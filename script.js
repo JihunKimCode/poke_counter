@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchButton');
     const pokemonInfo = document.getElementById('pokemonInfo');
+    const statsHistogram = document.getElementById('statsHistogram');
 
     // Function to perform the search
     function performSearch() {
@@ -28,7 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const resistancesHtml = resistances.length > 0 ? `<p>Resistances: ${resistances.join(', ')}</p>` : '';
 
                 // Get stats
-                const stats = data.stats.map((stat) => `${stat.stat.name}: ${stat.base_stat}`).join(', ');
+                const statsData = data.stats.map((stat) => ({ name: stat.stat.name, value: stat.base_stat }));
+                
+                // Display the Pokémon's stats histogram
+                displayStatsHistogram(statsData);
 
                 // Get evolution chain details
                 fetch(data.species.url)
@@ -46,11 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const html = `
                                     <h2>${name.toUpperCase()}</h2>
                                     <img src="${image}" alt="${name}" width="200">
-                                    <p>#${id}</p>
+                                    <p>Pokedex #${id}</p>
                                     <p>Type: ${types.join(', ')}</p>
                                     ${weaknessesHtml}
                                     ${resistancesHtml}
-                                    <p>Stats: ${stats}</p>
                                     <p>Evolution: ${evolutionDetails}</p>
                                     <p>Abilities: ${abilities}</p>
                                 `;
@@ -65,6 +68,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Pokémon not found. Please try another name or ID.');
                 console.error(error);
             });
+    }
+
+    // Function to display the Pokémon's stats histogram
+    function displayStatsHistogram(statsData) {
+        // Define the maximum value for the stats (assuming it's 255)
+        const maxValue = 255;
+
+        // Create HTML for the histogram
+        const histogramHTML = statsData.map((stat) => {
+            const barWidth = (stat.value / maxValue) * 100;
+            return `
+                <div class="stat-bar">
+                    <div class="bar-label">${stat.name}: ${stat.value}</div>
+                    <div class="bar-container">
+                        <div class="bar" style="width: ${barWidth}%;"></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Set the HTML content of the histogram container
+        statsHistogram.innerHTML = histogramHTML;
     }
 
     // Add a click event listener to the search button

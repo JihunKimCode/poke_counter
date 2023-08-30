@@ -42,6 +42,46 @@ h1{
     background: #00d6fa;
 }  
 
-#pokemonInfo {
+.information{
+    display: table;
     margin: 20px;
+}
+
+#pokemonInfo {
+    display: table-cell;
+    width: 60%;
+}
+
+#statsHistogram{
+    display: table-cell;
+    width: 40%;
+    align-items: start;
+}
+
+.stat-bar {
+    margin-bottom: 10px;
+    position: relative;
+    width: 255px; /* Adjust the width as needed */
+}
+
+.bar-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.bar-container {
+    height: 20px;
+    background-color: white; /* Change the color as desired */
+    position: relative;
+    width: 100%;
+}
+
+.bar {
+    background-color: #1288f8;
+    height: 100%;
+    width: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: width 0.5s;
 }
