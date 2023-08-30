@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon Information Search</title>
+    <title>Pokémon Counter Search</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Pokémon Information Search</h1>
-        <input type="text" id="searchInput" placeholder="Enter Pokémon name or ID">
-        <button id="searchButton">Search</button>
-        <div id="pokemonInfo"></div>
+    <div class="topnav">
+        <h1>Pokémon Counter Search</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Enter Pokémon name or ID">
+            <button id="searchButton"><i class="fa fa-search"></i></button>
+        </div>
     </div>
+    <div id="pokemonInfo"></div>
     <script src="script.js"></script>
 </body>
 </html>

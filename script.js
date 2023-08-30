@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('searchButton');
     const pokemonInfo = document.getElementById('pokemonInfo');
 
-    searchButton.addEventListener('click', () => {
+    // Function to perform the search
+    function performSearch() {
         const searchTerm = searchInput.value.toLowerCase().trim();
         if (searchTerm === '') {
             alert('Please enter a Pokémon name or ID.');
@@ -44,14 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 const html = `
                                     <h2>${name.toUpperCase()}</h2>
-                                    <p>ID: ${id}</p>
+                                    <img src="${image}" alt="${name}" width="200">
+                                    <p>#${id}</p>
                                     <p>Type: ${types.join(', ')}</p>
                                     ${weaknessesHtml}
                                     ${resistancesHtml}
                                     <p>Stats: ${stats}</p>
                                     <p>Evolution: ${evolutionDetails}</p>
                                     <p>Abilities: ${abilities}</p>
-                                    <img src="${image}" alt="${name}" width="200">
                                 `;
 
                                 pokemonInfo.innerHTML = html;
@@ -64,6 +65,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Pokémon not found. Please try another name or ID.');
                 console.error(error);
             });
+    }
+
+    // Add a click event listener to the search button
+    searchButton.addEventListener('click', () => {
+        performSearch();
+    });
+
+    // Add a keydown event listener to the input field
+    searchInput.addEventListener('keydown', (event) => {
+        // Check if the key pressed is the Enter key (key code 13)
+        if (event.keyCode === 13) {
+            performSearch();
+        }
     });
 
     function parseEvolutionChain(chain) {
