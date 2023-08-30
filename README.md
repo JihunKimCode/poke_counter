@@ -1,4 +1,4 @@
-# poke_counter
+# [jihunkimcode.github.io/poke_counter/](https://jihunkimcode.github.io/poke_counter/)
 Pokemon information searcher. It finds counter Pokemon as well.
 
 # Goals
