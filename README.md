@@ -12,3 +12,5 @@ Pokemon information searcher. It finds counter Pokemon as well.
 - [ ] Move table (HM/TM/TR/Egg/Move Tutor)
 - [ ] Counter Type(attack/defense)
 - [ ] Counter Pokemon
+- [ ] Related Pokemon pop-up on serach bar
+- [ ] Design logo
