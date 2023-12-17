@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const WeakChart = {
-        normal: [],
+        normal: ['fighting'],
         fighting: ['flying', 'psychic', 'fairy'],
         flying: ['electric', 'ice', 'rock'],
         poison: ['ground', 'psychic'],
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         bug: ['flying', 'rock', 'fire'],
         ghost: ['ghost', 'dark'],
         steel: ['fighting', 'ground', 'fire'],
-        fire: ['water', 'rock', 'fire'],
+        fire: ['water', 'rock', 'ground'],
         water: ['electric', 'grass'],
         grass: ['flying', 'poison', 'bug', 'fire', 'ice'],
         electric: ['ground'],
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ice: ['fighting', 'rock', 'steel', 'fire'],
         dragon: ['ice', 'dragon', 'fairy'],
         dark: ['fighting', 'bug', 'fairy'],
-        fairy: ['poison', 'steel', 'fire'],
+        fairy: ['poison', 'steel'],
     };
     
     const ResisChart = {
@@ -160,13 +160,13 @@ document.addEventListener('DOMContentLoaded', () => {
         bug: ['fighting', 'ground', 'grass'],
         ghost: ['poison', 'bug'],
         steel: ['normal', 'flying', 'rock', 'bug', 'steel', 'grass', 'psychic', 'ice', 'dragon', 'fairy'],
-        fire: ['bug', 'steel', 'fire', 'grass', 'ice'],
+        fire: ['bug', 'steel', 'fire', 'grass', 'ice','fairy'],
         water: ['steel', 'fire', 'water', 'ice'],
         grass: ['ground', 'water', 'grass', 'electric'],
         electric: ['flying', 'steel', 'electric'],
         psychic: ['fighting', 'psychic'],
         ice: ['ice'],
-        dragon: ['steel'],
+        dragon: ['fire','water','grass','electric'],
         dark: ['ghost', 'dark'],
         fairy: ['fighting', 'bug', 'dark'],
     };
