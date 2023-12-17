@@ -1,11 +1,26 @@
+@font-face{
+    font-family: 'NanumB';
+    src: url('fonts/NanumBarunGothic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face{
+    font-family: 'NanumS';
+    src: url('fonts/NanumSquareRoundB.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'NanumS', sans-serif;
     background-color: #f2f2f2;
     margin: 0;
     padding: 0;
 }
 
 .topnav {
+    font-family: 'NanumB', sans-serif;
     overflow: hidden;
 }
 
@@ -13,6 +28,10 @@ h1{
     float: left;
     margin-left: 20px;
     height: auto;
+}
+
+h2{
+    font-family: 'NanumB', sans-serif;
 }
   
 .topnav .search-container {
