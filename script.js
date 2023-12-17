@@ -217,11 +217,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
         const effectiveWeaknesses = Array.from(weaknesses).map((weakness) => {
             const count = types.reduce((acc, type) => (WeakChart[type]?.includes(weakness) ? acc + 1 : acc), 0);
-            return `${weakness} x${count === 2 ? 4 : count === 1 ? 2 : 1}`;
+            return { weakness, count };
         });
-    
-        return effectiveWeaknesses;
-    }
+        
+        // Sort the weaknesses based on the count in descending order
+        effectiveWeaknesses.sort((a, b) => b.count - a.count);
+        
+        // Map the sorted weaknesses to the desired format before returning
+        const sortedEffectiveWeaknesses = effectiveWeaknesses.map(({ weakness, count }) => `${weakness} x${count === 2 ? 4 : count === 1 ? 2 : 1}`);
+        
+        return sortedEffectiveWeaknesses;
+}
     
     function getResistances(types) {
         const resistances = new Set();
@@ -248,11 +254,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
         const effectiveResistances = Array.from(resistances).map((resistance) => {
             const count = types.reduce((acc, type) => (ResisChart[type]?.includes(resistance) ? acc + 1 : acc), 0);
-            return `${resistance} x${count === 2 ? 1 / 4 : count === 1 ? 1 / 2 : 1}`;
+            return { resistance, count };
         });
-    
-        return effectiveResistances;
-    }
+        
+        // Sort the resistances based on the count in ascending order (few to many)
+        effectiveResistances.sort((a, b) => a.count - b.count);
+        
+        // Map the sorted resistances to the desired format before returning
+        const sortedEffectiveResistances = effectiveResistances.map(({ resistance, count }) => `${resistance} x${count === 2 ? 1 / 4 : count === 1 ? 1 / 2 : 1}`);
+        
+        return sortedEffectiveResistances;
+}
 
     function getInvalid(types) {
         const invalid = new Set();
