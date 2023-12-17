@@ -64,16 +64,18 @@ h2{
 .information{
     display: table;
     margin: 20px;
+    width: 100%;
 }
 
 #pokemonInfo {
     display: table-cell;
-    width: 60%;
+    width: 30%;
+    line-height: 1.5;
 }
 
 #statsHistogram{
     display: table-cell;
-    width: 40%;
+    width: 70%;
     align-items: start;
 }
 
@@ -124,4 +126,22 @@ h2{
 
 .btn.btn-github:hover {
     color: #fff;
+}
+
+@media (max-width: 767px) {
+    .information{
+        flex-direction: column;
+        margin: 20px;
+    }
+    
+    #pokemonInfo {
+        display: table-row;
+        width: 60%;
+    }
+    
+    #statsHistogram{
+        display: table-row;
+        width: 40%;
+        align-items: start;
+    }
 }
