@@ -10,5 +10,7 @@ Pokemon information searcher. It finds counter Pokemon as well.
 - [ ] Evolution Method (Friendship, Item)
 - [ ] Better Pokemon Search (NIDORAN-F, NIDORAN-M)
 - [ ] Move table (HM/TM/TR/Egg/Move Tutor)
-- [ ] Counter Type(attack/defense)
+- [x] Counter Type(attack/defense)
+    - [ ] x1 Type
+    - [ ] Reorder by Multiple (x4 to x2; x1/2 to x1/4)
 - [ ] Counter Pokemon

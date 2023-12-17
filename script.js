@@ -23,10 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get weaknesses and resistances
                 const weaknesses = getWeaknesses(types);
                 const resistances = getResistances(types);
+                const invalid = getInvalid(types);
 
                 // Display the Pokémon's weaknesses and resistances
                 const weaknessesHtml = weaknesses.length > 0 ? `<p>Weaknesses: ${weaknesses.join(', ')}</p>` : '';
                 const resistancesHtml = resistances.length > 0 ? `<p>Resistances: ${resistances.join(', ')}</p>` : '';
+                const invalidHtml = invalid.length > 0 ? `<p>Invalid: ${invalid.join(', ')}</p>` : '';
 
                 // Get stats
                 const statsData = data.stats.map((stat) => ({ name: stat.stat.name, value: stat.base_stat }));
@@ -54,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <p>Type: ${types.join(', ')}</p>
                                     ${weaknessesHtml}
                                     ${resistancesHtml}
+                                    ${invalidHtml}
                                     <p>Evolution: ${evolutionDetails}</p>
                                     <p>Abilities: ${abilities}</p>
                                 `;
@@ -126,73 +129,140 @@ document.addEventListener('DOMContentLoaded', () => {
         return evolutionDetails;
     }
 
-    function getWeaknesses(types) {
-        // Define type weaknesses and strengths based on the Pokémon type chart
-        const typeChart = {
-            normal: ['fighting'],
-            fighting: ['flying', 'psychic', 'fairy'],
-            flying: ['electric', 'ice', 'rock'],
-            poison: ['ground', 'psychic'],
-            ground: ['water', 'ice', 'grass'],
-            rock: ['water', 'grass', 'fighting', 'ground', 'steel'],
-            bug: ['flying', 'rock', 'fire'],
-            ghost: ['ghost', 'dark'],
-            steel: ['fighting', 'ground', 'fire'],
-            fire: ['water', 'rock', 'fire'],
-            water: ['electric', 'grass'],
-            grass: ['flying', 'poison', 'bug', 'fire', 'ice'],
-            electric: ['ground'],
-            psychic: ['bug', 'ghost', 'dark'],
-            ice: ['fighting', 'rock', 'steel', 'fire'],
-            dragon: ['ice', 'dragon', 'fairy'],
-            dark: ['fighting', 'bug', 'fairy'],
-            fairy: ['poison', 'steel', 'fire'],
-        };
+    const WeakChart = {
+        normal: [],
+        fighting: ['flying', 'psychic', 'fairy'],
+        flying: ['electric', 'ice', 'rock'],
+        poison: ['ground', 'psychic'],
+        ground: ['water', 'ice', 'grass'],
+        rock: ['water', 'grass', 'fighting', 'ground', 'steel'],
+        bug: ['flying', 'rock', 'fire'],
+        ghost: ['ghost', 'dark'],
+        steel: ['fighting', 'ground', 'fire'],
+        fire: ['water', 'rock', 'fire'],
+        water: ['electric', 'grass'],
+        grass: ['flying', 'poison', 'bug', 'fire', 'ice'],
+        electric: ['ground'],
+        psychic: ['bug', 'ghost', 'dark'],
+        ice: ['fighting', 'rock', 'steel', 'fire'],
+        dragon: ['ice', 'dragon', 'fairy'],
+        dark: ['fighting', 'bug', 'fairy'],
+        fairy: ['poison', 'steel', 'fire'],
+    };
+    
+    const ResisChart = {
+        normal: [],
+        fighting: ['rock', 'bug', 'dark'],
+        flying: ['fighting', 'bug', 'grass'],
+        poison: ['fighting', 'poison', 'bug', 'grass', 'fairy'],
+        ground: ['poison', 'rock'],
+        rock: ['normal', 'flying', 'poison', 'fire'],
+        bug: ['fighting', 'ground', 'grass'],
+        ghost: ['poison', 'bug'],
+        steel: ['normal', 'flying', 'rock', 'bug', 'steel', 'grass', 'psychic', 'ice', 'dragon', 'fairy'],
+        fire: ['bug', 'steel', 'fire', 'grass', 'ice'],
+        water: ['steel', 'fire', 'water', 'ice'],
+        grass: ['ground', 'water', 'grass', 'electric'],
+        electric: ['flying', 'steel', 'electric'],
+        psychic: ['fighting', 'psychic'],
+        ice: ['ice'],
+        dragon: ['steel'],
+        dark: ['ghost', 'dark'],
+        fairy: ['fighting', 'bug', 'dark'],
+    };
+    
+    const ResisInvalChart = {
+        normal: ['ghost'],
+        fighting: [],
+        flying: ['ground'],
+        poison: [],
+        ground: ['electric'],
+        rock: [],
+        bug: [],
+        ghost: ['normal','fighting'],
+        steel: ['poison'],
+        fire: [],
+        water: [],
+        grass: [],
+        electric: [],
+        psychic: [],
+        ice: [],
+        dragon: [],
+        dark: ['pyschic'],
+        fairy: ['dragon'],
+    };
 
-        // Calculate weaknesses based on the Pokémon's types
+    function getWeaknesses(types) {
         const weaknesses = new Set();
-        for (const type of types) {
-            const typeWeaknesses = typeChart[type];
+        types.forEach((type) => {
+            const typeWeaknesses = WeakChart[type];
             if (typeWeaknesses) {
                 typeWeaknesses.forEach((weakness) => weaknesses.add(weakness));
             }
+        });
+        types.forEach((type) => {
+            const typeResistances = ResisChart[type];
+            if (typeResistances) {
+                typeResistances.forEach((resistance) => weaknesses.delete(resistance));
+            }
+        });
+        for (rep = 0; rep<2; rep++){
+            types.forEach((type) => {
+                const typeInval = ResisInvalChart[type];
+                if (typeInval) {
+                    typeInval.forEach((inval) => weaknesses.delete(inval));
+                }
+            });
         }
-
-        return Array.from(weaknesses);
+    
+        const effectiveWeaknesses = Array.from(weaknesses).map((weakness) => {
+            const count = types.reduce((acc, type) => (WeakChart[type]?.includes(weakness) ? acc + 1 : acc), 0);
+            return `${weakness} x${count === 2 ? 4 : count === 1 ? 2 : 1}`;
+        });
+    
+        return effectiveWeaknesses;
     }
-
+    
     function getResistances(types) {
-        // Define type resistances based on the Pokémon type chart
-        const typeChart = {
-            normal: [],
-            fighting: ['rock', 'bug', 'dark'],
-            flying: ['fighting', 'bug', 'grass'],
-            poison: ['fighting', 'poison', 'bug', 'grass', 'fairy'],
-            ground: ['poison', 'rock'],
-            rock: ['normal', 'flying', 'poison', 'fire'],
-            bug: ['fighting', 'ground', 'grass'],
-            ghost: ['poison', 'bug'],
-            steel: ['normal', 'flying', 'rock', 'bug', 'steel', 'grass', 'psychic', 'ice', 'dragon', 'fairy'],
-            fire: ['bug', 'steel', 'fire', 'grass', 'ice'],
-            water: ['steel', 'fire', 'water', 'ice'],
-            grass: ['ground', 'water', 'grass', 'electric'],
-            electric: ['flying', 'steel', 'electric'],
-            psychic: ['fighting', 'psychic'],
-            ice: ['ice'],
-            dragon: ['steel'],
-            dark: ['ghost', 'dark'],
-            fairy: ['fighting', 'bug', 'dark'],
-        };
-
-        // Calculate resistances based on the Pokémon's types
         const resistances = new Set();
-        for (const type of types) {
-            const typeResistances = typeChart[type];
+        types.forEach((type) => {
+            const typeResistances = ResisChart[type];
             if (typeResistances) {
                 typeResistances.forEach((resistance) => resistances.add(resistance));
             }
+        });
+        types.forEach((type) => {
+            const typeWeaknesses = WeakChart[type];
+            if (typeWeaknesses) {
+                typeWeaknesses.forEach((weakness) => resistances.delete(weakness));
+            }
+        });
+        for (rep = 0; rep<2; rep++){
+            types.forEach((type) => {
+                const typeInval = ResisInvalChart[type];
+                if (typeInval) {
+                    typeInval.forEach((inval) => resistances.delete(inval));
+                }
+            });
         }
-
-        return Array.from(resistances);
+    
+        const effectiveResistances = Array.from(resistances).map((resistance) => {
+            const count = types.reduce((acc, type) => (ResisChart[type]?.includes(resistance) ? acc + 1 : acc), 0);
+            return `${resistance} x${count === 2 ? 1 / 4 : count === 1 ? 1 / 2 : 1}`;
+        });
+    
+        return effectiveResistances;
     }
+
+    function getInvalid(types) {
+        const invalid = new Set();
+        types.forEach((type) => {
+            const typeInval = ResisInvalChart[type];
+            if (typeInval) {
+                typeInval.forEach((inval) => invalid.add(inval));
+            }
+        });
+    
+        return Array.from(invalid);
+    }        
 });
