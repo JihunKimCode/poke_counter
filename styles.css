@@ -79,6 +79,10 @@ h2{
     align-items: start;
 }
 
+#counterpokemon{
+
+}
+
 .stat-bar {
     margin-bottom: 10px;
     position: relative;
@@ -131,17 +135,22 @@ h2{
 @media (max-width: 767px) {
     .information{
         flex-direction: column;
-        margin: 20px;
+        margin: 10px;
     }
     
     #pokemonInfo {
         display: table-row;
-        width: 60%;
+        width: fit-content;
     }
     
     #statsHistogram{
         display: table-row;
-        width: 40%;
-        align-items: start;
+        width: fit-content;
+        /* align-items: start; */
+    }
+    #statsHistogram{
+        display: table-row;
+        width: fit-content;
+        /* align-items: start; */
     }
 }

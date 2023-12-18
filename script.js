@@ -26,9 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const invalid = getInvalid(types);
 
                 // Display the Pokémon's weaknesses and resistances
-                const weaknessesHtml = weaknesses.length > 0 ? `<p>Weaknesses: ${weaknesses.join(', ')}</p>` : '';
-                const resistancesHtml = resistances.length > 0 ? `<p>Resistances: ${resistances.join(', ')}</p>` : '';
-                const invalidHtml = invalid.length > 0 ? `<p>Invalid: ${invalid.join(', ')}</p>` : '';
+                const weaknessesHtml = weaknesses.length > 0 ? `<p>[Weaknesses]<br>${weaknesses.join(', ')}</p>` : '';
+                const resistancesHtml = resistances.length > 0 ? `<p>[Resistances]<br>${resistances.join(', ')}</p>` : '';
+                const invalidHtml = invalid.length > 0 ? `<p>[Invalid]<br>${invalid.join(', ')}</p>` : '';
 
                 // Get stats
                 const statsData = data.stats.map((stat) => ({ name: stat.stat.name, value: stat.base_stat }));
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     ${weaknessesHtml}
                                     ${resistancesHtml}
                                     ${invalidHtml}
-                                    <p>Evolution: ${evolutionDetails}</p>
+                                    <p>[Evolution]<br>${evolutionDetails}</p>
                                     <p>Abilities: ${abilities}</p>
                                 `;
 
@@ -110,25 +110,112 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function parseEvolutionChain(chain) {
         let evolutionDetails = chain.species.name;
-
+    
         if (chain.evolution_details && chain.evolution_details.length > 0) {
-            const evolveLevel = chain.evolution_details[0].min_level;
-            const evolveMethod = chain.evolution_details[0].trigger.name;
-
-            if (evolveLevel === null) {
-                evolutionDetails += ` (${evolveMethod})`;
+            const evolutionMethod = chain.evolution_details[0].trigger.name;
+        
+            if (evolutionMethod === 'level-up') {
+                const evolveLevel = chain.evolution_details[0].min_level;
+                const evolveMove = chain.evolution_details[0].known_move;
+                const evolveItem = chain.evolution_details[0].item?.name;
+                const evolveHappiness = chain.evolution_details[0].min_happiness;
+                const evolveTime = chain.evolution_details[0].time_of_day;
+                const evolveGender = chain.evolution_details[0].gender;
+                const evolveLocation = chain.evolution_details[0].location;
+                const evolveFriendship = chain.evolution_details[0].min_affection;
+    
+                let evolutionConditions = [];
+    
+                if (evolveLevel !== null) {
+                    evolutionConditions.push(`Level ${evolveLevel}`);
+                }
+    
+                if (evolveMove) {
+                    evolutionConditions.push(`Knows ${evolveMove}`);
+                }
+    
+                if (evolveItem) {
+                    evolutionConditions.push(`Use ${evolveItem} to evolve`);
+                }
+    
+                if (evolveHappiness !== null) {
+                    evolutionConditions.push(`Happiness ${evolveHappiness}`);
+                }
+    
+                if (evolveTime) {
+                    evolutionConditions.push(`Time of Day: ${evolveTime}`);
+                }
+    
+                if (evolveGender) {
+                    evolutionConditions.push(`Gender: ${evolveGender}`);
+                }
+    
+                if (evolveLocation) {
+                    evolutionConditions.push(`Location: ${evolveLocation}`);
+                }
+    
+                if (evolveFriendship !== null) {
+                    evolutionConditions.push(`Friendship ${evolveFriendship}`);
+                }
+    
+                evolutionDetails += ` (${evolutionConditions.join(', ')})`;
+            } else if (evolutionMethod === 'trade') {
+                const evolveItem = chain.evolution_details[0].held_item?.name;
+                if (evolveItem) {
+                    evolutionDetails += ` (Trade with held item: ${evolveItem})`;
+                } else {
+                    evolutionDetails += ` (Trade)`;
+                }
+            } else if (evolutionMethod === 'use-item') {
+                    const evolveItem = chain.evolution_details[0].item?.name;
+                evolutionDetails += ` (Use ${evolveItem} to evolve)`;
             } else {
-                evolutionDetails += ` (Level ${evolveLevel})`;
+                const evolveMove = chain.evolution_details[0].known_move;
+                const evolveHappiness = chain.evolution_details[0].min_happiness;
+                const evolveTime = chain.evolution_details[0].time_of_day;
+                const evolveGender = chain.evolution_details[0].gender;
+                const evolveLocation = chain.evolution_details[0].location;
+                const evolveFriendship = chain.evolution_details[0].min_affection;
+
+                let evolutionConditions = [];
+
+                if (evolveMove) {
+                    evolutionConditions.push(`Knows ${evolveMove}`);
+                }
+
+                if (evolveHappiness !== null) {
+                    evolutionConditions.push(`Happiness ${evolveHappiness}`);
+                }
+
+                if (evolveTime) {
+                    evolutionConditions.push(`Time of Day: ${evolveTime}`);
+                }
+
+                if (evolveGender) {
+                    evolutionConditions.push(`Gender: ${evolveGender}`);
+                }
+
+                if (evolveLocation) {
+                    evolutionConditions.push(`Location: ${evolveLocation}`);
+                }
+    
+                if (evolveFriendship !== null) {
+                    evolutionConditions.push(`Friendship ${evolveFriendship}`);
+                }
+    
+                evolutionDetails += ` (${evolutionConditions.join(', ')})`;
             }
         }
-
+    
         if (chain.evolves_to && chain.evolves_to.length > 0) {
-            evolutionDetails += ` -> ${parseEvolutionChain(chain.evolves_to[0])}`;
+            const evolutionBranches = chain.evolves_to.map((evolve) => parseEvolutionChain(evolve));
+            evolutionDetails += ` <br>-> ${evolutionBranches.join(' <br>or ')}`;
         }
-
+    
         return evolutionDetails;
     }
-
+    
+                            
     const WeakChart = {
         normal: ['fighting'],
         fighting: ['flying', 'psychic', 'fairy'],
