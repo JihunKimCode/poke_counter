@@ -7,7 +7,8 @@ Pokemon information searcher. It finds counter Pokemon as well.
 - [x] Stats
 - [x] Abilities
 - [x] Evolution Level
-- [ ] Evolution Method (Friendship, Item)
+- [x] Evolution Method (Friendship, Item)
+    - [ ] Minor route
 - [ ] Better Pokemon Search (NIDORAN-F, NIDORAN-M)
 - [ ] Move table (HM/TM/TR/Egg/Move Tutor)
 - [x] Counter Type(attack/defense)
