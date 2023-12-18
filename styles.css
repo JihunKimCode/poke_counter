@@ -12,11 +12,39 @@
     font-style: normal;
 }
 
+/* Scroll Bar Width */
+::-webkit-scrollbar {
+    scroll-behavior: smooth;
+    height: calc(100% - 3em);
+    overflow-y: auto;
+    width: 8px;
+    height: 8px;
+}
+
+/* Scroll Bar Track */
+::-webkit-scrollbar-track {
+    border: none;
+    border-radius: 10px;
+}
+
+/* Scroll Bar Handle */
+::-webkit-scrollbar-thumb {
+    background: #1288F8;  
+    border-radius: 20px;
+}
+
+/* Scroll Bar Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #00d6fa;  
+}
+
+
 body {
     font-family: 'NanumS', sans-serif;
     background-color: #f2f2f2;
     margin: 0;
     padding: 0;
+    font-size: 16px;
 }
 
 .topnav {
@@ -61,26 +89,67 @@ h2{
     background: #00d6fa;
 }  
 
+footer {
+    background-color: #1288F8;
+    color: white;
+    text-align: left;
+    padding: 15px;
+}
+
+footer a{
+    color: white;
+}
+
+footer a:hover{
+    color: #00d6fa
+}
+
 .information{
     display: table;
     margin: 20px;
-    width: 100%;
+    width: 95%;
 }
 
 #pokemonInfo {
     display: table-cell;
-    width: 30%;
+    width: 25%;
     line-height: 1.5;
 }
 
 #statsHistogram{
     display: table-cell;
-    width: 70%;
-    align-items: start;
+    width: 20%;
 }
 
-#counterpokemon{
+#counterPokemon {
+    width: 50%;
+    /* Add any additional styling for the counterPokemon container */
+    max-height: 600px;
+    overflow: scroll;
+}
 
+/* Add your custom styling here */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    max-height: 600px;
+    overflow: scroll;
+}
+
+.table th, .table td {
+    border: 2px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f2f2f2;
+}
+
+.table img {
+    max-width: 100%;
+    height: auto;
 }
 
 .stat-bar {
@@ -148,7 +217,7 @@ h2{
         width: fit-content;
         /* align-items: start; */
     }
-    #statsHistogram{
+    #counterpokemon{
         display: table-row;
         width: fit-content;
         /* align-items: start; */
