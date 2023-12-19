@@ -486,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // Create the table header
         const headerRow = table.createTHead().insertRow();
-        headerRow.innerHTML = '<th>Image</th><th>Name</th><th>Types</th><th>Score</th><th>Attack</th><th>Special Attack</th><th>Speed</th>';
+        headerRow.innerHTML = '<th>Image</th><th>Name</th><th>Types</th><th>Abilities</th><th>Score</th><th>HP</th><th>Atk</th><th>Def</th><th>SpA</th><th>SpD</th><th>Spe</th>';
     
         // Iterate through the sorted array and add rows to the table
         for (const pokemon of pokemonArray) {
@@ -494,6 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const counterPokemonUrl = `${base_url}pokemon/${pokemon.name}`;
             const counterPokemonResponse = await fetch(counterPokemonUrl);
             const counterPokemonData = await counterPokemonResponse.json();
+            console.log(counterPokemonData.stats[0].base_stat)
     
             // Add row to the table
             const row = table.insertRow();
@@ -501,10 +502,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td><img src="${counterPokemonData.sprites.front_default}" alt="${pokemon.name}" width="50"></td>
                 <td>${counterPokemonData.name}</td>
                 <td>${counterPokemonData.types.map((type) => type.type.name).join(', ')}</td>
+                <td>${counterPokemonData.abilities.map((ability) => ability.ability.name).join(', ')}</td>
                 <td>${pokemon.score}</td>
-                <td>${pokemon.attack}</td>
-                <td>${pokemon.specialAttack}</td>
-                <td>${pokemon.speed}</td>
+                <td>${counterPokemonData.stats[0].base_stat}</td>
+                <td>${counterPokemonData.stats[1].base_stat}</td>
+                <td>${counterPokemonData.stats[2].base_stat}</td>
+                <td>${counterPokemonData.stats[3].base_stat}</td>
+                <td>${counterPokemonData.stats[4].base_stat}</td>
+                <td>${counterPokemonData.stats[5].base_stat}</td>
             `;
         }
     
