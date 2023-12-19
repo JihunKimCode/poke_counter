@@ -415,65 +415,66 @@ document.addEventListener('DOMContentLoaded', () => {
                 const counterPokemonUrl = `${base_url}pokemon/${pokemonName}`;
                 const counterPokemonResponse = await fetch(counterPokemonUrl);
                 const counterPokemonData = await counterPokemonResponse.json();
+                
+                // counter pokemon stats
+                hp = counterPokemonData.stats.find((stat) => stat.stat.name === 'hp').base_stat
+                atk = counterPokemonData.stats.find((stat) => stat.stat.name === 'attack').base_stat
+                def = counterPokemonData.stats.find((stat) => stat.stat.name === 'defense').base_stat
+                spa = counterPokemonData.stats.find((stat) => stat.stat.name === 'special-attack').base_stat
+                spd = counterPokemonData.stats.find((stat) => stat.stat.name === 'special-defense').base_stat
+                spe = counterPokemonData.stats.find((stat) => stat.stat.name === 'speed').base_stat
     
                 // Initialize the score for the Pokémon if not present
                 if (!pokemonScores[pokemonName]) {
                     pokemonScores[pokemonName] = {
                         score: 0,
-                        types: [],
-                        attack: counterPokemonData.stats.find((stat) => stat.stat.name === 'attack').base_stat,
-                        specialAttack: counterPokemonData.stats.find((stat) => stat.stat.name === 'special-attack').base_stat,
-                        speed: counterPokemonData.stats.find((stat) => stat.stat.name === 'speed').base_stat,
+                        types: []
                     };
                 }
     
                 // Increment the score for the Pokémon based on matched types
-                pokemonScores[pokemonName].score+=100;
+                pokemonScores[pokemonName].score+=30;
     
                 // Additional scoring based on target Pokemon's stats
-                if (pokemonScores[pokemonName].score<=100) {
+                if (pokemonScores[pokemonName].score<=30) {
                     /* 0: hp
                      * 1: attack
                      * 2: defense
                      * 3: special-attack
                      * 4: special-defense
                      * 5: speed */
+
                     // Check if defense or special-defense is lower
                     if (statsData[2].value < statsData[4].value) {
-                        pokemonScores[pokemonName].score += Math.floor(pokemonScores[pokemonName].attack * 0.5);
+                        pokemonScores[pokemonName].score += Math.floor(atk * 0.5);
                     } else if (statsData[2].value > statsData[4].value) {
-                        pokemonScores[pokemonName].score += Math.floor(pokemonScores[pokemonName].specialAttack * 0.5);
-                    } else if (pokemonScores[pokemonName].attack > pokemonScores[pokemonName].specialAttack){
-                        pokemonScores[pokemonName].score += Math.floor(pokemonScores[pokemonName].attack * 0.5);
+                        pokemonScores[pokemonName].score += Math.floor(spa * 0.5);
+                    } else if (atk > spa){
+                        pokemonScores[pokemonName].score += Math.floor(atk * 0.5);
                     } else{
-                        pokemonScores[pokemonName].score += Math.floor(pokemonScores[pokemonName].specialAttack * 0.5);
+                        pokemonScores[pokemonName].score += Math.floor(spa * 0.5);
                     }
-    
+                    
+                    // Def vs SpD based on Atk vs SpA
+                    if (statsData[1].value > statsData[3].value) {
+                        pokemonScores[pokemonName].score += Math.floor((hp+def)*0.2);
+                    } else if (statsData[1].value < statsData[3].value) {
+                        pokemonScores[pokemonName].score += Math.floor((hp+spd)*0.2);
+                    } else {
+                        pokemonScores[pokemonName].score += Math.floor((hp+def+spd)*0.1);
+                    }
+
                     // Give more score to the counter Pokemon whose speed is faster
-                    if (counterPokemonData.stats.find((stat) => stat.stat.name === 'speed').base_stat > statsData[5].value) {
-                        pokemonScores[pokemonName].score += 10;
-                    }
+                    if (spe > statsData[5].value) pokemonScores[pokemonName].score += 10;
                 }
             }
         }
     
         // Convert the scores object into an array of objects
-        const pokemonArray = Object.entries(pokemonScores).map(([name, { score, types, attack, specialAttack, speed }]) => ({
-            name,
-            score,
-            types,
-            attack,
-            specialAttack,
-            speed,
-        }));
+        const pokemonArray = Object.entries(pokemonScores).map(([name, { score }]) => ({name, score}));
     
         // Sort the array by score and then by attack, specialAttack, and speed in descending order
-        pokemonArray.sort((a, b) => {
-            if (b.score !== a.score) return b.score - a.score;
-            if (b.attack !== a.attack) return b.attack - a.attack;
-            if (b.specialAttack !== a.specialAttack) return b.specialAttack - a.specialAttack;
-            return b.speed - a.speed;
-        });
+        pokemonArray.sort((a, b) => { return b.score - a.score; });
     
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
@@ -494,7 +495,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const counterPokemonUrl = `${base_url}pokemon/${pokemon.name}`;
             const counterPokemonResponse = await fetch(counterPokemonUrl);
             const counterPokemonData = await counterPokemonResponse.json();
-            console.log(counterPokemonData.stats[0].base_stat)
     
             // Add row to the table
             const row = table.insertRow();
