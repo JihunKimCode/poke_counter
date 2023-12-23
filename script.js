@@ -106,8 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
             pokeColor = "#4cbb17";
             lightpokeColor = "#0b6623";
         } else if (pokeColor === "pink") {
-            pokeColor = "#e0115f";
-            lightpokeColor = "#fe5bac";
+            pokeColor = "#fe5bac";
+            lightpokeColor = "pink";
         } else if (pokeColor === "purple") {
             pokeColor = "purple";
             lightpokeColor = "#b5338a";
