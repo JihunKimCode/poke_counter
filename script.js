@@ -97,8 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
             pokeColor = "#1288f8";
             lightpokeColor = "#00d6fa";
         } else if (pokeColor === "brown") {
-            pokeColor = "#795c32";
-            lightpokeColor = "#997950";
+            pokeColor = "#a66a2e";
+            lightpokeColor = "#622a0f";
         } else if (pokeColor === "gray") {
             pokeColor = "gray";
             lightpokeColor = "#48494b";
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
             lightpokeColor = "#d9dddc";
         } else if (pokeColor === "yellow") {
             pokeColor = "#ffd300";
-            lightpokeColor = "#fce205";
+            lightpokeColor = "#ffbf00";
         }
         
         // Update background color
