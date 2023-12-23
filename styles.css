@@ -56,6 +56,11 @@ h2{
     font-family: 'NanumB', sans-serif;
 }
 
+h3{
+    font-family: 'NanumS', sans-serif;
+    font-size: 1.3em;
+}
+
 /* Top Nav (search bar)*/
 .topnav {
     font-family: 'NanumB', sans-serif;

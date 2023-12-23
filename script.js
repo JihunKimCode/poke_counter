@@ -460,7 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }        
 
-        counterPokemon.innerHTML = '';
+        counterPokemon.innerHTML = '<h3>Counter Pokemons</h3>';
     
         const base_url = 'https://pokeapi.co/api/v2/';
     
@@ -565,7 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
         tableContainer.style.overflow = 'auto';
-        tableContainer.style.maxHeight = '700px';
+        tableContainer.style.maxHeight = '600px';
     
         // Create the table element
         const table = document.createElement('table');
