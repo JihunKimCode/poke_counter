@@ -9,24 +9,25 @@ document.addEventListener('DOMContentLoaded', () => {
     function performSearch() {
         const searchTerm = searchInput.value.toLowerCase().trim();
         if (searchTerm === '') {
-            alert('Please enter a Pokémon name or ID.');
+            alert('Please enter a pokemon name or ID.');
             return;
         }
 
         fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`)
             .then((response) => response.json())
             .then((data) => {
+                // Trace Pokemon's information
                 const name = data.name;
                 const id = data.id;
                 const image = data.sprites.front_default;
                 const types = data.types.map((type) => type.type.name);
 
-                // Get weaknesses and resistances
+                // Get weaknesses, resistances, and invalid
                 const weaknesses = getWeaknesses(types);
                 const resistances = getResistances(types);
                 const invalid = getInvalid(types);
 
-                // Display the Pokémon's weaknesses and resistances
+                // Display the weaknesses, resistances, and invalid
                 const weaknessesHtml = weaknesses.length > 0 ? `<p>[Weaknesses]<br>${weaknesses.join(', ')}</p>` : '';
                 const resistancesHtml = resistances.length > 0 ? `<p>[Resistances]<br>${resistances.join(', ')}</p>` : '';
                 const invalidHtml = invalid.length > 0 ? `<p>[Invalid]<br>${invalid.join(', ')}</p>` : '';
@@ -34,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get stats
                 const statsData = data.stats.map((stat) => ({ name: stat.stat.name, value: stat.base_stat }));
                 
-                // Display the Pokémon's stats histogram
+                // Display the pokemon's stats histogram and counter pokemon
                 displayStatsHistogram(statsData);
 
                 findCounterPokemon(types, statsData);
@@ -52,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 // Get moves and abilities
                                 const abilities = data.abilities.map((ability) => ability.ability.name).join(', ');
 
+                                // Display as text
                                 const html = `
                                     <h2>${name.toUpperCase()}</h2>
                                     <img src="${image}" alt="${name}" width="100">
@@ -76,9 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // Function to display the Pokémon's stats histogram
+    // Function to display the pokemon's stats histogram
     function displayStatsHistogram(statsData) {
-        // Define the maximum value for the stats (assuming it's 255)
+        // Max value for Each Stats
         const maxValue = 255;
 
         // Create HTML for the histogram
@@ -98,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statsHistogram.innerHTML = histogramHTML;
     }
 
-    // Add a click event listener to the search button
+    // Search button click event
     searchButton.addEventListener('click', () => {
         performSearch();
     });
@@ -111,12 +113,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Get Evolution Chain
     function parseEvolutionChain(chain) {
         let evolutionDetails = chain.species.name;
     
         if (chain.evolution_details && chain.evolution_details.length > 0) {
             const evolutionMethod = chain.evolution_details[0].trigger.name;
         
+            // Evolution Methods
             if (evolutionMethod === 'level-up') {
                 const evolveLevel = chain.evolution_details[0].min_level;
                 const evolveMove = chain.evolution_details[0].known_move;
@@ -210,6 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     
+        // Check all evolutions (e.g. eevee)
         if (chain.evolves_to && chain.evolves_to.length > 0) {
             const evolutionBranches = chain.evolves_to.map((evolve) => parseEvolutionChain(evolve));
             evolutionDetails += ` <br>-> ${evolutionBranches.join(' <br>or ')}`;
@@ -218,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return evolutionDetails;
     }
     
-                            
+    // x2 damages when defend
     const WeakChart = {
         normal: ['fighting'],
         fighting: ['flying', 'psychic', 'fairy'],
@@ -240,6 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fairy: ['poison', 'steel'],
     };
     
+    // x1/2 damages when defend
     const ResisChart = {
         normal: [],
         fighting: ['rock', 'bug', 'dark'],
@@ -261,6 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fairy: ['fighting', 'bug', 'dark'],
     };
     
+    // x0 damages when defend
     const ResisInvalChart = {
         normal: ['ghost'],
         fighting: [],
@@ -282,6 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fairy: ['dragon'],
     };
 
+    // Find the weakness information
     function getWeaknesses(types) {
         const weaknesses = new Set();
         types.forEach((type) => {
@@ -313,12 +321,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Sort the weaknesses based on the count in descending order
         effectiveWeaknesses.sort((a, b) => b.count - a.count);
         
-        // Map the sorted weaknesses to the desired format before returning
+        // Map the sorted weaknesses (x4 and then x2)
         const sortedEffectiveWeaknesses = effectiveWeaknesses.map(({ weakness, count }) => `${weakness} x${count === 2 ? 4 : count === 1 ? 2 : 1}`);
         
         return sortedEffectiveWeaknesses;
     }
     
+    // Check the resistances information
     function getResistances(types) {
         const resistances = new Set();
         types.forEach((type) => {
@@ -347,15 +356,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return { resistance, count };
         });
         
-        // Sort the resistances based on the count in ascending order (few to many)
+        // Sort the resistances based on the count in ascending order
         effectiveResistances.sort((a, b) => a.count - b.count);
         
-        // Map the sorted resistances to the desired format before returning
+        // Map the sorted resistances (x1/2 and then x1/4)
         const sortedEffectiveResistances = effectiveResistances.map(({ resistance, count }) => `${resistance} x${count === 2 ? 1 / 4 : count === 1 ? 1 / 2 : 1}`);
         
         return sortedEffectiveResistances;
     }
 
+    // Check invalid information
     function getInvalid(types) {
         const invalid = new Set();
         types.forEach((type) => {
@@ -368,8 +378,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return Array.from(invalid);
     }
 
+    // Find counter pokemon of the pokemon
     async function findCounterPokemon(types, statsData) {
-        //Find Weaknesses
+        //Find Weaknesses of the pokemon
         const weaknesses = new Set();
         types.forEach((type) => {
             const typeWeaknesses = WeakChart[type];
@@ -392,22 +403,21 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }        
 
-        // Clear existing table content
         counterPokemon.innerHTML = '';
     
         const base_url = 'https://pokeapi.co/api/v2/';
     
-        // Create an object to store Pokémon scores
+        // Create an object to store pokemon scores
         const pokemonScores = {};
     
         // Iterate through each type in the weaknesses list
         for (const type of weaknesses) {
-            // Get a list of Pokémon for the current type
+            // Get a list of pokemon for the current weakness type
             const typeUrl = `${base_url}type/${type.toLowerCase()}`;
             const typeResponse = await fetch(typeUrl);
             const typeData = await typeResponse.json();
     
-            // Iterate through each Pokémon for the current type
+            // Iterate through each pokemon for the current weakness type
             for (const entry of typeData.pokemon) {
                 const pokemonName = entry.pokemon.name;
     
@@ -416,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const counterPokemonResponse = await fetch(counterPokemonUrl);
                 const counterPokemonData = await counterPokemonResponse.json();
                 
-                // counter pokemon stats
+                // counter pokemon stats in variables
                 hp = counterPokemonData.stats.find((stat) => stat.stat.name === 'hp').base_stat
                 atk = counterPokemonData.stats.find((stat) => stat.stat.name === 'attack').base_stat
                 def = counterPokemonData.stats.find((stat) => stat.stat.name === 'defense').base_stat
@@ -424,7 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 spd = counterPokemonData.stats.find((stat) => stat.stat.name === 'special-defense').base_stat
                 spe = counterPokemonData.stats.find((stat) => stat.stat.name === 'speed').base_stat
     
-                // Initialize the score for the Pokémon if not present
+                // Initialize the score for the pokemon if not present
                 if (!pokemonScores[pokemonName]) {
                     pokemonScores[pokemonName] = {
                         score: 0,
@@ -432,19 +442,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                 }
     
-                // Increment the score for the Pokémon based on matched types
+                // Increment the score for the pokemon based on matched types
                 pokemonScores[pokemonName].score+=30;
     
-                // Additional scoring based on target Pokemon's stats
+                // Additional scoring based on pokemons' stats
                 if (pokemonScores[pokemonName].score<=30) {
-                    /* 0: hp
+                    /* statsData[n].value means the search pokemon's stats value
+                     * 0: hp
                      * 1: attack
                      * 2: defense
                      * 3: special-attack
                      * 4: special-defense
                      * 5: speed */
 
-                    // Check if defense or special-defense is lower
+                    // Check if the pokeomon's defense or special-defense is lower
                     if (statsData[2].value < statsData[4].value) {
                         pokemonScores[pokemonName].score += Math.floor(atk * 0.5);
                     } else if (statsData[2].value > statsData[4].value) {
@@ -473,17 +484,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Convert the scores object into an array of objects
         const pokemonArray = Object.entries(pokemonScores).map(([name, { score }]) => ({name, score}));
     
-        // Sort the array by score and then by attack, specialAttack, and speed in descending order
+        // Sort the array by score in descending order
         pokemonArray.sort((a, b) => { return b.score - a.score; });
     
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
         tableContainer.style.overflow = 'auto';
-        tableContainer.style.maxHeight = '700px'; // Set a fixed height, adjust as needed
+        tableContainer.style.maxHeight = '700px';
     
         // Create the table element
         const table = document.createElement('table');
-        table.className = 'table'; // Add any CSS classes for styling if needed
+        table.className = 'table';
     
         // Create the table header
         const headerRow = table.createTHead().insertRow();
