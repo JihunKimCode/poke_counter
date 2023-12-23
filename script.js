@@ -460,7 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }        
 
-        counterPokemon.innerHTML = '<h3>Counter Pokemons</h3>';
+        counterPokemon.innerHTML = '<h3>Counter Pokémons</h3>';
     
         const base_url = 'https://pokeapi.co/api/v2/';
     
