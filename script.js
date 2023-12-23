@@ -138,11 +138,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
     
                 if (evolveMove) {
-                    evolutionConditions.push(`Knows ${evolveMove}`);
+                    evolutionConditions.push(`Knows Specific Moves`);
                 }
     
                 if (evolveItem) {
-                    evolutionConditions.push(`Use ${evolveItem} to evolve`);
+                    evolutionConditions.push(`Use ${evolveItem}`);
                 }
     
                 if (evolveHappiness !== null) {
@@ -150,15 +150,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
     
                 if (evolveTime) {
-                    evolutionConditions.push(`Time of Day: ${evolveTime}`);
+                    evolutionConditions.push(`${evolveTime}`);
                 }
     
                 if (evolveGender) {
-                    evolutionConditions.push(`Gender: ${evolveGender}`);
+                    if(evolveGender===1){
+                        evolutionConditions.push(`Female`);
+                    } else {
+                        evolutionConditions.push(`Male`);
+                    }
                 }
     
                 if (evolveLocation) {
-                    evolutionConditions.push(`Location: ${evolveLocation}`);
+                    evolutionConditions.push(`Specific Locations`);
                 }
     
                 if (evolveFriendship !== null) {
@@ -175,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } else if (evolutionMethod === 'use-item') {
                     const evolveItem = chain.evolution_details[0].item?.name;
-                evolutionDetails += ` (Use ${evolveItem} to evolve)`;
+                evolutionDetails += ` (Use ${evolveItem})`;
             } else {
                 const evolveMove = chain.evolution_details[0].known_move;
                 const evolveHappiness = chain.evolution_details[0].min_happiness;
@@ -187,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let evolutionConditions = [];
 
                 if (evolveMove) {
-                    evolutionConditions.push(`Knows ${evolveMove}`);
+                    evolutionConditions.push(`Knows Specific Moves`);
                 }
 
                 if (evolveHappiness !== null) {
@@ -195,15 +199,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (evolveTime) {
-                    evolutionConditions.push(`Time of Day: ${evolveTime}`);
+                    evolutionConditions.push(`${evolveTime}`);
                 }
 
                 if (evolveGender) {
-                    evolutionConditions.push(`Gender: ${evolveGender}`);
+                    if(evolveGender===1){
+                        evolutionConditions.push(`Female`);
+                    } else {
+                        evolutionConditions.push(`Male`);
+                    }
                 }
 
                 if (evolveLocation) {
-                    evolutionConditions.push(`Location: ${evolveLocation}`);
+                    evolutionConditions.push(`Specific Locations`);
                 }
     
                 if (evolveFriendship !== null) {
@@ -379,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Find counter pokemon of the pokemon
-    async function findCounterPokemon(types, statsData) {
+    async function findCounterPokemon(types, SP_stats) {
         //Find Weaknesses of the pokemon
         const weaknesses = new Set();
         types.forEach((type) => {
@@ -421,24 +429,35 @@ document.addEventListener('DOMContentLoaded', () => {
             for (const entry of typeData.pokemon) {
                 const pokemonName = entry.pokemon.name;
     
-                // Fetch the stats of the counter Pokemon from the PokeAPI
-                const counterPokemonUrl = `${base_url}pokemon/${pokemonName}`;
-                const counterPokemonResponse = await fetch(counterPokemonUrl);
-                const counterPokemonData = await counterPokemonResponse.json();
+                // Fetch the stats of the Counter Pokemon(CP) from the PokeAPI
+                const CP_url = `${base_url}pokemon/${pokemonName}`;
+                const CP_response = await fetch(CP_url);
+                const CP_data = await CP_response.json();
                 
                 // counter pokemon stats in variables
-                hp = counterPokemonData.stats.find((stat) => stat.stat.name === 'hp').base_stat
-                atk = counterPokemonData.stats.find((stat) => stat.stat.name === 'attack').base_stat
-                def = counterPokemonData.stats.find((stat) => stat.stat.name === 'defense').base_stat
-                spa = counterPokemonData.stats.find((stat) => stat.stat.name === 'special-attack').base_stat
-                spd = counterPokemonData.stats.find((stat) => stat.stat.name === 'special-defense').base_stat
-                spe = counterPokemonData.stats.find((stat) => stat.stat.name === 'speed').base_stat
+                hp = CP_data.stats.find((stat) => stat.stat.name === 'hp').base_stat
+                atk = CP_data.stats.find((stat) => stat.stat.name === 'attack').base_stat
+                def = CP_data.stats.find((stat) => stat.stat.name === 'defense').base_stat
+                spa = CP_data.stats.find((stat) => stat.stat.name === 'special-attack').base_stat
+                spd = CP_data.stats.find((stat) => stat.stat.name === 'special-defense').base_stat
+                spe = CP_data.stats.find((stat) => stat.stat.name === 'speed').base_stat
     
-                // Initialize the score for the pokemon if not present
+                // Initialize the score and information of the pokemon if not present
                 if (!pokemonScores[pokemonName]) {
                     pokemonScores[pokemonName] = {
+                        sprite: CP_data.sprites.front_default, 
+                        name: CP_data.name,
+                        types: CP_data.types.map((type) => type.type.name).join(', '),
+                        abilities: CP_data.abilities.map((ability) => ability.ability.name).join(', '),
                         score: 0,
-                        types: []
+                        stats:{
+                            hp: hp,
+                            atk: atk,
+                            def: def,
+                            spa: spa,
+                            spd: spd,
+                            spe: spe
+                        }
                     };
                 }
     
@@ -447,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
                 // Additional scoring based on pokemons' stats
                 if (pokemonScores[pokemonName].score<=30) {
-                    /* statsData[n].value means the search pokemon's stats value
+                    /* SP_stats[n].value means the search pokemon(SP)'s stats value
                      * 0: hp
                      * 1: attack
                      * 2: defense
@@ -456,9 +475,9 @@ document.addEventListener('DOMContentLoaded', () => {
                      * 5: speed */
 
                     // Check if the pokeomon's defense or special-defense is lower
-                    if (statsData[2].value < statsData[4].value) {
+                    if (SP_stats[2].value < SP_stats[4].value) {
                         pokemonScores[pokemonName].score += Math.floor(atk * 0.5);
-                    } else if (statsData[2].value > statsData[4].value) {
+                    } else if (SP_stats[2].value > SP_stats[4].value) {
                         pokemonScores[pokemonName].score += Math.floor(spa * 0.5);
                     } else if (atk > spa){
                         pokemonScores[pokemonName].score += Math.floor(atk * 0.5);
@@ -467,22 +486,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     
                     // Def vs SpD based on Atk vs SpA
-                    if (statsData[1].value > statsData[3].value) {
+                    if (SP_stats[1].value > SP_stats[3].value) {
                         pokemonScores[pokemonName].score += Math.floor((hp+def)*0.2);
-                    } else if (statsData[1].value < statsData[3].value) {
+                    } else if (SP_stats[1].value < SP_stats[3].value) {
                         pokemonScores[pokemonName].score += Math.floor((hp+spd)*0.2);
                     } else {
                         pokemonScores[pokemonName].score += Math.floor((hp+def+spd)*0.1);
                     }
 
                     // Give more score to the counter Pokemon whose speed is faster
-                    if (spe > statsData[5].value) pokemonScores[pokemonName].score += 10;
+                    if (spe > SP_stats[5].value) pokemonScores[pokemonName].score += 10;
                 }
             }
         }
     
         // Convert the scores object into an array of objects
-        const pokemonArray = Object.entries(pokemonScores).map(([name, { score }]) => ({name, score}));
+        const pokemonArray = Object.entries(pokemonScores).map(([name, { score, sprite, types, abilities, stats }]) => ({
+            name,
+            score,
+            sprite,
+            types,
+            abilities,
+            stats
+        }));
     
         // Sort the array by score in descending order
         pokemonArray.sort((a, b) => { return b.score - a.score; });
@@ -498,29 +524,24 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // Create the table header
         const headerRow = table.createTHead().insertRow();
-        headerRow.innerHTML = '<th>Image</th><th>Name</th><th>Types</th><th>Abilities</th><th>Score</th><th>HP</th><th>Atk</th><th>Def</th><th>SpA</th><th>SpD</th><th>Spe</th>';
+        headerRow.innerHTML = '<th>Sprite</th><th>Name</th><th>Types</th><th>Abilities</th><th>Score</th><th>HP</th><th>Atk</th><th>Def</th><th>SpA</th><th>SpD</th><th>Spe</th>';
     
         // Iterate through the sorted array and add rows to the table
         for (const pokemon of pokemonArray) {
-            // Fetch the stats of the counter Pokemon from the PokeAPI
-            const counterPokemonUrl = `${base_url}pokemon/${pokemon.name}`;
-            const counterPokemonResponse = await fetch(counterPokemonUrl);
-            const counterPokemonData = await counterPokemonResponse.json();
-    
             // Add row to the table
             const row = table.insertRow();
             row.innerHTML = `
-                <td><img src="${counterPokemonData.sprites.front_default}" alt="${pokemon.name}" width="50"></td>
-                <td>${counterPokemonData.name}</td>
-                <td>${counterPokemonData.types.map((type) => type.type.name).join(', ')}</td>
-                <td>${counterPokemonData.abilities.map((ability) => ability.ability.name).join(', ')}</td>
+                <td><img src="${pokemon.sprite}" alt="${pokemon.name}" width="50"></td>
+                <td>${pokemon.name}</td>
+                <td>${pokemon.types}</td>
+                <td>${pokemon.abilities}</td>
                 <td>${pokemon.score}</td>
-                <td>${counterPokemonData.stats[0].base_stat}</td>
-                <td>${counterPokemonData.stats[1].base_stat}</td>
-                <td>${counterPokemonData.stats[2].base_stat}</td>
-                <td>${counterPokemonData.stats[3].base_stat}</td>
-                <td>${counterPokemonData.stats[4].base_stat}</td>
-                <td>${counterPokemonData.stats[5].base_stat}</td>
+                <td>${pokemon.stats.hp}</td>
+                <td>${pokemon.stats.atk}</td>
+                <td>${pokemon.stats.def}</td>
+                <td>${pokemon.stats.spa}</td>
+                <td>${pokemon.stats.spd}</td>
+                <td>${pokemon.stats.spe}</td>
             `;
         }
     
