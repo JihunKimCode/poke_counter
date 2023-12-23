@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayStatsHistogram(statsData);
                 findCounterPokemon(types, statsData);
                 
-                // Update layout colors
+                // Update theme colors
                 updateColors(name);
 
                 // Get evolution chain details
