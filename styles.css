@@ -38,18 +38,12 @@
     background: #00d6fa;  
 }
 
-
 body {
     font-family: 'NanumS', sans-serif;
     background-color: #f2f2f2;
     margin: 0;
     padding: 0;
     font-size: 16px;
-}
-
-.topnav {
-    font-family: 'NanumB', sans-serif;
-    overflow: hidden;
 }
 
 h1{
@@ -60,6 +54,12 @@ h1{
 
 h2{
     font-family: 'NanumB', sans-serif;
+}
+
+/* Top Nav (search bar)*/
+.topnav {
+    font-family: 'NanumB', sans-serif;
+    overflow: hidden;
 }
   
 .topnav .search-container {
@@ -89,6 +89,29 @@ h2{
     background: #00d6fa;
 }  
 
+/* Github Button */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    color: #e2e2e2;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn.btn-github {
+    background-color: #000000;
+}
+
+.btn.btn-github:hover {
+    color: #fff;
+}
+
+/* Footer */
 footer {
     background-color: #1288F8;
     color: white;
@@ -104,6 +127,7 @@ footer a:hover{
     color: #00d6fa
 }
 
+/* Main Body Display */
 .information{
     display: table;
     margin: 20px;
@@ -116,19 +140,47 @@ footer a:hover{
     line-height: 1.5;
 }
 
+/* Histogram Design */
 #statsHistogram{
     display: table-cell;
     width: 20%;
 }
 
+.stat-bar {
+    margin-bottom: 10px;
+    position: relative;
+    width: 255px;
+}
+
+.bar-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.bar-container {
+    height: 20px;
+    background-color: white;
+    position: relative;
+    width: 100%;
+}
+
+.bar {
+    background-color: #1288f8;
+    height: 100%;
+    width: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: width 0.5s;
+}
+
+/* Table design for counter pokemon */
 #counterPokemon {
     width: 50%;
-    /* Add any additional styling for the counterPokemon container */
     max-height: 600px;
     overflow: scroll;
 }
 
-/* Add your custom styling here */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -152,55 +204,7 @@ footer a:hover{
     height: auto;
 }
 
-.stat-bar {
-    margin-bottom: 10px;
-    position: relative;
-    width: 255px; /* Adjust the width as needed */
-}
-
-.bar-label {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.bar-container {
-    height: 20px;
-    background-color: white; /* Change the color as desired */
-    position: relative;
-    width: 100%;
-}
-
-.bar {
-    background-color: #1288f8;
-    height: 100%;
-    width: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transition: width 0.5s;
-}
-
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px;
-    color: #e2e2e2;
-    border: none;
-    border-radius: 4px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.btn.btn-github {
-    background-color: #000000;
-}
-
-.btn.btn-github:hover {
-    color: #fff;
-}
-
+/* Layout for mobile */
 @media (max-width: 767px) {
     .information{
         flex-direction: column;
@@ -215,11 +219,9 @@ footer a:hover{
     #statsHistogram{
         display: table-row;
         width: fit-content;
-        /* align-items: start; */
     }
     #counterpokemon{
         display: table-row;
         width: fit-content;
-        /* align-items: start; */
     }
 }
