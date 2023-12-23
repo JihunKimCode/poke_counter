@@ -34,11 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Get stats
                 const statsData = data.stats.map((stat) => ({ name: stat.stat.name, value: stat.base_stat }));
+
                 
                 // Display the pokemon's stats histogram and counter pokemon
                 displayStatsHistogram(statsData);
-
                 findCounterPokemon(types, statsData);
+                
+                // Update layout colors
+                updateColors(name);
 
                 // Get evolution chain details
                 fetch(data.species.url)
@@ -76,6 +79,52 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Pokémon not found. Please try another name or ID.');
                 console.error(error);
             });
+    }
+
+    // Match color theme to the pokemon color
+    async function updateColors(name) {
+        const url = `https://pokeapi.co/api/v2/pokemon-species/${name}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        let pokeColor = data.color.name.toLowerCase();
+        let lightpokeColor;
+
+        // Set color matched to pokemon color
+        if (pokeColor === "black") {
+            pokeColor = "black";
+            lightpokeColor = "gray";
+        } else if (pokeColor === "blue") { 
+            pokeColor = "#1288f8";
+            lightpokeColor = "#00d6fa";
+        } else if (pokeColor === "brown") {
+            pokeColor = "#795c32";
+            lightpokeColor = "#997950";
+        } else if (pokeColor === "gray") {
+            pokeColor = "gray";
+            lightpokeColor = "#48494b";
+        } else if (pokeColor === "green") {
+            pokeColor = "#4cbb17";
+            lightpokeColor = "#0b6623";
+        } else if (pokeColor === "pink") {
+            pokeColor = "#e0115f";
+            lightpokeColor = "#fe5bac";
+        } else if (pokeColor === "purple") {
+            pokeColor = "purple";
+            lightpokeColor = "#b5338a";
+        } else if (pokeColor === "red") {
+            pokeColor = "#ff0800";
+            lightpokeColor = "#c21807";
+        } else if (pokeColor === "white") {
+            pokeColor = "#b8b8b8";
+            lightpokeColor = "#d9dddc";
+        } else if (pokeColor === "yellow") {
+            pokeColor = "#ffd300";
+            lightpokeColor = "#fce205";
+        }
+        
+        // Update background color
+        document.documentElement.style.setProperty('--pokemoncolor', pokeColor);
+        document.documentElement.style.setProperty('--lightpokemoncolor', lightpokeColor);
     }
 
     // Function to display the pokemon's stats histogram

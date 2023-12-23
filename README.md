@@ -21,7 +21,9 @@ Pokemon information searcher. It finds counter Pokemon as well.
     - [ ] Better way to calculate score
     - [ ] Beutify Display Table
     - Issue: First search takes 10sec, then 1sec.
-- [ ] Design webpage logo
+- [ ] Website Design
+    - [ ] Webpage logo
+    - [x] Table Colors
 
 # Stretch Goals
 - [ ] Better Pokemon Search (NIDORAN-F, NIDORAN-M)
