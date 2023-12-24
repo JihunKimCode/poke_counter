@@ -57,9 +57,9 @@ h2{
 }
 
 h3{
-    font-family: 'NanumS', sans-serif;
+    font-family: 'NanumB', sans-serif;
     font-size: 1.3em;
-    margin-block: 0em;
+    margin-block: 0.83em;
 }
 
 /* Top Nav (search bar)*/
@@ -138,6 +138,7 @@ footer a:hover{
 .information{
     display: table;
     margin: 20px;
+    margin-top: 0px;
     width: 95%;
 }
 
@@ -183,9 +184,8 @@ footer a:hover{
 
 /* Table design for counter pokemon */
 #counterPokemon {
-    width: 50%;
-    max-height: 600px;
-    overflow: scroll;
+    display: table-cell;
+    width: auto;
 }
 
 .table {
@@ -217,6 +217,7 @@ footer a:hover{
     .information{
         flex-direction: column;
         margin: 10px;
+        margin-top: 0px;
     }
     
     #pokemonInfo {

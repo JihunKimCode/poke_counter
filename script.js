@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('searchButton');
     const pokemonInfo = document.getElementById('pokemonInfo');
     const statsHistogram = document.getElementById('statsHistogram');
-    const counterPokemon = document.getElementById('counterpokemon');
+    const counterPokemon = document.getElementById('counterPokemon');
 
     // Function to perform the search
     function performSearch() {
@@ -61,12 +61,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <h2>${name.toUpperCase()}</h2>
                                     <img src="${image}" alt="${name}" width="100">
                                     <p>Pokedex #${id}</p>
-                                    <p>Type: ${types.join(', ')}</p>
+                                    <p>[Type] <br> ${types.join(', ')}</p>
                                     ${weaknessesHtml}
                                     ${resistancesHtml}
                                     ${invalidHtml}
-                                    <p>[Evolution]<br>${evolutionDetails}</p>
-                                    <p>Abilities: ${abilities}</p>
+                                    <p>[Evolution] <br> ${evolutionDetails}</p>
+                                    <p>[Abilities] <br> ${abilities}</p>
                                 `;
 
                                 pokemonInfo.innerHTML = html;
@@ -132,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Max value for Each Stats
         const maxValue = 255;
 
+        statsHistogram.innerHTML = `<h3>Pokemon Stats</h3>`
         // Create HTML for the histogram
         const histogramHTML = statsData.map((stat) => {
             const barWidth = (stat.value / maxValue) * 100;
@@ -146,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
 
         // Set the HTML content of the histogram container
-        statsHistogram.innerHTML = histogramHTML;
+        statsHistogram.innerHTML += histogramHTML;
     }
 
     // Search button click event
@@ -564,8 +565,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
-        tableContainer.style.overflow = 'auto';
-        tableContainer.style.maxHeight = '600px';
+        tableContainer.style.overflow = 'scroll';
+        tableContainer.style.maxHeight = '650px';
     
         // Create the table element
         const table = document.createElement('table');
