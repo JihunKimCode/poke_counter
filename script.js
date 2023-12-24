@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const statsHistogram = document.getElementById('statsHistogram');
     const counterPokemon = document.getElementById('counterPokemon');
     
+    // Filter variables to adjust counter pokemon table
     const filter = document.getElementById('filter');
     const filter2 = document.getElementById('filter2');
     const filter3 = document.getElementById('filter3');
@@ -267,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 evolutionConditions.push(`${evolveTime}`);
             }
 
-            // EvolutionTrigger
+            // EvolutionTriggers
             if (evolutionMethod === 'trade') 
             {
                 if (tradeItem) {
@@ -447,26 +448,32 @@ document.addEventListener('DOMContentLoaded', () => {
         return Array.from(invalid);
     }
 
-    // Function to handle the click event on the update button
-    filterCheckbox.addEventListener('click', () => {
-        findCounterPokemon(global_types, global_statsData);
-    });  
-    filterCheckbox2.addEventListener('click', () => {
-        findCounterPokemon(global_types, global_statsData);
-    });    
-    filterCheckbox3.addEventListener('click', () => {
-        findCounterPokemon(global_types, global_statsData);
-    });  
-    filterCheckbox4.addEventListener('click', () => {
+    // Function to handle the click event on the filter buttons
+    updateButton.addEventListener('click', () => {
         findCounterPokemon(global_types, global_statsData);
     });    
 
     // Find counter pokemon of the pokemon
     async function findCounterPokemon(types, SP_stats) {
+        // Show filters
         filter.style.display = 'inline-block';
         filter2.style.display = 'inline-block';
         filter3.style.display = 'inline-block';
         filter4.style.display = 'inline-block';
+        updateButton.style.display = 'inline-block';
+        
+        // Clear contents to initialize
+        counterPokemon.innerHTML = '';
+
+        // Create a container for the scrollable table
+        const tableContainer = document.createElement('div');
+        tableContainer.style.overflow = 'scroll';
+        tableContainer.style.maxHeight = '650px';
+        
+        // Create the table element
+        const table = document.createElement('table');
+        table.className = 'table';
+        table.innerHTML = '';
 
         //Find Weaknesses of the pokemon
         const weaknesses = new Set();
@@ -592,22 +599,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Sort the array by score in descending order
         pokemonArray.sort((a, b) => { return b.score - a.score; });
         
-        counterPokemon.innerHTML = '';
-        // Create a container for the scrollable table
-        const tableContainer = document.createElement('div');
-        tableContainer.style.overflow = 'scroll';
-        tableContainer.style.maxHeight = '650px';
-        
-        // Create the table element
-        const table = document.createElement('table');
-        table.className = 'table';
-        table.innerHTML = '';
-        
-        // Check Checkbox
-        const filterSpe = filterCheckbox.checked;
-        const filterSpe2 = filterCheckbox2.checked;
-        const filterSpe3 = filterCheckbox3.checked;
-        const filterSpe4 = filterCheckbox4.checked;
+        // Check that the checkbox is checked
+        const filterSpe = filterCheckbox.checked;       // BST > 600
+        const filterSpe2 = filterCheckbox2.checked;     // Types
+        const filterSpe3 = filterCheckbox3.checked;     // Abilities
+        const filterSpe4 = filterCheckbox4.checked;     // Base Stats
 
         // Create the table header
         const headerRow = table.createTHead().insertRow();

@@ -25,6 +25,7 @@ Pokemon information searcher. It finds counter Pokemon as well.
         - [x] color update
         - [x] Hide elements
     - Issue: First search takes 10sec, then 1sec.
+    - Issue: Multi-clicking Update button occur Race Condition
 - [ ] **Website Design**
     - [ ] Webpage logo
     - [x] Table Colors

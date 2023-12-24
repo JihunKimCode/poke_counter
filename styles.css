@@ -280,16 +280,15 @@ footer a:hover{
 #updateButton {
     background: #fff;
     color: #212121;
-    border-radius: .375rem;
+    border-radius: 5px;
     border-style: solid;
-    border-width: 0.1rem;
+    border-width: 2px;
     box-sizing: border-box;
     cursor: pointer;
-    display: inline-block;
+    display: none;
     font-family: 'NanumB', sans-serif;
-    font-size: 0.9rem;
+    font-size: 12px;
     font-weight: 1000;
-    letter-spacing: -.01em;
     line-height: 1;
     padding: .4rem;
     position: relative;
