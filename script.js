@@ -168,108 +168,99 @@ document.addEventListener('DOMContentLoaded', () => {
         let evolutionDetails = chain.species.name;
     
         if (chain.evolution_details && chain.evolution_details.length > 0) {
-            const evolutionMethod = chain.evolution_details[0].trigger.name;
+            const evolutionMethod = chain.evolution_details[0].trigger?.name;
         
             // Evolution Methods
-            if (evolutionMethod === 'level-up') {
-                const evolveLevel = chain.evolution_details[0].min_level;
-                const evolveMove = chain.evolution_details[0].known_move;
-                const evolveItem = chain.evolution_details[0].item?.name;
-                const evolveHappiness = chain.evolution_details[0].min_happiness;
-                const evolveTime = chain.evolution_details[0].time_of_day;
-                const evolveGender = chain.evolution_details[0].gender;
-                const evolveLocation = chain.evolution_details[0].location;
-                const evolveFriendship = chain.evolution_details[0].min_affection;
-    
-                let evolutionConditions = [];
-    
-                if (evolveLevel !== null) {
-                    evolutionConditions.push(`Level ${evolveLevel}`);
-                }
-    
-                if (evolveMove) {
-                    evolutionConditions.push(`Knows Specific Moves`);
-                }
-    
-                if (evolveItem) {
-                    evolutionConditions.push(`Use ${evolveItem}`);
-                }
-    
-                if (evolveHappiness !== null) {
-                    evolutionConditions.push(`Happiness ${evolveHappiness}`);
-                }
-    
-                if (evolveTime) {
-                    evolutionConditions.push(`${evolveTime}`);
-                }
-    
-                if (evolveGender) {
-                    if(evolveGender===1){
-                        evolutionConditions.push(`Female`);
-                    } else {
-                        evolutionConditions.push(`Male`);
-                    }
-                }
-    
-                if (evolveLocation) {
-                    evolutionConditions.push(`Specific Locations`);
-                }
-    
-                if (evolveFriendship !== null) {
-                    evolutionConditions.push(`Friendship ${evolveFriendship}`);
-                }
-    
-                evolutionDetails += ` (${evolutionConditions.join(', ')})`;
-            } else if (evolutionMethod === 'trade') {
-                const evolveItem = chain.evolution_details[0].held_item?.name;
-                if (evolveItem) {
-                    evolutionDetails += ` (Trade with held item: ${evolveItem})`;
-                } else {
-                    evolutionDetails += ` (Trade)`;
-                }
-            } else if (evolutionMethod === 'use-item') {
-                    const evolveItem = chain.evolution_details[0].item?.name;
-                evolutionDetails += ` (Use ${evolveItem})`;
-            } else {
-                const evolveMove = chain.evolution_details[0].known_move;
-                const evolveHappiness = chain.evolution_details[0].min_happiness;
-                const evolveTime = chain.evolution_details[0].time_of_day;
-                const evolveGender = chain.evolution_details[0].gender;
-                const evolveLocation = chain.evolution_details[0].location;
-                const evolveFriendship = chain.evolution_details[0].min_affection;
-
-                let evolutionConditions = [];
-
-                if (evolveMove) {
-                    evolutionConditions.push(`Knows Specific Moves`);
-                }
-
-                if (evolveHappiness !== null) {
-                    evolutionConditions.push(`Happiness ${evolveHappiness}`);
-                }
-
-                if (evolveTime) {
-                    evolutionConditions.push(`${evolveTime}`);
-                }
-
-                if (evolveGender) {
-                    if(evolveGender===1){
-                        evolutionConditions.push(`Female`);
-                    } else {
-                        evolutionConditions.push(`Male`);
-                    }
-                }
-
-                if (evolveLocation) {
-                    evolutionConditions.push(`Specific Locations`);
-                }
-    
-                if (evolveFriendship !== null) {
-                    evolutionConditions.push(`Friendship ${evolveFriendship}`);
-                }
-    
-                evolutionDetails += ` (${evolutionConditions.join(', ')})`;
+            const evolveGender = chain.evolution_details[0].gender;
+            const tradeItem = chain.evolution_details[0].held_item?.name;
+            const evolveItem = chain.evolution_details[0].item?.name;
+            const evolveMove = chain.evolution_details[0].known_move?.name;
+            const evolveLocation = chain.evolution_details[0].location?.name;
+            const evolveAffection = chain.evolution_details[0].min_affection;
+            const evolveBeauty = chain.evolution_details[0].min_beauty;
+            const evolveHappiness = chain.evolution_details[0].min_happiness;
+            const evolveLevel = chain.evolution_details[0].min_level;
+            const evolveRain = chain.evolution_details[0].needs_overworld_rain;
+            const evolveParty = chain.evolution_details[0].party_species?.name;
+            const evolvePartyType = chain.evolution_details[0].party_type?.name;
+            const evolveStats = chain.evolution_details[0].relative_physical_stats;
+            const evolveTime = chain.evolution_details[0].time_of_day;
+            
+            let evolutionConditions = [];
+            
+            if (evolveLevel !== null) {
+                evolutionConditions.push(`Level ${evolveLevel}`);
             }
+
+            if (evolveGender) {
+                if(evolveGender===1){
+                    evolutionConditions.push(`Female`);
+                } else {
+                    evolutionConditions.push(`Male`);
+                }
+            }
+            
+            if (evolveItem) {
+                evolutionConditions.push(`Use ${evolveItem}`);
+            }
+
+            if (evolveMove) {
+                evolutionConditions.push(`Learn ${evolveMove}`);
+            }
+            
+            if (evolveLocation) {
+                evolutionConditions.push(`At ${evolveLocation} and more!`);
+            }
+
+            if (evolveHappiness !== null) {
+                evolutionConditions.push(`Happiness ${evolveHappiness}`);
+            }
+
+            if (evolveBeauty !== null) {
+                evolutionConditions.push(`Beauty ${evolveBeauty}`);
+            }
+
+            if (evolveAffection !== null) {
+                evolutionConditions.push(`Friendship ${evolveAffection}`);
+            }
+
+            if(evolveRain) {
+                evolutionConditions.push(`Rain Field`);
+            }
+            
+            if(evolveParty){
+                evolutionConditions.push(`"${evolveParty}" in party`);
+            }
+
+            if(evolvePartyType){
+                evolutionConditions.push(`${evolvePartyType} type in party`);
+            }
+            
+            if(evolveStats != null){
+                if(evolveStats === 1){
+                    evolutionConditions.push(`ATK > DEF`);
+                } else if(evolveStats === 0){
+                    evolutionConditions.push(`ATK = DEF`);
+                } else if(evolveStats === -1){
+                    evolutionConditions.push(`ATK < DEF`);
+                }
+            }
+            
+            if (evolveTime) {
+                evolutionConditions.push(`${evolveTime}`);
+            }
+
+            // EvolutionTrigger
+            if (evolutionMethod === 'trade') {
+                if (tradeItem) {
+                    evolutionConditions.push(`Trade holding ${tradeItem}`);
+                } else {
+                    evolutionConditions.push(`Trade`);
+                }
+            } else if(evolutionMethod != null && evolutionMethod != `level-up`) {
+                evolutionConditions.push(`${evolutionMethod}`);
+            }
+            evolutionDetails += ` (${evolutionConditions.join(', ')})`;
         }
     
         // Check all evolutions (e.g. eevee)

@@ -10,8 +10,9 @@ Pokemon information searcher. It finds counter Pokemon as well.
 - [ ] **Evolutions**
     - [x] Evolution Level
     - [x] Evolution Method (Friendship, Item)
-        - [ ] Minor routes
-        - [ ] object issue (e.g. moves, locations)
+        - [ ] Minor routes 
+            - e.g. lycanroc, urshifu, pawmot, maushold, brambleghast, rabsca, palafin, annihilape, kingambit, and gholdengo
+        - [x] object issue (e.g. moves, locations)
     - [x] Evolution Chains
         - [x] More than one (e.g. eevee, beautifly)
 - [x] **Counter Type** (defense)
