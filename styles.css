@@ -59,6 +59,7 @@ h2{
 h3{
     font-family: 'NanumS', sans-serif;
     font-size: 1.3em;
+    margin-block: 0em;
 }
 
 /* Top Nav (search bar)*/
