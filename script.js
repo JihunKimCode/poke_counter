@@ -468,6 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
         tableContainer.style.overflow = 'scroll';
+        tableContainer.style.marginTop = '10px';
         tableContainer.style.maxHeight = '650px';
         
         // Create the table element

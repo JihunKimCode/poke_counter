@@ -197,7 +197,7 @@ footer a:hover{
 #filter4 *, #filter4 ::after, #filter4 ::before  {
     box-sizing: border-box;
     vertical-align: top;
-    margin-right: 5px;
+    margin-right: 2px;
 }
 
 #filter .cbx,
@@ -279,7 +279,7 @@ footer a:hover{
 /* Button Layout */
 #updateButton {
     background: #fff;
-    color: #212121;
+    color: #000;
     border-radius: 5px;
     border-style: solid;
     border-width: 2px;
@@ -289,15 +289,16 @@ footer a:hover{
     font-family: 'NanumB', sans-serif;
     font-size: 12px;
     font-weight: 1000;
-    line-height: 1;
-    padding: .4rem;
+    padding: 6px;
     position: relative;
-    transform: translateZ(0) scale(1);
     transition: transform .2s;
 }
+#updateButton:hover {
+    transform: scale(1.05) translateY(-2px);
+}
 
-#updateButton:not(:disabled):hover:active {
-    transform: scale(0.95) translateY(.125rem);
+#updateButton:active {
+    transform: scale(0.95) translateY(0px);
 }
 
 /* Table design for counter pokemon */
