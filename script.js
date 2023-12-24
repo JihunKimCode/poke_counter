@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             if (evolveLocation) {
-                evolutionConditions.push(`At ${evolveLocation} and more!`);
+                evolutionConditions.push(`At ${evolveLocation} and more`);
             }
 
             if (evolveHappiness !== null) {
@@ -286,13 +286,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // EvolutionTrigger
-            if (evolutionMethod === 'trade') {
+            if (evolutionMethod === 'trade') 
+            {
                 if (tradeItem) {
                     evolutionConditions.push(`Trade holding ${tradeItem}`);
                 } else {
                     evolutionConditions.push(`Trade`);
                 }
-            } else if(evolutionMethod != null && evolutionMethod != `level-up`) {
+            } else if(evolutionMethod != null 
+                && evolutionMethod != `level-up`
+                && evolutionMethod != `use-item`) 
+            {
                 evolutionConditions.push(`${evolutionMethod}`);
             }
             evolutionDetails += ` (${evolutionConditions.join(', ')})`;
