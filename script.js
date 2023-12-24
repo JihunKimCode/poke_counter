@@ -462,20 +462,6 @@ document.addEventListener('DOMContentLoaded', () => {
         filter4.style.display = 'inline-block';
         updateButton.style.display = 'inline-block';
         
-        // Clear contents to initialize
-        counterPokemon.innerHTML = '';
-
-        // Create a container for the scrollable table
-        const tableContainer = document.createElement('div');
-        tableContainer.style.overflow = 'scroll';
-        tableContainer.style.marginTop = '10px';
-        tableContainer.style.maxHeight = '650px';
-        
-        // Create the table element
-        const table = document.createElement('table');
-        table.className = 'table';
-        table.innerHTML = '';
-
         //Find Weaknesses of the pokemon
         const weaknesses = new Set();
         types.forEach((type) => {
@@ -605,6 +591,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const filterSpe2 = filterCheckbox2.checked;     // Types
         const filterSpe3 = filterCheckbox3.checked;     // Abilities
         const filterSpe4 = filterCheckbox4.checked;     // Base Stats
+
+        // Clear contents to initialize
+        counterPokemon.innerHTML = '';
+
+        // Create a container for the scrollable table
+        const tableContainer = document.createElement('div');
+        tableContainer.style.overflow = 'scroll';
+        tableContainer.style.marginTop = '10px';
+        tableContainer.style.maxHeight = '650px';
+        
+        // Create the table element
+        const table = document.createElement('table');
+        table.className = 'table';
+        table.innerHTML = '';
 
         // Create the table header
         const headerRow = table.createTHead().insertRow();
