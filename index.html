@@ -34,16 +34,27 @@
         />
         <button id="searchButton"><i class="fa fa-search"></i></button>
       </div>
-      <!-- Filter button -->
-      <button id="filterButton" class="btn">
-        Filter Pokémon with total stat above 600
-      </button>
     </div>
     <!-- Information display -->
     <div class="information">
       <div id="pokemonInfo"></div>
       <div id="statsHistogram"></div>
-      <div id="counterPokemon"></div>
+      <div class="container">
+        <div id="filter">
+          <h3>Counter Pokémons</h3>
+          <label for="filterCheckbox">
+            <input type="checkbox" id="filterCheckbox">
+            <span class="cbx">
+              <svg width="12px" height="11px" viewBox="0 0 12 11">
+                <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+              </svg>
+            </span>
+            <span>Exclude Total Base Stats > 600</span>
+            <!-- <button id="updateButton">Update Table</button> -->
+          </label>
+        </div>
+        <div id="counterPokemon"></div>
+      </div>
     </div>
     <script src="script.js"></script>
   </body>

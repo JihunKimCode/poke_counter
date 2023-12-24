@@ -20,7 +20,8 @@ Pokemon information searcher. It finds counter Pokemon as well.
     - [x] Reorder by Multiple (x4 to x2; x1/2 to x1/4)
 - [x] **Counter Pokemon**
     - [ ] Better way to calculate score
-    - [ ] Beutify Display Table
+        - [x] Exclude BST > 600
+    - [x] Beutify Display Table
     - Issue: First search takes 10sec, then 1sec.
 - [ ] **Website Design**
     - [ ] Webpage logo

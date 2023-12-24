@@ -170,6 +170,7 @@ footer a:hover{
     background-color: white;
     position: relative;
     width: 100%;
+    border-radius: 10px;
 }
 
 .bar {
@@ -180,12 +181,102 @@ footer a:hover{
     top: 0;
     left: 0;
     transition: width 0.5s;
+    border-radius: 10px;
+}
+
+.container{
+    display: table-cell;
+    width: auto;
+    flex-direction: column;
+}
+
+/* Checkbox and Text */
+#filter *,
+#filter ::after,
+#filter ::before {
+    box-sizing: border-box;
+}
+
+#filter .cbx {
+    position: relative;
+    display: block;
+    float: left;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    background-color: #606062;
+    transition: all 0.15s ease;
+}
+#filter .cbx svg {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-dasharray: 17;
+    stroke-dashoffset: 17;
+    transform: translate3d(0, 0, 0);
+}
+#filter .cbx + span {
+    float: left;
+    margin-left: 6px;
+}
+#filter {
+    user-select: none;
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+}
+#filter label {
+    display: inline-block;
+    cursor: pointer;
+}
+
+#filter input[type="checkbox"] {
+    display: none;
+    visibility: hidden;
+}
+
+#filter input[type="checkbox"]:checked + .cbx {
+    background-color: var(--pokemoncolor, #1288f8);
+}
+
+#filter input[type="checkbox"]:checked + .cbx svg {
+    stroke-dashoffset: 0;
+    transition: all 0.15s ease;
+}
+
+/* Button Layout */
+#updateButton {
+    background: #fff;
+    color: #212121;
+    border-radius: .375rem;
+    border-style: solid;
+    border-width: 0.1rem;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'NanumB', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 1000;
+    letter-spacing: -.01em;
+    line-height: 1;
+    padding: .4rem;
+    position: relative;
+    transform: translateZ(0) scale(1);
+    transition: transform .2s;
+}
+
+#updateButton:not(:disabled):hover:active {
+    transform: scale(0.95) translateY(.125rem);
 }
 
 /* Table design for counter pokemon */
 #counterPokemon {
-    display: table-cell;
-    width: auto;
+    display: table-row;
 }
 
 .table {

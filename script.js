@@ -4,6 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const pokemonInfo = document.getElementById('pokemonInfo');
     const statsHistogram = document.getElementById('statsHistogram');
     const counterPokemon = document.getElementById('counterPokemon');
+    
+    const filter = document.getElementById('filter');
+    const filterCheckbox = document.getElementById('filterCheckbox');
+    const updateButton = document.getElementById('updateButton');
+
+    //global variables for updating table
+    let global_types, global_statsData
 
     // Function to perform the search
     function performSearch() {
@@ -12,41 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Please enter a Pokémon name or ID.');
             return;
         }
-        //filtering the pokemon with total stat above 600
-        function filterCounterPokemon() {
-            // Get the total stat of the searched Pokemon
-            const totalStat = calculateTotalStat(statsData); // Assuming statsData is available globally
-    
-            // Filter counter Pokemon based on total stat
-            const filteredPokemonArray = pokemonArray.filter((pokemon) => {
-                return calculateTotalStat(pokemon.stats) <= 600; // Only include Pokemon with total stat less than or equal to 600
-            });
-    
-            // Render the filtered Pokemon in the table
-            renderFilteredPokemon(filteredPokemonArray);
-        }
-    
-        // Function to calculate total stat
-        function calculateTotalStat(stats) {
-            return stats.reduce((total, stat) => total + stat.value, 0);
-        }
-    
-        // Function to render the filtered Pokemon in the table
-        function renderFilteredPokemon(filteredPokemonArray) {
-            // ... (existing code to render the table)
-        }
-    
-        // Search button click event
-        searchButton.addEventListener('click', () => {
-            performSearch();
-        });
-    
-        // Filter button click event
-        filterButton.addEventListener('click', () => {
-            filterCounterPokemon();
-        });
-
-        //
 
         fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`)
             .then((response) => response.json())
@@ -56,28 +28,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 const id = data.id;
                 const image = data.sprites.front_default;
                 const types = data.types.map((type) => type.type.name);
+                global_types = types;
 
                 // Get weaknesses, resistances, and invalid
                 const weaknesses = getWeaknesses(types);
                 const resistances = getResistances(types);
                 const invalid = getInvalid(types);
-
+                
                 // Display the weaknesses, resistances, and invalid
                 const weaknessesHtml = weaknesses.length > 0 ? `<p>[Weaknesses]<br>${weaknesses.join(', ')}</p>` : '';
                 const resistancesHtml = resistances.length > 0 ? `<p>[Resistances]<br>${resistances.join(', ')}</p>` : '';
                 const invalidHtml = invalid.length > 0 ? `<p>[Invalid]<br>${invalid.join(', ')}</p>` : '';
-
+                
                 // Get stats
                 const statsData = data.stats.map((stat) => ({ name: stat.stat.name, value: stat.base_stat }));
-
+                global_statsData = statsData;
                 
                 // Display the pokemon's stats histogram and counter pokemon
                 displayStatsHistogram(statsData);
                 findCounterPokemon(types, statsData);
-                
                 // Update theme colors
                 updateColors(name);
-
+                
                 // Get evolution chain details
                 fetch(data.species.url)
                     .then((response) => response.json())
@@ -105,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 `;
 
                                 pokemonInfo.innerHTML = html;
+                                
                             })
                             .catch((error) => console.error(error));
                     })
@@ -166,11 +139,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayStatsHistogram(statsData) {
         // Max value for Each Stats
         const maxValue = 255;
+        let stats = 0;
 
         statsHistogram.innerHTML = `<h3>Pokémon Stats</h3>`
         // Create HTML for the histogram
         const histogramHTML = statsData.map((stat) => {
             const barWidth = (stat.value / maxValue) * 100;
+            stats += stat.value;
             return `
                 <div class="stat-bar">
                     <div class="bar-label">${stat.name}: ${stat.value}</div>
@@ -183,6 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Set the HTML content of the histogram container
         statsHistogram.innerHTML += histogramHTML;
+        statsHistogram.innerHTML += `<p>Total Base Stats: ${stats}</p>`;
     }
 
     // Search button click event
@@ -462,12 +438,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 typeInval.forEach((inval) => invalid.add(inval));
             }
         });
-    
         return Array.from(invalid);
     }
 
+    // Function to handle the click event on the update button
+    filterCheckbox.addEventListener('click', () => {
+        findCounterPokemon(global_types, global_statsData);
+    });    
+
     // Find counter pokemon of the pokemon
     async function findCounterPokemon(types, SP_stats) {
+        filter.style.display = 'table-row';
+
         //Find Weaknesses of the pokemon
         const weaknesses = new Set();
         types.forEach((type) => {
@@ -490,9 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }        
-
-        counterPokemon.innerHTML = '<h3>Counter Pokémons</h3>';
-    
+        
         const base_url = 'https://pokeapi.co/api/v2/';
     
         // Create an object to store pokemon scores
@@ -536,7 +516,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             def: def,
                             spa: spa,
                             spd: spd,
-                            spe: spe
+                            spe: spe,
+                            total: hp+atk+def+spa+spd+spe
                         }
                     };
                 }
@@ -592,22 +573,31 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // Sort the array by score in descending order
         pokemonArray.sort((a, b) => { return b.score - a.score; });
-    
+        
+        counterPokemon.innerHTML = '';
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
         tableContainer.style.overflow = 'scroll';
         tableContainer.style.maxHeight = '650px';
-    
+        
         // Create the table element
         const table = document.createElement('table');
         table.className = 'table';
-    
+        table.innerHTML = '';
+        
         // Create the table header
         const headerRow = table.createTHead().insertRow();
-        headerRow.innerHTML = '<th>Sprite</th><th>Name</th><th>Types</th><th>Abilities</th><th>Score</th><th>HP</th><th>Atk</th><th>Def</th><th>SpA</th><th>SpD</th><th>Spe</th>';
-    
+        headerRow.innerHTML = '<th>Sprite</th><th>Name</th><th>Types</th><th>Abilities</th><th>Score</th><th>HP</th><th>Atk</th><th>Def</th><th>SpA</th><th>SpD</th><th>Spe</th><th>BST</th>';
+        
+        // Check Checkbox
+        const filterSpe = filterCheckbox.checked;
+
         // Iterate through the sorted array and add rows to the table
         for (const pokemon of pokemonArray) {
+
+            // Skip Pokemon with BST > 600 if the checkbox is checked
+            if (filterSpe && pokemon.stats.total > 600) continue;
+    
             // Add row to the table
             const row = table.insertRow();
             row.innerHTML = `
@@ -622,13 +612,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${pokemon.stats.spa}</td>
                 <td>${pokemon.stats.spd}</td>
                 <td>${pokemon.stats.spe}</td>
+                <td>${pokemon.stats.total}</td>
             `;
         }
-    
         // Append the table to the container
         tableContainer.appendChild(table);
     
         // Append the container to the counterPokemon element
         counterPokemon.appendChild(tableContainer);
-    }        
+    }
 });
