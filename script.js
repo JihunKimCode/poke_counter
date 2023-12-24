@@ -12,6 +12,41 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Please enter a Pokémon name or ID.');
             return;
         }
+        //filtering the pokemon with total stat above 600
+        function filterCounterPokemon() {
+            // Get the total stat of the searched Pokemon
+            const totalStat = calculateTotalStat(statsData); // Assuming statsData is available globally
+    
+            // Filter counter Pokemon based on total stat
+            const filteredPokemonArray = pokemonArray.filter((pokemon) => {
+                return calculateTotalStat(pokemon.stats) <= 600; // Only include Pokemon with total stat less than or equal to 600
+            });
+    
+            // Render the filtered Pokemon in the table
+            renderFilteredPokemon(filteredPokemonArray);
+        }
+    
+        // Function to calculate total stat
+        function calculateTotalStat(stats) {
+            return stats.reduce((total, stat) => total + stat.value, 0);
+        }
+    
+        // Function to render the filtered Pokemon in the table
+        function renderFilteredPokemon(filteredPokemonArray) {
+            // ... (existing code to render the table)
+        }
+    
+        // Search button click event
+        searchButton.addEventListener('click', () => {
+            performSearch();
+        });
+    
+        // Filter button click event
+        filterButton.addEventListener('click', () => {
+            filterCounterPokemon();
+        });
+
+        //
 
         fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`)
             .then((response) => response.json())
