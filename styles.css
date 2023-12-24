@@ -197,9 +197,10 @@ footer a:hover{
 #filter4 *, #filter4 ::after, #filter4 ::before  {
     box-sizing: border-box;
     vertical-align: top;
-    margin-right: 2px;
+    margin-right: 6px;
 }
 
+/* Checkbox styles */
 #filter .cbx,
 #filter2 .cbx2,
 #filter3 .cbx3,
@@ -213,6 +214,8 @@ footer a:hover{
     background-color: #606062;
     transition: all 0.15s ease;
 }
+
+/* Checkmark styles */
 #filter .cbx svg,
 #filter2 .cbx2 svg,
 #filter3 .cbx3 svg,
@@ -227,15 +230,9 @@ footer a:hover{
     stroke-width: 2;
     stroke-dasharray: 17;
     stroke-dashoffset: 17;
-    transform: translate3d(0, 0, 0);
 }
-#filter .cbx + span,
-#filter2 .cbx2 + span,
-#filter3 .cbx3 + span,
-#filter4 .cbx4 + span {
-    float: left;
-    margin-left: 6px;
-}
+
+/* Container styles */
 #filter,
 #filter2,
 #filter3,
@@ -245,6 +242,8 @@ footer a:hover{
     justify-content: space-between;
     align-items: center;
 }
+
+/* Label styles */
 #filter label,
 #filter2 label,
 #filter3 label,
@@ -253,6 +252,7 @@ footer a:hover{
     cursor: pointer;
 }
 
+/* Hide default checkboxes */
 #filter input[type="checkbox"],
 #filter2 input[type="checkbox"],
 #filter3 input[type="checkbox"],
@@ -261,6 +261,7 @@ footer a:hover{
     visibility: hidden;
 }
 
+/* Checked state styles */
 #filter input[type="checkbox"]:checked + .cbx,
 #filter2 input[type="checkbox"]:checked + .cbx2,
 #filter3 input[type="checkbox"]:checked + .cbx3,
@@ -268,6 +269,7 @@ footer a:hover{
     background-color: var(--pokemoncolor, #1288f8);
 }
 
+/* Checked state animation */
 #filter input[type="checkbox"]:checked + .cbx svg,
 #filter2 input[type="checkbox"]:checked + .cbx2 svg,
 #filter3 input[type="checkbox"]:checked + .cbx3 svg,
@@ -294,11 +296,13 @@ footer a:hover{
     transition: transform .2s;
 }
 #updateButton:hover {
-    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2),0 3px 3px 0 rgba(0,0,0,0.2);
+    transform: translateY(-2px);
 }
 
 #updateButton:active {
-    transform: scale(0.95) translateY(0px);
+    box-shadow: none;
+    transform: translateY(0px);
 }
 
 /* Table design for counter pokemon */
