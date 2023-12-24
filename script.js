@@ -455,6 +455,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Find counter pokemon of the pokemon
     async function findCounterPokemon(types, SP_stats) {
+        // Clear Content to update
+        counterPokemon.innerHTML = '';
+
+        // Create a container for the loading message
+        const Loading = document.createElement('div');
+        Loading.style.marginTop = '10px';
+        Loading.innerHTML = `Loading...`;
+        counterPokemon.appendChild(Loading);
+
         // Show filters
         filter.style.display = 'inline-block';
         filter2.style.display = 'inline-block';
@@ -592,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const filterSpe3 = filterCheckbox3.checked;     // Abilities
         const filterSpe4 = filterCheckbox4.checked;     // Base Stats
 
-        // Clear contents to initialize
+        // Clear contents to prevent Race Condition
         counterPokemon.innerHTML = '';
 
         // Create a container for the scrollable table
