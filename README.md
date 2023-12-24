@@ -22,6 +22,8 @@ Pokemon information searcher. It finds counter Pokemon as well.
     - [ ] Better way to calculate score
         - [x] Exclude BST > 600
     - [x] Beutify Display Table
+        - [x] color update
+        - [x] Hide elements
     - Issue: First search takes 10sec, then 1sec.
 - [ ] **Website Design**
     - [ ] Webpage logo

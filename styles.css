@@ -191,13 +191,19 @@ footer a:hover{
 }
 
 /* Checkbox and Text */
-#filter *,
-#filter ::after,
-#filter ::before {
+#filter *, #filter ::after, #filter ::before,
+#filter2 *, #filter2 ::after, #filter2 ::before,
+#filter3 *, #filter3 ::after, #filter3 ::before,
+#filter4 *, #filter4 ::after, #filter4 ::before  {
     box-sizing: border-box;
+    vertical-align: top;
+    margin-right: 5px;
 }
 
-#filter .cbx {
+#filter .cbx,
+#filter2 .cbx2,
+#filter3 .cbx3,
+#filter4 .cbx4 {
     position: relative;
     display: block;
     float: left;
@@ -207,7 +213,10 @@ footer a:hover{
     background-color: #606062;
     transition: all 0.15s ease;
 }
-#filter .cbx svg {
+#filter .cbx svg,
+#filter2 .cbx2 svg,
+#filter3 .cbx3 svg,
+#filter4 .cbx4 svg {
     position: absolute;
     top: 3px;
     left: 3px;
@@ -220,31 +229,49 @@ footer a:hover{
     stroke-dashoffset: 17;
     transform: translate3d(0, 0, 0);
 }
-#filter .cbx + span {
+#filter .cbx + span,
+#filter2 .cbx2 + span,
+#filter3 .cbx3 + span,
+#filter4 .cbx4 + span {
     float: left;
     margin-left: 6px;
 }
-#filter {
+#filter,
+#filter2,
+#filter3,
+#filter4 {
     user-select: none;
     display: none;
     justify-content: space-between;
     align-items: center;
 }
-#filter label {
+#filter label,
+#filter2 label,
+#filter3 label,
+#filter4 label {
     display: inline-block;
     cursor: pointer;
 }
 
-#filter input[type="checkbox"] {
+#filter input[type="checkbox"],
+#filter2 input[type="checkbox"],
+#filter3 input[type="checkbox"],
+#filter4 input[type="checkbox"] {
     display: none;
     visibility: hidden;
 }
 
-#filter input[type="checkbox"]:checked + .cbx {
+#filter input[type="checkbox"]:checked + .cbx,
+#filter2 input[type="checkbox"]:checked + .cbx2,
+#filter3 input[type="checkbox"]:checked + .cbx3,
+#filter4 input[type="checkbox"]:checked + .cbx4 {
     background-color: var(--pokemoncolor, #1288f8);
 }
 
-#filter input[type="checkbox"]:checked + .cbx svg {
+#filter input[type="checkbox"]:checked + .cbx svg,
+#filter2 input[type="checkbox"]:checked + .cbx2 svg,
+#filter3 input[type="checkbox"]:checked + .cbx3 svg,
+#filter4 input[type="checkbox"]:checked + .cbx4 svg {
     stroke-dashoffset: 0;
     transition: all 0.15s ease;
 }

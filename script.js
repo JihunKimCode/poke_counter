@@ -6,7 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const counterPokemon = document.getElementById('counterPokemon');
     
     const filter = document.getElementById('filter');
+    const filter2 = document.getElementById('filter2');
+    const filter3 = document.getElementById('filter3');
+    const filter4 = document.getElementById('filter4');
     const filterCheckbox = document.getElementById('filterCheckbox');
+    const filterCheckbox2 = document.getElementById('filterCheckbox2');
+    const filterCheckbox3 = document.getElementById('filterCheckbox3');
+    const filterCheckbox4 = document.getElementById('filterCheckbox4');
     const updateButton = document.getElementById('updateButton');
 
     //global variables for updating table
@@ -444,11 +450,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to handle the click event on the update button
     filterCheckbox.addEventListener('click', () => {
         findCounterPokemon(global_types, global_statsData);
+    });  
+    filterCheckbox2.addEventListener('click', () => {
+        findCounterPokemon(global_types, global_statsData);
+    });    
+    filterCheckbox3.addEventListener('click', () => {
+        findCounterPokemon(global_types, global_statsData);
+    });  
+    filterCheckbox4.addEventListener('click', () => {
+        findCounterPokemon(global_types, global_statsData);
     });    
 
     // Find counter pokemon of the pokemon
     async function findCounterPokemon(types, SP_stats) {
-        filter.style.display = 'table-row';
+        filter.style.display = 'inline-block';
+        filter2.style.display = 'inline-block';
+        filter3.style.display = 'inline-block';
+        filter4.style.display = 'inline-block';
 
         //Find Weaknesses of the pokemon
         const weaknesses = new Set();
@@ -585,12 +603,19 @@ document.addEventListener('DOMContentLoaded', () => {
         table.className = 'table';
         table.innerHTML = '';
         
-        // Create the table header
-        const headerRow = table.createTHead().insertRow();
-        headerRow.innerHTML = '<th>Sprite</th><th>Name</th><th>Types</th><th>Abilities</th><th>Score</th><th>HP</th><th>Atk</th><th>Def</th><th>SpA</th><th>SpD</th><th>Spe</th><th>BST</th>';
-        
         // Check Checkbox
         const filterSpe = filterCheckbox.checked;
+        const filterSpe2 = filterCheckbox2.checked;
+        const filterSpe3 = filterCheckbox3.checked;
+        const filterSpe4 = filterCheckbox4.checked;
+
+        // Create the table header
+        const headerRow = table.createTHead().insertRow();
+        headerRow.innerHTML = '<th>Sprite</th><th>Name</th>'
+        if(!filterSpe2) headerRow.innerHTML += '<th>Types</th>';
+        if(!filterSpe3) headerRow.innerHTML += '<th>Abilities</th>';
+        headerRow.innerHTML += '<th>Score</th>'
+        if(!filterSpe4) headerRow.innerHTML += '<th>HP</th><th>Atk</th><th>Def</th><th>SpA</th><th>SpD</th><th>Spe</th><th>BST</th>';
 
         // Iterate through the sorted array and add rows to the table
         for (const pokemon of pokemonArray) {
@@ -601,19 +626,30 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add row to the table
             const row = table.insertRow();
             row.innerHTML = `
-                <td><img src="${pokemon.sprite}" alt="${pokemon.name}" width="50"></td>
-                <td>${pokemon.name}</td>
-                <td>${pokemon.types}</td>
-                <td>${pokemon.abilities}</td>
-                <td>${pokemon.score}</td>
-                <td>${pokemon.stats.hp}</td>
-                <td>${pokemon.stats.atk}</td>
-                <td>${pokemon.stats.def}</td>
-                <td>${pokemon.stats.spa}</td>
-                <td>${pokemon.stats.spd}</td>
-                <td>${pokemon.stats.spe}</td>
-                <td>${pokemon.stats.total}</td>
+            <td><img src="${pokemon.sprite}" alt="${pokemon.name}" width="50"></td>
+            <td>${pokemon.name}</td>
             `;
+            if(!filterSpe2){
+                row.innerHTML += `<td>${pokemon.types}</td>`;
+            }
+
+            if(!filterSpe3){
+                row.innerHTML += `<td>${pokemon.abilities}</td>`;
+            } 
+
+            row.innerHTML += `<td>${pokemon.score}</td>`;
+            
+            if(!filterSpe4) {
+                row.innerHTML += `
+                    <td>${pokemon.stats.hp}</td>
+                    <td>${pokemon.stats.atk}</td>
+                    <td>${pokemon.stats.def}</td>
+                    <td>${pokemon.stats.spa}</td>
+                    <td>${pokemon.stats.spd}</td>
+                    <td>${pokemon.stats.spe}</td>
+                    <td>${pokemon.stats.total}</td>
+                `;
+            }
         }
         // Append the table to the container
         tableContainer.appendChild(table);
