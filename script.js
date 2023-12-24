@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function performSearch() {
         const searchTerm = searchInput.value.toLowerCase().trim();
         if (searchTerm === '') {
-            alert('Please enter a pokemon name or ID.');
+            alert('Please enter a Pokémon name or ID.');
             return;
         }
 
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Max value for Each Stats
         const maxValue = 255;
 
-        statsHistogram.innerHTML = `<h3>Pokemon Stats</h3>`
+        statsHistogram.innerHTML = `<h3>Pokémon Stats</h3>`
         // Create HTML for the histogram
         const histogramHTML = statsData.map((stat) => {
             const barWidth = (stat.value / maxValue) * 100;
