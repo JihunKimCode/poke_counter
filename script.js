@@ -460,7 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Create a container for the loading message
         const Loading = document.createElement('div');
-        Loading.style.marginTop = '10px';
+        Loading.style.marginTop = '12px';
         Loading.innerHTML = `Loading...`;
         counterPokemon.appendChild(Loading);
 
@@ -607,7 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
         tableContainer.style.overflow = 'scroll';
-        tableContainer.style.marginTop = '10px';
+        tableContainer.style.marginTop = '12px';
         tableContainer.style.maxHeight = '650px';
         
         // Create the table element
