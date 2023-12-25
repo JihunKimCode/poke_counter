@@ -60,6 +60,8 @@ h3{
     font-family: 'NanumB', sans-serif;
     font-size: 1.3em;
     margin-block: 0.83em;
+    margin-top: 0px;
+    margin-bottom: 12px;
 }
 
 /* Top Nav (search bar)*/
