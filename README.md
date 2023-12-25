@@ -3,7 +3,8 @@ Pokemon information searcher. It finds counter Pokemon as well.
 
 # Goals
 - [x] **Sprite**
-    - [x] Shiney Sprite
+    - [x] Shiny Sprite
+    - [ ] Back Sprite
 - [x] **ID**
 - [x] **Type**
     - [ ] Type icons?
