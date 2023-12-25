@@ -533,6 +533,9 @@ document.addEventListener('DOMContentLoaded', () => {
         findCounterPokemon(global_types, global_statsData);
     });    
 
+    // Show and hide table settings
+    settingButton.addEventListener('click', toggleSettingDisplay);     
+    
     function toggleSettingDisplay() {
         const filters = [filter, filter1, filter2, filter3, filter4];
     
@@ -541,8 +544,6 @@ document.addEventListener('DOMContentLoaded', () => {
             filter.style.display = (currentDisplay === 'none') ? 'inline-block' : 'none';
         });
     }
-    
-    settingButton.addEventListener('click', toggleSettingDisplay);     
 
     // Find counter pokemon of the pokemon
     async function findCounterPokemon(types, SP_stats) {
@@ -562,7 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Loading.innerHTML = `Loading...`;
         counterPokemon.appendChild(Loading);
 
-        // Show filters
+        // Show Buttons
         settingButton.style.display = 'inline-block';
         updateButton.style.display = 'inline-block';
         
