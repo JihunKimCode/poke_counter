@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="styles.css" />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
   </head>
   <body>
@@ -37,7 +37,20 @@
     </div>
     <!-- Information display -->
     <div class="information">
-      <div id="pokemonInfo"></div>
+      <div class="container">
+        <div id="filter5">
+          <label for="filterCheckbox5">
+            <input type="checkbox" id="filterCheckbox5">
+            <span class="cbx5">
+              <svg width="12px" height="11px" viewBox="0 0 12 11">
+                <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+              </svg>
+            </span>
+            <span>Shiny Sprite</span>
+          </label>
+        </div>
+        <div id="pokemonInfo"></div>
+      </div>
       <div id="statsHistogram"></div>
       <div class="container">
         <div id="filter">
@@ -93,8 +106,7 @@
   </body>
   <footer>
     All images and data are from
-    <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer"
-      >PokéAPI</a
-    >. <br />© 2023 Pokémon. © 1995-2023 Nintendo/Creatures Inc./GAME FREAK inc.
+    <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer">PokéAPI</a>. 
+    <br>© 2023 Pokémon. © 1995-2023 Nintendo/Creatures Inc./GAME FREAK inc.
   </footer>
 </html>

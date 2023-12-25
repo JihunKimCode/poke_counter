@@ -10,14 +10,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const filter2 = document.getElementById('filter2');
     const filter3 = document.getElementById('filter3');
     const filter4 = document.getElementById('filter4');
+    const filter5 = document.getElementById('filter5');
     const filterCheckbox = document.getElementById('filterCheckbox');
     const filterCheckbox2 = document.getElementById('filterCheckbox2');
     const filterCheckbox3 = document.getElementById('filterCheckbox3');
     const filterCheckbox4 = document.getElementById('filterCheckbox4');
+    const filterCheckbox5 = document.getElementById('filterCheckbox5');
     const updateButton = document.getElementById('updateButton');
 
     //global variables for updating table
-    let global_types, global_statsData
+    let global_types, global_statsData, global_sprites;
+
+    // Search button click event
+    searchButton.addEventListener('click', () => {
+        performSearch();
+    });
+
+    // Add a keydown event listener to the input field
+    searchInput.addEventListener('keydown', (event) => {
+        // Check if the key pressed is the Enter key (key code 13)
+        if (event.keyCode === 13) {
+            performSearch();
+        }
+    });
 
     // Function to perform the search
     function performSearch() {
@@ -30,65 +45,23 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`)
             .then((response) => response.json())
             .then((data) => {
-                // Trace Pokemon's information
-                const name = data.name;
-                const id = data.id;
-                const image = data.sprites.front_default;
+                const sprites = data.sprites;
+                const abilities = data.abilities.map((ability) => ability.ability.name).join(', ');
                 const types = data.types.map((type) => type.type.name);
-                global_types = types;
-
-                // Get weaknesses, resistances, and invalid
-                const weaknesses = getWeaknesses(types);
-                const resistances = getResistances(types);
-                const invalid = getInvalid(types);
-                
-                // Display the weaknesses, resistances, and invalid
-                const weaknessesHtml = weaknesses.length > 0 ? `<p>[Weaknesses]<br>${weaknesses.join(', ')}</p>` : '';
-                const resistancesHtml = resistances.length > 0 ? `<p>[Resistances]<br>${resistances.join(', ')}</p>` : '';
-                const invalidHtml = invalid.length > 0 ? `<p>[Invalid]<br>${invalid.join(', ')}</p>` : '';
-                
-                // Get stats
                 const statsData = data.stats.map((stat) => ({ name: stat.stat.name, value: stat.base_stat }));
+                
+                // global variables for click events
+                global_sprites = sprites;
+                global_types = types;
                 global_statsData = statsData;
                 
-                // Display the pokemon's stats histogram and counter pokemon
+                // Update theme colors
+                findColors(data.name, data.id);
+
+                // Main Body
+                getpokemonInfo(data.name, data.id, sprites, types, data.species.url, abilities);
                 displayStatsHistogram(statsData);
                 findCounterPokemon(types, statsData);
-                // Update theme colors
-                findColors(name, id);
-                
-                // Get evolution chain details
-                fetch(data.species.url)
-                    .then((response) => response.json())
-                    .then((speciesData) => {
-                        const evolutionChainUrl = speciesData.evolution_chain.url;
-                        fetch(evolutionChainUrl)
-                            .then((response) => response.json())
-                            .then((evolutionData) => {
-                                const evolutionDetails = parseEvolutionChain(evolutionData.chain);
-
-                                // Get moves and abilities
-                                const abilities = data.abilities.map((ability) => ability.ability.name).join(', ');
-
-                                // Display as text
-                                const html = `
-                                    <h2>${name.toUpperCase()}</h2>
-                                    <img src="${image}" alt="${name}" width="100">
-                                    <p>Pokedex #${id}</p>
-                                    <p>[Type] <br> ${types.join(', ')}</p>
-                                    ${weaknessesHtml}
-                                    ${resistancesHtml}
-                                    ${invalidHtml}
-                                    <p>[Evolution] <br> ${evolutionDetails}</p>
-                                    <p>[Abilities] <br> ${abilities}</p>
-                                `;
-
-                                pokemonInfo.innerHTML = html;
-                                
-                            })
-                            .catch((error) => console.error(error));
-                    })
-                    .catch((error) => console.error(error));
             })
             .catch((error) => {
                 alert('Pokémon not found. Please try another name or ID.');
@@ -96,6 +69,74 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+    function getpokemonInfo(name, id, sprites, types, species, abilities){
+        // Trace Pokemon's information
+        const image = getSprite(sprites);
+
+        // Get weaknesses, resistances, and invalid
+        const weaknesses = getWeaknesses(types);
+        const resistances = getResistances(types);
+        const invalid = getInvalid(types);
+        
+        // Display the weaknesses, resistances, and invalid
+        const weaknessesHtml = weaknesses.length > 0 ? `<p>[Weaknesses]<br>${weaknesses.join(', ')}</p>` : '';
+        const resistancesHtml = resistances.length > 0 ? `<p>[Resistances]<br>${resistances.join(', ')}</p>` : '';
+        const invalidHtml = invalid.length > 0 ? `<p>[Invalid]<br>${invalid.join(', ')}</p>` : '';
+
+        // Get evolution chain details
+        fetch(species)
+        .then((response) => response.json())
+        .then((speciesData) => {
+            const evolutionChainUrl = speciesData.evolution_chain.url;
+            fetch(evolutionChainUrl)
+                .then((response) => response.json())
+                .then((evolutionData) => {
+                    const evolutionDetails = parseEvolutionChain(evolutionData.chain);
+
+                    // Display as text
+                    const html = `
+                        <h2>${name.toUpperCase()}</h2>
+                        <img src="${image}" alt="${name}" width="100" class="pokemon-image">
+                        <p>Pokedex #${id}</p>
+                        <p>[Type] <br> ${types.join(', ')}</p>
+                        ${weaknessesHtml}
+                        ${resistancesHtml}
+                        ${invalidHtml}
+                        <p>[Evolution] <br> ${evolutionDetails}</p>
+                        <p>[Abilities] <br> ${abilities}</p>
+                    `;
+                    pokemonInfo.innerHTML = html;
+                })
+                .catch((error) => console.error(error));
+        })
+        .catch((error) => console.error(error));
+    }
+
+    // Function to handle the click event on the filter buttons
+    filter5.addEventListener('click', () => {
+        // get updated Sprite
+        const updatedImage = getSprite(global_sprites);
+        
+        // Update the sprite in the HTML
+        const sprite = document.querySelector('.pokemon-image');
+        if (sprite) {
+            sprite.src = updatedImage;
+        }
+    });    
+
+    function getSprite(sprites){
+        filter5.style.display = 'inline-block';
+        const filterSpe5 = filterCheckbox5.checked;     // Shiny sprite
+        let image;
+        
+        if(filterSpe5) {
+            image = sprites.front_shiny;
+        } else{
+            image = sprites.front_default;
+        }
+        return image;
+    }
+    
     // Find color in the correct address
     async function findColors(name, id){
         try {
@@ -195,19 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
         statsHistogram.innerHTML += `<p>Total Base Stats: ${stats}</p>`;
     }
 
-    // Search button click event
-    searchButton.addEventListener('click', () => {
-        performSearch();
-    });
-
-    // Add a keydown event listener to the input field
-    searchInput.addEventListener('keydown', (event) => {
-        // Check if the key pressed is the Enter key (key code 13)
-        if (event.keyCode === 13) {
-            performSearch();
-        }
-    });
-
     // Get Evolution Chain
     function parseEvolutionChain(chain) {
         let evolutionDetails = chain.species.name;
@@ -234,7 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const evolveTime = chain.evolution_details[i].time_of_day;
                 const evolveTrade = chain.evolution_details[i].trade_species?.name;
                 const evolveUpsideDown = chain.evolution_details[i].turn_upside_down;
-                console.log(chain.evolution_details[i]);
                 
                 if (evolveLevel !== null) {
                     evolutionConditions.push(`Level ${evolveLevel}`);
@@ -491,7 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return Array.from(invalid);
     }
 
-    // Function to handle the click event on the filter buttons
+    // Update Counter Pokemon Table
     updateButton.addEventListener('click', () => {
         findCounterPokemon(global_types, global_statsData);
     });    
@@ -552,11 +579,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Iterate through each pokemon for the current weakness type
             for (const entry of typeData.pokemon) {
                 const pokemonName = entry.pokemon.name;
+                if(!pokemonName) continue;
     
                 // Fetch the stats of the Counter Pokemon(CP) from the PokeAPI
                 const CP_url = `${base_url}pokemon/${pokemonName}`;
                 const CP_response = await fetch(CP_url);
                 const CP_data = await CP_response.json();
+
+                // Skip when pokemon does not have sprite 
+                if(!CP_data.sprites.front_default) continue;
                 
                 // counter pokemon stats in variables
                 hp = CP_data.stats.find((stat) => stat.stat.name === 'hp').base_stat

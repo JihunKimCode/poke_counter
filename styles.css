@@ -145,7 +145,7 @@ footer a:hover{
 }
 
 #pokemonInfo {
-    display: table-cell;
+    display: table-row;
     width: 25%;
     line-height: 1.5;
 }
@@ -196,7 +196,8 @@ footer a:hover{
 #filter *, #filter ::after, #filter ::before,
 #filter2 *, #filter2 ::after, #filter2 ::before,
 #filter3 *, #filter3 ::after, #filter3 ::before,
-#filter4 *, #filter4 ::after, #filter4 ::before  {
+#filter4 *, #filter4 ::after, #filter4 ::before,
+#filter5 *, #filter5 ::after, #filter5 ::before  {
     box-sizing: border-box;
     vertical-align: top;
     margin-right: 6px;
@@ -206,7 +207,8 @@ footer a:hover{
 #filter .cbx,
 #filter2 .cbx2,
 #filter3 .cbx3,
-#filter4 .cbx4 {
+#filter4 .cbx4,
+#filter5 .cbx5 {
     position: relative;
     display: block;
     float: left;
@@ -221,7 +223,8 @@ footer a:hover{
 #filter .cbx svg,
 #filter2 .cbx2 svg,
 #filter3 .cbx3 svg,
-#filter4 .cbx4 svg {
+#filter4 .cbx4 svg,
+#filter5 .cbx5 svg {
     position: absolute;
     top: 3px;
     left: 3px;
@@ -238,7 +241,8 @@ footer a:hover{
 #filter,
 #filter2,
 #filter3,
-#filter4 {
+#filter4,
+#filter5 {
     user-select: none;
     display: none;
     justify-content: space-between;
@@ -249,7 +253,8 @@ footer a:hover{
 #filter label,
 #filter2 label,
 #filter3 label,
-#filter4 label {
+#filter4 label,
+#filter5 label {
     display: inline-block;
     cursor: pointer;
 }
@@ -258,7 +263,8 @@ footer a:hover{
 #filter input[type="checkbox"],
 #filter2 input[type="checkbox"],
 #filter3 input[type="checkbox"],
-#filter4 input[type="checkbox"] {
+#filter4 input[type="checkbox"],
+#filter5 input[type="checkbox"] {
     display: none;
     visibility: hidden;
 }
@@ -267,7 +273,8 @@ footer a:hover{
 #filter input[type="checkbox"]:checked + .cbx,
 #filter2 input[type="checkbox"]:checked + .cbx2,
 #filter3 input[type="checkbox"]:checked + .cbx3,
-#filter4 input[type="checkbox"]:checked + .cbx4 {
+#filter4 input[type="checkbox"]:checked + .cbx4,
+#filter5 input[type="checkbox"]:checked + .cbx5 {
     background-color: var(--pokemoncolor, #1288f8);
 }
 
@@ -275,7 +282,8 @@ footer a:hover{
 #filter input[type="checkbox"]:checked + .cbx svg,
 #filter2 input[type="checkbox"]:checked + .cbx2 svg,
 #filter3 input[type="checkbox"]:checked + .cbx3 svg,
-#filter4 input[type="checkbox"]:checked + .cbx4 svg {
+#filter4 input[type="checkbox"]:checked + .cbx4 svg,
+#filter5 input[type="checkbox"]:checked + .cbx5 svg {
     stroke-dashoffset: 0;
     transition: all 0.15s ease;
 }
