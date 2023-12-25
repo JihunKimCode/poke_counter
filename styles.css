@@ -145,15 +145,17 @@ footer a:hover{
 }
 
 #pokemonInfo {
-    display: table-row;
-    width: 20%;
+    display: table-cell;
+    width: 50%;
     line-height: 1.5;
 }
 
 /* Histogram Design */
 #statsHistogram{
     display: table-cell;
-    width: 20%;
+    width: 50%;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .stat-bar {
@@ -187,8 +189,7 @@ footer a:hover{
 }
 
 .container1,
-.container2,
-.container3{
+.container2{
     display: table-cell;
     flex-direction: column;
     padding-left: 10px;
@@ -196,19 +197,16 @@ footer a:hover{
 }
 
 .container1{
-    width: 30%;
+    min-width: auto;
 }
 
 .container2{
-    width: 20%;
-}
-
-.container3{
-    width: 50%;
+    width: auto;
 }
 
 /* Checkbox and Text */
 #filter *, #filter ::after, #filter ::before,
+#filter1 *, #filter1 ::after, #filter1 ::before,
 #filter2 *, #filter2 ::after, #filter2 ::before,
 #filter3 *, #filter3 ::after, #filter3 ::before,
 #filter4 *, #filter4 ::after, #filter4 ::before,
@@ -216,10 +214,12 @@ footer a:hover{
     box-sizing: border-box;
     vertical-align: top;
     margin-right: 6px;
+    margin-bottom: 3px;
 }
 
 /* Checkbox styles */
 #filter .cbx,
+#filter1 .cbx1,
 #filter2 .cbx2,
 #filter3 .cbx3,
 #filter4 .cbx4,
@@ -236,6 +236,7 @@ footer a:hover{
 
 /* Checkmark styles */
 #filter .cbx svg,
+#filter1 .cbx1 svg,
 #filter2 .cbx2 svg,
 #filter3 .cbx3 svg,
 #filter4 .cbx4 svg,
@@ -254,6 +255,7 @@ footer a:hover{
 
 /* Container styles */
 #filter,
+#filter1,
 #filter2,
 #filter3,
 #filter4,
@@ -266,6 +268,7 @@ footer a:hover{
 
 /* Label styles */
 #filter label,
+#filter1 label,
 #filter2 label,
 #filter3 label,
 #filter4 label,
@@ -276,6 +279,7 @@ footer a:hover{
 
 /* Hide default checkboxes */
 #filter input[type="checkbox"],
+#filter1 input[type="checkbox"],
 #filter2 input[type="checkbox"],
 #filter3 input[type="checkbox"],
 #filter4 input[type="checkbox"],
@@ -286,6 +290,7 @@ footer a:hover{
 
 /* Checked state styles */
 #filter input[type="checkbox"]:checked + .cbx,
+#filter1 input[type="checkbox"]:checked + .cbx1,
 #filter2 input[type="checkbox"]:checked + .cbx2,
 #filter3 input[type="checkbox"]:checked + .cbx3,
 #filter4 input[type="checkbox"]:checked + .cbx4,
@@ -295,6 +300,7 @@ footer a:hover{
 
 /* Checked state animation */
 #filter input[type="checkbox"]:checked + .cbx svg,
+#filter1 input[type="checkbox"]:checked + .cbx1 svg,
 #filter2 input[type="checkbox"]:checked + .cbx2 svg,
 #filter3 input[type="checkbox"]:checked + .cbx3 svg,
 #filter4 input[type="checkbox"]:checked + .cbx4 svg,
@@ -304,6 +310,7 @@ footer a:hover{
 }
 
 /* Button Layout */
+#settingButton,
 #updateButton {
     background: #fff;
     color: #000;
@@ -319,12 +326,16 @@ footer a:hover{
     padding: 6px;
     position: relative;
     transition: transform .2s;
+    margin-bottom: 12px;
+    margin-right: 6px;
 }
+#settingButton:hover,
 #updateButton:hover {
     box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2),0 3px 3px 0 rgba(0,0,0,0.2);
     transform: translateY(-2px);
 }
 
+#settingButton:active,
 #updateButton:active {
     box-shadow: none;
     transform: translateY(0px);
@@ -359,6 +370,15 @@ footer a:hover{
     height: auto;
 }
 
+@media (min-width: 768px) and (max-width: 1024px) {
+    .container1,
+    .container2{
+        width: 100%;
+    }
+    .container2{
+        display: table-row;
+    }
+}
 /* Layout for mobile */
 @media (max-width: 767px) {
     .information{
@@ -368,8 +388,7 @@ footer a:hover{
     }
 
     .container1,
-    .container2,
-    .container3{
+    .container2{
         display: table-row;
         width: 100%;
     }

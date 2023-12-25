@@ -50,13 +50,13 @@
           </label>
         </div>
         <div id="pokemonInfo"></div>
-      </div>
-      <div class="container2">
         <div id="statsHistogram"></div>
       </div>
-      <div class="container3">
+      <div class="container2">
+        <button id="settingButton">Show/Hide Table Setting</button>
+        <button id="updateButton">Update Table</button>
+        <div>
         <div id="filter">
-          <h3>Counter Pokémons</h3>
           <label for="filterCheckbox">
             <input type="checkbox" id="filterCheckbox">
             <span class="cbx">
@@ -65,6 +65,17 @@
               </svg>
             </span>
             <span>Total Base Stats &#x2264 600</span>
+          </label>
+        </div>
+        <div id="filter1">
+          <label for="filterCheckbox1">
+            <input type="checkbox" id="filterCheckbox1">
+            <span class="cbx1">
+              <svg width="12px" height="11px" viewBox="0 0 12 11">
+                <polyline points="1 6.3 4.5 10 11 1"></polyline>
+              </svg>
+            </span>
+            <span>Hide mega/gmax</span>
           </label>
         </div>
         <div id="filter2">
@@ -100,7 +111,7 @@
             <span>Hide Base Stats</span>
           </label>
         </div>
-        <button id="updateButton">Update Table</button>
+        </div>
         <div id="counterPokemon"></div>
       </div>
     </div>

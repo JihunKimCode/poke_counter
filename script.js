@@ -7,16 +7,19 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Filter variables to adjust counter pokemon table
     const filter = document.getElementById('filter');
+    const filter1 = document.getElementById('filter1');
     const filter2 = document.getElementById('filter2');
     const filter3 = document.getElementById('filter3');
     const filter4 = document.getElementById('filter4');
     const filter5 = document.getElementById('filter5');
     const filterCheckbox = document.getElementById('filterCheckbox');
+    const filterCheckbox1 = document.getElementById('filterCheckbox1');
     const filterCheckbox2 = document.getElementById('filterCheckbox2');
     const filterCheckbox3 = document.getElementById('filterCheckbox3');
     const filterCheckbox4 = document.getElementById('filterCheckbox4');
     const filterCheckbox5 = document.getElementById('filterCheckbox5');
     const updateButton = document.getElementById('updateButton');
+    const settingButton = document.getElementById('settingButton');
 
     //global variables for updating table
     let global_types, global_statsData, global_sprites;
@@ -530,10 +533,28 @@ document.addEventListener('DOMContentLoaded', () => {
         findCounterPokemon(global_types, global_statsData);
     });    
 
+    function toggleSettingDisplay() {
+        const filters = [filter, filter1, filter2, filter3, filter4];
+    
+        filters.forEach(filter => {
+            const currentDisplay = window.getComputedStyle(filter).getPropertyValue('display');
+            filter.style.display = (currentDisplay === 'none') ? 'inline-block' : 'none';
+        });
+    }
+    
+    settingButton.addEventListener('click', toggleSettingDisplay);     
+
     // Find counter pokemon of the pokemon
     async function findCounterPokemon(types, SP_stats) {
+        // Check that the checkbox is checked
+        const filterSpe = filterCheckbox.checked;       // BST > 600
+        const filterSpe1 = filterCheckbox1.checked;     // mega/Gmax
+        const filterSpe2 = filterCheckbox2.checked;     // Types
+        const filterSpe3 = filterCheckbox3.checked;     // Abilities
+        const filterSpe4 = filterCheckbox4.checked;     // Base Stats
+
         // Clear Content to update
-        counterPokemon.innerHTML = '';
+        counterPokemon.innerHTML = '<h3>Counter Pokémons</h3>';
 
         // Create a container for the loading message
         const Loading = document.createElement('div');
@@ -542,10 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
         counterPokemon.appendChild(Loading);
 
         // Show filters
-        filter.style.display = 'inline-block';
-        filter2.style.display = 'inline-block';
-        filter3.style.display = 'inline-block';
-        filter4.style.display = 'inline-block';
+        settingButton.style.display = 'inline-block';
         updateButton.style.display = 'inline-block';
         
         //Find Weaknesses of the pokemon
@@ -585,8 +603,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
             // Iterate through each pokemon for the current weakness type
             for (const entry of typeData.pokemon) {
+
+                // Pokemon Name Check
                 const pokemonName = entry.pokemon.name;
                 if(!pokemonName) continue;
+                if (filterSpe1 && (pokemonName.includes("mega") || pokemonName.includes("gmax"))) {
+                    continue;
+                }
     
                 // Fetch the stats of the Counter Pokemon(CP) from the PokeAPI
                 const CP_url = `${base_url}pokemon/${pokemonName}`;
@@ -603,7 +626,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const spa = CP_data.stats.find((stat) => stat.stat.name === 'special-attack').base_stat
                 const spd = CP_data.stats.find((stat) => stat.stat.name === 'special-defense').base_stat
                 const spe = CP_data.stats.find((stat) => stat.stat.name === 'speed').base_stat
-    
+                const total = hp+atk+def+spa+spd+spe;
+                
+                // Skip Pokemon with BST > 600
+                if (filterSpe && total > 600) continue;
+
                 // Initialize the score and information of the pokemon if not present
                 if (!pokemonScores[pokemonName]) {
                     pokemonScores[pokemonName] = {
@@ -619,7 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             spa: spa,
                             spd: spd,
                             spe: spe,
-                            total: hp+atk+def+spa+spd+spe
+                            total: total
                         }
                     };
                 }
@@ -675,15 +702,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // Sort the array by score in descending order
         pokemonArray.sort((a, b) => { return b.score - a.score; });
-        
-        // Check that the checkbox is checked
-        const filterSpe = filterCheckbox.checked;       // BST > 600
-        const filterSpe2 = filterCheckbox2.checked;     // Types
-        const filterSpe3 = filterCheckbox3.checked;     // Abilities
-        const filterSpe4 = filterCheckbox4.checked;     // Base Stats
 
         // Clear contents to prevent Race Condition
-        counterPokemon.innerHTML = '';
+        counterPokemon.innerHTML = '<h3>Counter Pokémons</h3>';
 
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
@@ -705,11 +726,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(!filterSpe4) headerRow.innerHTML += '<th>HP</th><th>Atk</th><th>Def</th><th>SpA</th><th>SpD</th><th>Spe</th><th>BST</th>';
 
         // Iterate through the sorted array and add rows to the table
-        for (const pokemon of pokemonArray) {
-
-            // Skip Pokemon with BST > 600 if the checkbox is checked
-            if (filterSpe && pokemon.stats.total > 600) continue;
-    
+        for (const pokemon of pokemonArray) {    
             // Add row to the table
             const row = table.insertRow();
             row.innerHTML = `
