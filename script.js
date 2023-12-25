@@ -131,13 +131,15 @@ document.addEventListener('DOMContentLoaded', () => {
         filter5.style.display = 'inline-block';
         const filterSpe5 = filterCheckbox5.checked;     // Shiny sprite
         let image = [];
+        const pokeball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+        const masterball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
         
-        if(filterSpe5) {
-            image.push(sprites.front_shiny);
-            image.push(sprites.back_shiny);
-        } else{
-            image.push(sprites.front_default);
-            image.push(sprites.back_default);
+        if (filterSpe5) {
+            image.push(sprites.front_shiny || masterball);
+            image.push(sprites.back_shiny || masterball);
+        } else {
+            image.push(sprites.front_default || pokeball);
+            image.push(sprites.back_default || pokeball);
         }
         return image;
     }
@@ -591,16 +593,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const CP_response = await fetch(CP_url);
                 const CP_data = await CP_response.json();
 
-                // Skip when pokemon does not have sprite 
+                // Skip when pokemon does not have a sprite 
                 if(!CP_data.sprites.front_default) continue;
                 
                 // counter pokemon stats in variables
-                hp = CP_data.stats.find((stat) => stat.stat.name === 'hp').base_stat
-                atk = CP_data.stats.find((stat) => stat.stat.name === 'attack').base_stat
-                def = CP_data.stats.find((stat) => stat.stat.name === 'defense').base_stat
-                spa = CP_data.stats.find((stat) => stat.stat.name === 'special-attack').base_stat
-                spd = CP_data.stats.find((stat) => stat.stat.name === 'special-defense').base_stat
-                spe = CP_data.stats.find((stat) => stat.stat.name === 'speed').base_stat
+                const hp = CP_data.stats.find((stat) => stat.stat.name === 'hp').base_stat
+                const atk = CP_data.stats.find((stat) => stat.stat.name === 'attack').base_stat
+                const def = CP_data.stats.find((stat) => stat.stat.name === 'defense').base_stat
+                const spa = CP_data.stats.find((stat) => stat.stat.name === 'special-attack').base_stat
+                const spd = CP_data.stats.find((stat) => stat.stat.name === 'special-defense').base_stat
+                const spe = CP_data.stats.find((stat) => stat.stat.name === 'speed').base_stat
     
                 // Initialize the score and information of the pokemon if not present
                 if (!pokemonScores[pokemonName]) {
