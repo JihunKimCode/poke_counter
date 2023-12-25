@@ -146,14 +146,15 @@ footer a:hover{
 
 #pokemonInfo {
     display: table-cell;
-    width: 50%;
+    width: fit-content;
     line-height: 1.5;
+    padding-right: 10px;
 }
 
 /* Histogram Design */
 #statsHistogram{
     display: table-cell;
-    width: 50%;
+    width: fit-content;
     padding-left: 10px;
     padding-right: 10px;
 }
