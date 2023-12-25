@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Display the weaknesses, resistances, and invalid
         const weaknessesHtml = weaknesses.length > 0 ? `<p>[Weaknesses]<br>${weaknesses.join(', ')}</p>` : '';
         const resistancesHtml = resistances.length > 0 ? `<p>[Resistances]<br>${resistances.join(', ')}</p>` : '';
-        const invalidHtml = invalid.length > 0 ? `<p>[Invalid]<br>${invalid.join(', ')}</p>` : '';
+        const invalidHtml = invalid.length > 0 ? `<p>[Invalids]<br>${invalid.join(', ')}</p>` : '';
 
         // Get evolution chain details
         fetch(species)
@@ -104,11 +104,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <img src="${image[1]}" alt="${name}" width="100" class="pokemon-image2">
                         </div>
                         <p>Pokédex #${id}</p>
-                        <p>[Type] <br> ${types.join(', ')}</p>
+                        <p>[Types] <br> ${types.join(', ')}</p>
                         ${weaknessesHtml}
                         ${resistancesHtml}
                         ${invalidHtml}
-                        <p>[Evolution] <br> ${evolutionDetails}</p>
+                        <p>[Evolution Chain] <br> ${evolutionDetails}</p>
                         <p>[Abilities] <br> ${abilities}</p>
                     `;
                     pokemonInfo.innerHTML = html;
