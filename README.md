@@ -4,7 +4,7 @@ Pokemon information searcher. It finds counter Pokemon as well.
 # Goals
 - [x] **Sprite**
     - [x] Shiny Sprite
-    - [ ] Back Sprite
+    - [x] Front/Back Sprite
 - [x] **ID**
 - [x] **Type**
     - [ ] Type icons?
@@ -24,11 +24,9 @@ Pokemon information searcher. It finds counter Pokemon as well.
 - [x] **Counter Pokemon**
     - [ ] Better way to calculate score
         - [x] Exclude BST > 600
-    - [x] Beutify Display Table
+    - [x] Beautify Display Table
         - [x] color update
         - [x] Hide elements
-    - Issue: First search takes 10sec, then 1sec.
-    - Issue: Multi-clicking Update button occur Race Condition
 - [ ] **Website Design**
     - [ ] Webpage logo
     - [x] Table Colors
