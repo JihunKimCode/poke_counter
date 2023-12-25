@@ -211,103 +211,119 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get Evolution Chain
     function parseEvolutionChain(chain) {
         let evolutionDetails = chain.species.name;
+        let evolutionConditions = [];
     
         if (chain.evolution_details && chain.evolution_details.length > 0) {
-            const evolutionMethod = chain.evolution_details[0].trigger?.name;
-        
-            // Evolution Methods
-            const evolveGender = chain.evolution_details[0].gender;
-            const tradeItem = chain.evolution_details[0].held_item?.name;
-            const evolveItem = chain.evolution_details[0].item?.name;
-            const evolveMove = chain.evolution_details[0].known_move?.name;
-            const evolveLocation = chain.evolution_details[0].location?.name;
-            const evolveAffection = chain.evolution_details[0].min_affection;
-            const evolveBeauty = chain.evolution_details[0].min_beauty;
-            const evolveHappiness = chain.evolution_details[0].min_happiness;
-            const evolveLevel = chain.evolution_details[0].min_level;
-            const evolveRain = chain.evolution_details[0].needs_overworld_rain;
-            const evolveParty = chain.evolution_details[0].party_species?.name;
-            const evolvePartyType = chain.evolution_details[0].party_type?.name;
-            const evolveStats = chain.evolution_details[0].relative_physical_stats;
-            const evolveTime = chain.evolution_details[0].time_of_day;
+            for(let i = 0; i<chain.evolution_details.length; i++){
+                const evolutionMethod = chain.evolution_details[i].trigger?.name;
             
-            let evolutionConditions = [];
-            
-            if (evolveLevel !== null) {
-                evolutionConditions.push(`Level ${evolveLevel}`);
-            }
-
-            if (evolveGender) {
-                if(evolveGender===1){
-                    evolutionConditions.push(`Female`);
-                } else {
-                    evolutionConditions.push(`Male`);
+                // Evolution Methods
+                const evolveGender = chain.evolution_details[i].gender;
+                const tradeItem = chain.evolution_details[i].held_item?.name;
+                const evolveItem = chain.evolution_details[i].item?.name;
+                const evolveMove = chain.evolution_details[i].known_move?.name;
+                const evolveLocation = chain.evolution_details[i].location?.name;
+                const evolveAffection = chain.evolution_details[i].min_affection;
+                const evolveBeauty = chain.evolution_details[i].min_beauty;
+                const evolveHappiness = chain.evolution_details[i].min_happiness;
+                const evolveLevel = chain.evolution_details[i].min_level;
+                const evolveRain = chain.evolution_details[i].needs_overworld_rain;
+                const evolveParty = chain.evolution_details[i].party_species?.name;
+                const evolvePartyType = chain.evolution_details[i].party_type?.name;
+                const evolveStats = chain.evolution_details[i].relative_physical_stats;
+                const evolveTime = chain.evolution_details[i].time_of_day;
+                const evolveTrade = chain.evolution_details[i].trade_species?.name;
+                const evolveUpsideDown = chain.evolution_details[i].turn_upside_down;
+                console.log(chain.evolution_details[i]);
+                
+                if (evolveLevel !== null) {
+                    evolutionConditions.push(`Level ${evolveLevel}`);
                 }
-            }
-            
-            if (evolveItem) {
-                evolutionConditions.push(`Use ${evolveItem}`);
-            }
 
-            if (evolveMove) {
-                evolutionConditions.push(`Learn ${evolveMove}`);
-            }
-            
-            if (evolveLocation) {
-                evolutionConditions.push(`At ${evolveLocation} and more`);
-            }
-
-            if (evolveHappiness !== null) {
-                evolutionConditions.push(`Happiness ${evolveHappiness}`);
-            }
-
-            if (evolveBeauty !== null) {
-                evolutionConditions.push(`Beauty ${evolveBeauty}`);
-            }
-
-            if (evolveAffection !== null) {
-                evolutionConditions.push(`Friendship ${evolveAffection}`);
-            }
-
-            if(evolveRain) {
-                evolutionConditions.push(`Rain Field`);
-            }
-            
-            if(evolveParty){
-                evolutionConditions.push(`"${evolveParty}" in party`);
-            }
-
-            if(evolvePartyType){
-                evolutionConditions.push(`${evolvePartyType} type in party`);
-            }
-            
-            if(evolveStats != null){
-                if(evolveStats === 1){
-                    evolutionConditions.push(`ATK > DEF`);
-                } else if(evolveStats === 0){
-                    evolutionConditions.push(`ATK = DEF`);
-                } else if(evolveStats === -1){
-                    evolutionConditions.push(`ATK < DEF`);
+                if (evolveGender) {
+                    if(evolveGender===1){
+                        evolutionConditions.push(`Female`);
+                    } else {
+                        evolutionConditions.push(`Male`);
+                    }
                 }
-            }
-            
-            if (evolveTime) {
-                evolutionConditions.push(`${evolveTime}`);
-            }
 
-            // EvolutionTriggers
-            if (evolutionMethod === 'trade') 
-            {
-                if (tradeItem) {
-                    evolutionConditions.push(`Trade holding ${tradeItem}`);
-                } else {
-                    evolutionConditions.push(`Trade`);
+                if (evolutionMethod != 'trade' && tradeItem) {
+                    evolutionConditions.push(`Holding ${tradeItem}`);
                 }
-            } else if(evolutionMethod != null 
-                && evolutionMethod != `level-up`
-                && evolutionMethod != `use-item`) 
-            {
-                evolutionConditions.push(`${evolutionMethod}`);
+
+                if (evolveItem) {
+                    evolutionConditions.push(`Use ${evolveItem}`);
+                }
+
+                if (evolveMove) {
+                    evolutionConditions.push(`Learn ${evolveMove}`);
+                }
+                
+                if (evolveLocation) {
+                    evolutionConditions.push(`At ${evolveLocation}`);
+                }
+
+                if (evolveHappiness !== null) {
+                    evolutionConditions.push(`Happiness ${evolveHappiness}`);
+                }
+
+                if (evolveBeauty !== null) {
+                    evolutionConditions.push(`Beauty ${evolveBeauty}`);
+                }
+
+                if (evolveAffection !== null) {
+                    evolutionConditions.push(`Friendship ${evolveAffection}`);
+                }
+
+                if(evolveRain) {
+                    evolutionConditions.push(`Rain Field`);
+                }
+                
+                if(evolveParty){
+                    evolutionConditions.push(`"${evolveParty}" in party`);
+                }
+
+                if(evolvePartyType){
+                    evolutionConditions.push(`${evolvePartyType} type in party`);
+                }
+                
+                if(evolveStats != null){
+                    if(evolveStats === 1){
+                        evolutionConditions.push(`ATK > DEF`);
+                    } else if(evolveStats === 0){
+                        evolutionConditions.push(`ATK = DEF`);
+                    } else if(evolveStats === -1){
+                        evolutionConditions.push(`ATK < DEF`);
+                    }
+                }
+                
+                if(evolveTime) {
+                    evolutionConditions.push(`${evolveTime}`);
+                }
+
+                if(evolveUpsideDown){
+                    evolutionConditions.push(`Turn Upside Down`);
+                }
+
+                // EvolutionTriggers
+                if (evolutionMethod === 'trade') 
+                {
+                    if (tradeItem) {
+                        evolutionConditions.push(`Trade holding ${tradeItem}`);
+                    }
+                    else if(evolveTrade){
+                        evolutionConditions.push(`Trade with ${evolveTrade}`);
+                    }
+                    else {
+                        evolutionConditions.push(`Trade`);
+                    }
+                } else if(evolutionMethod != null 
+                    && evolutionMethod != `level-up`
+                    && evolutionMethod != `use-item`) 
+                {
+                    evolutionConditions.push(`${evolutionMethod}`);
+                }
             }
             evolutionDetails += ` (${evolutionConditions.join(', ')})`;
         }
