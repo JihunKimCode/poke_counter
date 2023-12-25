@@ -96,8 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Display as text
                     const html = `
                         <h2>${name.toUpperCase()}</h2>
-                        <img src="${image}" alt="${name}" width="100" class="pokemon-image">
-                        <p>Pokedex #${id}</p>
+                        <div>
+                        <img src="${image[0]}" alt="${name}" width="100" class="pokemon-image">
+                        <img src="${image[1]}" alt="${name}" width="100" class="pokemon-image2">
+                        </div>
+                        <p>Pokédex #${id}</p>
                         <p>[Type] <br> ${types.join(', ')}</p>
                         ${weaknessesHtml}
                         ${resistancesHtml}
@@ -118,21 +121,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedImage = getSprite(global_sprites);
         
         // Update the sprite in the HTML
-        const sprite = document.querySelector('.pokemon-image');
-        if (sprite) {
-            sprite.src = updatedImage;
-        }
+        const sprite_front = document.querySelector('.pokemon-image');
+        const sprite_back = document.querySelector('.pokemon-image2');
+        if (sprite_front) sprite_front.src = updatedImage[0];
+        if (sprite_back) sprite_back.src = updatedImage[1];
     });    
 
     function getSprite(sprites){
         filter5.style.display = 'inline-block';
         const filterSpe5 = filterCheckbox5.checked;     // Shiny sprite
-        let image;
+        let image = [];
         
         if(filterSpe5) {
-            image = sprites.front_shiny;
+            image.push(sprites.front_shiny);
+            image.push(sprites.back_shiny);
         } else{
-            image = sprites.front_default;
+            image.push(sprites.front_default);
+            image.push(sprites.back_default);
         }
         return image;
     }
