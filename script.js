@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayStatsHistogram(statsData);
                 findCounterPokemon(types, statsData);
                 // Update theme colors
-                updateColors(id);
+                findColors(name, id);
                 
                 // Get evolution chain details
                 fetch(data.species.url)
@@ -96,12 +96,39 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+    // Find color in the correct address
+    async function findColors(name, id){
+        try {
+            if(id>10000) {
+                var parts = name.split('-');
+                var orig_name = parts[0];
+                name = orig_name
+            } 
+            let url = `https://pokeapi.co/api/v2/pokemon-species/${name}`;
+            let response = await fetch(url);
+
+            if(!response.ok) throw new Error('Fail to Fetch')
+    
+            const data = await response.json();
+            const color = data.color.name.toLowerCase();
+            updateColors(color)
+        } catch (error) {
+            var parts = name.split('-');
+            var orig_name = parts[0];
+            name = orig_name
+
+            url = `https://pokeapi.co/api/v2/pokemon-species/${name}`;
+            response = await fetch(url);
+
+            const data = await response.json();
+            const color = data.color.name.toLowerCase();
+            updateColors(color)
+        }
+    }
+
     // Match color theme to the pokemon color
-    async function updateColors(id) {
-        const url = `https://pokeapi.co/api/v2/pokemon-species/${id}`;
-        const response = await fetch(url);
-        const data = await response.json();
-        let pokeColor = data.color.name.toLowerCase();
+    async function updateColors(color) {
+        let pokeColor = color;
         let lightpokeColor;
 
         // Set color matched to pokemon color
