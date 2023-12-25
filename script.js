@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayStatsHistogram(statsData);
                 findCounterPokemon(types, statsData);
                 // Update theme colors
-                updateColors(name);
+                updateColors(id);
                 
                 // Get evolution chain details
                 fetch(data.species.url)
@@ -97,8 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Match color theme to the pokemon color
-    async function updateColors(name) {
-        const url = `https://pokeapi.co/api/v2/pokemon-species/${name}`;
+    async function updateColors(id) {
+        const url = `https://pokeapi.co/api/v2/pokemon-species/${id}`;
         const response = await fetch(url);
         const data = await response.json();
         let pokeColor = data.color.name.toLowerCase();
