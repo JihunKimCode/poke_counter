@@ -102,8 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Display as text
                     const html = `
                         <div>
-                        <img src="${image[0]}" alt="${name}" width="100" class="pokemon-image">
-                        <img src="${image[1]}" alt="${name}" width="100" class="pokemon-image2">
+                        <img src="${image[0]}" alt="${name}" width=130" class="pokemon-image">
+                        <img src="${image[1]}" alt="${name}" width="130" class="pokemon-image2">
                         </div>
                         <p>Pokédex #${id}</p>
                         <p>[Types] <br> ${types.join(', ')}</p>
