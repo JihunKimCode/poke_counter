@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const counterPokemon = document.getElementById('counterPokemon');
     const pokeHead = document.getElementById('pokemonHead');
     const cpHead = document.getElementById('cpHead');
+    const progressContainer = document.getElementById('progress-bar');
     
     // Filter variables to adjust counter pokemon table
     const filter = document.getElementById('filter');
@@ -600,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create a container for the loading message
         const Loading = document.createElement('div');
         Loading.style.marginTop = '12px';
-        Loading.innerHTML = `Loading...`;
+        Loading.innerHTML = `Loading...0%`;
         counterPokemon.appendChild(Loading);
 
         // Show Header
@@ -638,6 +639,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // Create an object to store pokemon scores
         const pokemonScores = {};
+        var progress = 0, totalPokemon = 0;
+        
+        // Get total number of pokemon for loading bar
+        for (const type of weaknesses) {
+            const typeUrl = `${base_url}type/${type.toLowerCase()}`;
+            const typeResponse = await fetch(typeUrl);
+            const typeData = await typeResponse.json();            
+            totalPokemon+=typeData.pokemon.length;
+        }
     
         // Iterate through each type in the weaknesses list
         for (const type of weaknesses) {
@@ -648,6 +658,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
             // Iterate through each pokemon for the current weakness type
             for (const entry of typeData.pokemon) {
+
+                // Update Loading Bar
+                counterPokemon.innerHTML = '';
+                progress += 1;
+                var percentage = Math.floor((progress / totalPokemon) * 100);
+                progressContainer.style.width = `${percentage}%`;
+                progressContainer.innerHTML = `Loading...${percentage}%`;
 
                 // Pokemon Name Check
                 const pokemonName = entry.pokemon.name;
@@ -760,6 +777,8 @@ document.addEventListener('DOMContentLoaded', () => {
         pokemonArray.sort((a, b) => { return b.score - a.score; });
 
         // Clear contents to prevent Race Condition
+        progressContainer.style.width = `0%`;
+        progressContainer.innerHTML = '';
         counterPokemon.innerHTML = '';
 
         // Create a container for the scrollable table
