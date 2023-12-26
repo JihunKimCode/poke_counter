@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const pokemonInfo = document.getElementById('pokemonInfo');
     const statsHistogram = document.getElementById('statsHistogram');
     const counterPokemon = document.getElementById('counterPokemon');
+    const pokeHead = document.getElementById('pokemonHead');
+    const cpHead = document.getElementById('cpHead');
     
     // Filter variables to adjust counter pokemon table
     const filter = document.getElementById('filter');
@@ -96,9 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then((evolutionData) => {
                     const evolutionDetails = parseEvolutionChain(evolutionData.chain);
 
+                    pokeHead.innerHTML = `${name.toUpperCase()}`;
                     // Display as text
                     const html = `
-                        <h2>${name.toUpperCase()}</h2>
                         <div>
                         <img src="${image[0]}" alt="${name}" width="100" class="pokemon-image">
                         <img src="${image[1]}" alt="${name}" width="100" class="pokemon-image2">
@@ -555,7 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const filterSpe4 = filterCheckbox4.checked;     // Base Stats
 
         // Clear Content to update
-        counterPokemon.innerHTML = '<h3>Counter Pokémons</h3>';
+        counterPokemon.innerHTML = '';
 
         // Create a container for the loading message
         const Loading = document.createElement('div');
@@ -563,6 +565,8 @@ document.addEventListener('DOMContentLoaded', () => {
         Loading.innerHTML = `Loading...`;
         counterPokemon.appendChild(Loading);
 
+        // Show Header
+        cpHead.style.display = 'block';
         // Show Buttons
         settingButton.style.display = 'inline-block';
         updateButton.style.display = 'inline-block';
@@ -705,7 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
         pokemonArray.sort((a, b) => { return b.score - a.score; });
 
         // Clear contents to prevent Race Condition
-        counterPokemon.innerHTML = '<h3>Counter Pokémons</h3>';
+        counterPokemon.innerHTML = '';
 
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');

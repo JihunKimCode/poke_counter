@@ -203,15 +203,19 @@ footer a:hover{
 }
 
 .container1{
-    width: auto;
+    width: 30%;
 }
 
 .container2{
-    width: fit-content;
+    width: 20%;
 }
 
 .container3{
-    width: fit-content;
+    width: 50%;
+}
+
+#cpHead{
+    display: none;
 }
 
 /* Checkbox and Text */
