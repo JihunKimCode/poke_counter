@@ -1,14 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const randomItem = document.getElementById('randomItem');
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchButton');
+    const pokeHead = document.getElementById('pokemonHead');
     const pokemonInfo = document.getElementById('pokemonInfo');
     const statsHistogram = document.getElementById('statsHistogram');
-    const counterPokemon = document.getElementById('counterPokemon');
-    const pokeHead = document.getElementById('pokemonHead');
     const cpHead = document.getElementById('cpHead');
     const progressContainer = document.getElementById('progress-bar');
+    const counterPokemon = document.getElementById('counterPokemon');
     
     // Filter variables to adjust counter pokemon table
+    const updateButton = document.getElementById('updateButton');
+    const settingButton = document.getElementById('settingButton');
+    const scrollUpButton = document.getElementById('scrollUpButton');
+    const scrollDownButton = document.getElementById('scrollDownButton');
     const filter = document.getElementById('filter');
     const filter1 = document.getElementById('filter1');
     const filter2 = document.getElementById('filter2');
@@ -21,17 +26,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterCheckbox3 = document.getElementById('filterCheckbox3');
     const filterCheckbox4 = document.getElementById('filterCheckbox4');
     const filterCheckbox5 = document.getElementById('filterCheckbox5');
-    const updateButton = document.getElementById('updateButton');
-    const settingButton = document.getElementById('settingButton');
-    const scrollUpButton = document.getElementById('scrollUpButton');
-    const scrollDownButton = document.getElementById('scrollDownButton');
+    
     const scrollTopButton = document.getElementById("scrollTop");
 
     //global variables for updating table
     let global_types, global_statsData, global_sprites;
 
+    async function newItem(){
+        try{
+            const url = `https://pokeapi.co/api/v2/item/`;
+            const response = await fetch(url);
+            const data = await response.json();
+            const id = Math.floor(Math.random()*data.count);
+            
+            const itemUrl = `${url}${id}/`;
+
+            const itemResponse = await fetch(itemUrl);
+            if(!itemResponse.ok) throw new Error('Fail to Fetch');
+            
+            const item = await itemResponse.json();
+            randomItem.src = item.sprites.default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucky-egg.png';
+        } catch(error){
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucky-egg.png';
+        }
+    }
+
     // Search button click event
     searchButton.addEventListener('click', () => {
+        newItem();
         performSearch();
     });
 
@@ -39,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('keydown', (event) => {
         // Check if the key pressed is the Enter key (key code 13)
         if (event.keyCode === 13) {
+            newItem();
             performSearch();
         }
     });
@@ -171,27 +194,27 @@ document.addEventListener('DOMContentLoaded', () => {
             if(id>10000) {
                 var parts = name.split('-');
                 var orig_name = parts[0];
-                name = orig_name
+                name = orig_name;
             } 
             let url = `https://pokeapi.co/api/v2/pokemon-species/${name}`;
             let response = await fetch(url);
 
-            if(!response.ok) throw new Error('Fail to Fetch')
+            if(!response.ok) throw new Error('Fail to Fetch');
     
             const data = await response.json();
             const color = data.color.name.toLowerCase();
-            updateColors(color)
+            updateColors(color);
         } catch (error) {
             var parts = name.split('-');
             var orig_name = parts[0];
-            name = orig_name
+            name = orig_name;
 
             url = `https://pokeapi.co/api/v2/pokemon-species/${name}`;
             response = await fetch(url);
 
             const data = await response.json();
             const color = data.color.name.toLowerCase();
-            updateColors(color)
+            updateColors(color);
         }
     }
 
