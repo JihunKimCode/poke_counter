@@ -15,10 +15,9 @@
 /* Scroll Bar Width */
 ::-webkit-scrollbar {
     scroll-behavior: smooth;
+    width: 8px;
     height: calc(100% - 3em);
     overflow-y: auto;
-    width: 8px;
-    height: 8px;
 }
 
 /* Scroll Bar Track */
