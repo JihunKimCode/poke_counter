@@ -29,9 +29,11 @@ Pokemon information searcher. It finds counter Pokemon as well.
     - [x] Beautify Display Table
         - [x] color update
         - [x] Hide elements
+        - [x] Table length == info length
 - [ ] **Website Design**
     - [ ] Webpage logo
     - [x] Table Colors
+    - [x] Easter Egg!
 
 # Stretch Goals
 - [ ] Better Pokemon Search (NIDORAN-F, NIDORAN-M)

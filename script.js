@@ -737,7 +737,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tableContainer = document.createElement('div');
         tableContainer.style.overflow = 'scroll';
         tableContainer.style.marginTop = '6px';
-        tableContainer.style.maxHeight = '650px';
+        tableContainer.style.height = (pokemonInfo.clientHeight)+'px';
         
         // Create the table element
         const table = document.createElement('table');
@@ -788,4 +788,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Append the container to the counterPokemon element
         counterPokemon.appendChild(tableContainer);
     }
+
+    // Set Scroll up Button
+    window.onbeforeunload = function () {
+        window.scrollTo(0, 0);
+    }
+    
+    const ScrollTopButton = document.getElementById("ScrollTop");
+    
+    // Set the image of the button
+    ScrollTopButton.innerHTML = '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucky-egg.png" alt="Lucky Egg" width="50px">';
+    
+    ScrollTopButton.addEventListener("click", () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });    
 });

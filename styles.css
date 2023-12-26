@@ -124,7 +124,6 @@ footer {
     background-color: var(--pokemoncolor, #1288f8);
     color: var(--text, white);
     text-align: left;
-    padding: 15px;
 }
 
 footer a{
@@ -133,6 +132,21 @@ footer a{
 
 footer a:hover{
     color: var(--lightpokemoncolor, #00d6fa);
+}
+
+.footerContent{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+#ScrollTop{
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
 }
 
 /* Main Body Display */
