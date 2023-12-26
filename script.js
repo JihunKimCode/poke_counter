@@ -623,7 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         continue;
                     }
 
-                if (filterSpe1 && (pokemonName.includes("mega"))) {
+                if (filterSpe1 && (pokemonName.includes("-mega"))) {
                     continue;
                 }
     

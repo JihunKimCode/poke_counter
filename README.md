@@ -24,6 +24,8 @@ Pokemon information searcher. It finds counter Pokemon as well.
 - [x] **Counter Pokemon**
     - [ ] Better way to calculate score
         - [x] Exclude BST > 600
+        - [x] Exclude mega
+        - [x] Exclude illegal pokemons and gmax
     - [x] Beautify Display Table
         - [x] color update
         - [x] Hide elements
