@@ -597,12 +597,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Clear Content to update
         counterPokemon.innerHTML = '';
-
-        // Create a container for the loading message
-        const Loading = document.createElement('div');
-        Loading.style.marginTop = '12px';
-        Loading.innerHTML = `Loading...0%`;
-        counterPokemon.appendChild(Loading);
+        progressContainer.innerHTML = '';
 
         // Show Header
         cpHead.style.display = 'block';
@@ -660,7 +655,7 @@ document.addEventListener('DOMContentLoaded', () => {
             for (const entry of typeData.pokemon) {
 
                 // Update Loading Bar
-                counterPokemon.innerHTML = '';
+                progressContainer.innerHTML = '';
                 progress += 1;
                 var percentage = Math.floor((progress / totalPokemon) * 100);
                 progressContainer.style.width = `${percentage}%`;
