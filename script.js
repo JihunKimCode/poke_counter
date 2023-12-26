@@ -611,8 +611,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Pokemon Name Check
                 const pokemonName = entry.pokemon.name;
-                if(!pokemonName) continue;
-                if (filterSpe1 && (pokemonName.includes("mega") || pokemonName.includes("gmax"))) {
+                if(!pokemonName 
+                    || pokemonName.includes("-totem")       //7th gen totem pokemons
+                    || pokemonName.includes("pikachu-")     //pikachu forms
+                    || pokemonName.includes("-dada")        //zarude-dada 
+                    || pokemonName.includes("-hangry")      //morpeko 
+                    || pokemonName.includes("-gmax")        //8th gen Gmax
+                    || pokemonName.includes("-build")       //koraidon
+                    || pokemonName.includes("-mode")        //miraidon
+                    ) { 
+                        continue;
+                    }
+
+                if (filterSpe1 && (pokemonName.includes("mega"))) {
                     continue;
                 }
     
@@ -622,7 +633,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const CP_data = await CP_response.json();
 
                 // Skip when pokemon does not have a sprite 
-                if(!CP_data.sprites.front_default) continue;
+                // if(!CP_data.sprites.front_default) continue;
                 
                 // counter pokemon stats in variables
                 const hp = CP_data.stats.find((stat) => stat.stat.name === 'hp').base_stat
@@ -639,7 +650,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Initialize the score and information of the pokemon if not present
                 if (!pokemonScores[pokemonName]) {
                     pokemonScores[pokemonName] = {
-                        sprite: CP_data.sprites.front_default, 
+                        sprite: CP_data.sprites.front_default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png', 
                         name: CP_data.name,
                         types: CP_data.types.map((type) => type.type.name).join(', '),
                         abilities: CP_data.abilities.map((ability) => ability.ability.name).join(', '),
@@ -714,7 +725,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
         tableContainer.style.overflow = 'scroll';
-        tableContainer.style.marginTop = '12px';
+        tableContainer.style.marginTop = '6px';
         tableContainer.style.maxHeight = '650px';
         
         // Create the table element
