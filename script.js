@@ -84,9 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const invalid = getInvalid(types);
         
         // Display the weaknesses, resistances, and invalid
-        const weaknessesHtml = weaknesses.length > 0 ? `<p>[Weaknesses]<br>${weaknesses.join(', ')}</p>` : '';
-        const resistancesHtml = resistances.length > 0 ? `<p>[Resistances]<br>${resistances.join(', ')}</p>` : '';
-        const invalidHtml = invalid.length > 0 ? `<p>[Invalids]<br>${invalid.join(', ')}</p>` : '';
+        const weaknessesHtml = weaknesses.length > 0 ? `<p>[Weaknesses]<br>${joinWithLineBreak(weaknesses)}</p>` : '';
+        const resistancesHtml = resistances.length > 0 ? `<p>[Resistances]<br>${joinWithLineBreak(resistances)}</p>` : '';
+        const invalidHtml = invalid.length > 0 ? `<p>[Invalids]<br>${joinWithLineBreak(invalid)}</p>` : '';
 
         // Get evolution chain details
         fetch(species)
@@ -118,6 +118,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch((error) => console.error(error));
         })
         .catch((error) => console.error(error));
+    }
+
+    // Join elements with comma and add <br> after every three elements
+    function joinWithLineBreak(elements) {
+        const result = [];
+
+        for (let i = 0; i < elements.length; i += 3) {
+            result.push(elements.slice(i, i + 3).join(', '));
+        }
+
+        return result.join(',<br>');
     }
 
     // Function to handle the click event on the filter buttons
