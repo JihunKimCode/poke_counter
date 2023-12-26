@@ -49,6 +49,7 @@ h1{
     float: left;
     margin-left: 20px;
     height: auto;
+    font-size: 28px;
 }
 
 h2{
@@ -57,8 +58,8 @@ h2{
 
 h3{
     font-family: 'NanumB', sans-serif;
-    font-size: 1.3em;
-    margin-block: 0.83em;
+    font-size: 21px;
+    margin-block: 13px;
     margin-top: 0px;
     margin-bottom: 12px;
 }
@@ -142,11 +143,12 @@ footer a:hover{
     padding: 0 20px;
 }
 
-#ScrollTop{
+#scrollTop{
     background-color: transparent;
     border: none;
     font-size: 24px;
     cursor: pointer;
+    display: none;
 }
 
 /* Main Body Display */
@@ -338,7 +340,9 @@ footer a:hover{
 
 /* Button Layout */
 #settingButton,
-#updateButton {
+#updateButton,
+#scrollUpButton,
+#scrollDownButton {
     background: #fff;
     color: #000;
     border-radius: 5px;
@@ -353,17 +357,21 @@ footer a:hover{
     padding: 6px;
     position: relative;
     transition: transform .2s;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     margin-right: 6px;
 }
 #settingButton:hover,
-#updateButton:hover {
+#updateButton:hover,
+#scrollUpButton:hover,
+#scrollDownButton:hover {
     box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2),0 3px 3px 0 rgba(0,0,0,0.2);
     transform: translateY(-2px);
 }
 
 #settingButton:active,
-#updateButton:active {
+#updateButton:active,
+#scrollUpButton:active,
+#scrollDownButton:active {
     box-shadow: none;
     transform: translateY(0px);
 }

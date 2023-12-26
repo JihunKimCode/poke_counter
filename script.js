@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterCheckbox5 = document.getElementById('filterCheckbox5');
     const updateButton = document.getElementById('updateButton');
     const settingButton = document.getElementById('settingButton');
+    const scrollUpButton = document.getElementById('scrollUpButton');
+    const scrollDownButton = document.getElementById('scrollDownButton');
+    const scrollTopButton = document.getElementById("scrollTop");
 
     //global variables for updating table
     let global_types, global_statsData, global_sprites;
@@ -67,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 getpokemonInfo(data.name, data.id, sprites, types, data.species.url, abilities);
                 displayStatsHistogram(statsData);
                 findCounterPokemon(types, statsData);
+
             })
             .catch((error) => {
                 alert('Pokémon not found. Please try another name or ID.');
@@ -102,8 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Display as text
                     const html = `
                         <div>
-                        <img src="${image[0]}" alt="${name}" width=130" class="pokemon-image">
-                        <img src="${image[1]}" alt="${name}" width="130" class="pokemon-image2">
+                            <img src="${image[0]}" alt="${name}" width="130" class="pokemon-image">
+                            <img src="${image[1]}" alt="${name}" width="130" class="pokemon-image2">
                         </div>
                         <p>Pokédex #${id}</p>
                         <p>[Types] <br> ${types.join(', ')}</p>
@@ -194,44 +198,67 @@ document.addEventListener('DOMContentLoaded', () => {
     async function updateColors(color) {
         let pokeColor = color;
         let lightpokeColor;
+        let item = 'lucky-egg';
 
         // Set color matched to pokemon color
         if (pokeColor === "black") {
             pokeColor = "black";
             lightpokeColor = "gray";
+            item = 'luxury-ball';
         } else if (pokeColor === "blue") { 
             pokeColor = "#1288f8";
             lightpokeColor = "#00d6fa";
+            item = 'dive-ball';
         } else if (pokeColor === "brown") {
             pokeColor = "#a66a2e";
             lightpokeColor = "#622a0f";
+            item = 'fast-ball';
         } else if (pokeColor === "gray") {
             pokeColor = "gray";
             lightpokeColor = "#48494b";
+            item = 'heavy-ball';
         } else if (pokeColor === "green") {
             pokeColor = "#4cbb17";
             lightpokeColor = "#0b6623";
+            item = 'friend-ball';
         } else if (pokeColor === "pink") {
             pokeColor = "#fe5bac";
             lightpokeColor = "pink";
+            item = 'dream-ball';
         } else if (pokeColor === "purple") {
             pokeColor = "purple";
             lightpokeColor = "#b5338a";
+            item = 'master-ball';
         } else if (pokeColor === "red") {
             pokeColor = "#ff0800";
             lightpokeColor = "#c21807";
+            item = 'poke-ball';
         } else if (pokeColor === "white") {
             pokeColor = "#b8b8b8";
             lightpokeColor = "#d9dddc";
+            item = 'premier-ball';
         } else if (pokeColor === "yellow") {
             pokeColor = "#ffd300";
             lightpokeColor = "#ffbf00";
+            item = 'quick-ball';
         }
         
         // Update background color
         document.documentElement.style.setProperty('--pokemoncolor', pokeColor);
         document.documentElement.style.setProperty('--lightpokemoncolor', lightpokeColor);
+
+        // Set the image of the button
+        scrollTopButton.style.display = 'inline-block';
+        scrollTopButton.innerHTML = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${item}.png" alt="Lucky Egg" width="50px">`;
     }
+    
+    // Set Scroll up Button
+    scrollTopButton.addEventListener("click", () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });  
 
     // Function to display the pokemon's stats histogram
     function displayStatsHistogram(statsData) {
@@ -581,6 +608,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Show Buttons
         settingButton.style.display = 'inline-block';
         updateButton.style.display = 'inline-block';
+        scrollUpButton.style.display = 'inline-block';
+        scrollDownButton.style.display = 'inline-block';
         
         //Find Weaknesses of the pokemon
         const weaknesses = new Set();
@@ -744,6 +773,22 @@ document.addEventListener('DOMContentLoaded', () => {
         table.className = 'table';
         table.innerHTML = '';
 
+        // Scroll to the top
+        scrollUpButton.addEventListener('click', () => {
+            tableContainer.scroll({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Scroll to the bottom
+        scrollDownButton.addEventListener('click', () => {
+            tableContainer.scroll({
+                top: tableContainer.scrollHeight,
+                behavior: 'smooth'
+            });
+        });
+
         // Create the table header
         const headerRow = table.createTHead().insertRow();
         headerRow.innerHTML = '<th>Sprite</th><th>Name</th>'
@@ -787,22 +832,5 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // Append the container to the counterPokemon element
         counterPokemon.appendChild(tableContainer);
-    }
-
-    // Set Scroll up Button
-    window.onbeforeunload = function () {
-        window.scrollTo(0, 0);
-    }
-    
-    const ScrollTopButton = document.getElementById("ScrollTop");
-    
-    // Set the image of the button
-    ScrollTopButton.innerHTML = '<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucky-egg.png" alt="Lucky Egg" width="50px">';
-    
-    ScrollTopButton.addEventListener("click", () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    });    
+    }  
 });
