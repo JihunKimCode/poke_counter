@@ -712,6 +712,103 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function calculate(CP_data, SP_stats){
+        /*  
+        * SP_stats[n].value means the search pokemon(SP)'s stats value
+        * 0: hp; 1: attack; 2: defense; 3: special-attack; 4: special-defense; 5: speed 
+        */
+        
+        // HP = baseStat+IV/2+EV/8+10+50
+        // others = (baseStat+IV/2+EV/8+5)*Nature
+        // Assume every stats are in best condition
+        const SP_real_hp = SP_stats[0].value+31/2+252/8+10+50;
+        const SP_real_atk = (SP_stats[1].value+31/2+252/8+5)*1.1;
+        const SP_real_def = (SP_stats[2].value+31/2+252/8+5)*1.1;
+        const SP_real_spa = (SP_stats[3].value+31/2+252/8+5)*1.1;
+        const SP_real_spd = (SP_stats[4].value+31/2+252/8+5)*1.1;
+        const SP_real_spe = (SP_stats[5].value+31/2+252/8+5)*1.1;
+
+        const CP_real_hp = CP_data.stats.hp+31/2+252/8+10+50;
+        const CP_real_atk = (CP_data.stats.atk+31/2+252/8+5)*1.1;
+        const CP_real_def = (CP_data.stats.def+31/2+252/8+5)*1.1;
+        const CP_real_spa = (CP_data.stats.spa+31/2+252/8+5)*1.1;
+        const CP_real_spd = (CP_data.stats.spd+31/2+252/8+5)*1.1;
+        const CP_real_spe = (CP_data.stats.spe+31/2+252/8+5)*1.1;
+
+        // real_damage = (real_atk or real_spa) * ability * power * STAB * rank
+        // real_defense = real_hp * (real_def or real_spd) / (0.44 or 0.411 or 0.374 (correction))
+        var SP_real_damage = 0, SP_real_defense = 0, CP_real_damage = 0, CP_real_defense = 0;
+
+        // Assume power = 80; No ability; STAB(x1.5); No rank-up;
+        // Check if the pokeomon's defense or special-defense is lower
+        if (SP_real_def < SP_real_spd) {
+            // Attack with attack
+            CP_real_damage = Math.floor(CP_real_atk * 1 * 80 * 1.5 * 1);
+            SP_real_defense = Math.floor(SP_real_hp * SP_real_def);
+        } else if (SP_real_def > SP_real_spd) {
+            CP_real_damage = Math.floor(CP_real_spa * 1 * 80 * 1.5 * 1);
+            SP_real_defense = Math.floor(SP_real_hp * SP_real_spd);
+        } else if (CP_real_atk > CP_real_spa){
+            CP_real_damage = Math.floor(CP_real_atk * 1 * 80 * 1.5 * 1);
+            SP_real_defense = Math.floor(SP_real_hp * SP_real_def);
+        } else{
+            CP_real_damage = Math.floor(CP_real_spa * 1 * 80 * 1.5 * 1);
+            SP_real_defense = Math.floor(SP_real_hp * SP_real_spd);
+        }
+
+        CP_data.score += Math.floor((CP_real_damage)*0.005);
+        
+        // 100% two-hit or more
+        if(CP_real_damage < Math.floor(SP_real_defense/0.44)) {
+            CP_data.score -= 10;
+        }
+        // Random one-hit
+        if(CP_real_damage > Math.floor(SP_real_defense/0.44) 
+           && CP_real_damage < Math.floor(SP_real_defense/0.374)) {
+            CP_data.score += 15;
+        }
+        // 100% one-hit
+        if(CP_real_damage > Math.floor(SP_real_defense/0.374)){
+            CP_data.score += 30;
+        }
+        
+        // Def vs SpD based on Atk vs SpA
+        if (SP_real_atk > SP_real_spa) {
+            SP_real_damage = Math.floor(SP_real_atk * 1 * 80 * 1.5 * 1);
+            CP_real_defense = Math.floor(CP_real_hp * CP_real_def);
+        } else if (SP_real_atk < SP_real_spa) {
+            SP_real_damage = Math.floor(SP_real_spa * 1 * 80 * 1.5 * 1);
+            CP_real_defense = Math.floor(CP_real_hp * CP_real_spd);
+        } else if (CP_real_def > CP_real_spd){
+            SP_real_damage = Math.floor(SP_real_spa * 1 * 80 * 1.5 * 1);
+            CP_real_defense = Math.floor(CP_real_hp * CP_real_spd);
+        } else {
+            SP_real_damage = Math.floor(SP_real_atk * 1 * 80 * 1.5 * 1);
+            CP_real_defense = Math.floor(CP_real_hp * CP_real_def);
+        }
+
+        CP_data.score += Math.floor((CP_real_defense)*0.001);
+
+        // 100% two-hit or more
+        if(SP_real_damage < Math.floor(CP_real_defense/0.44)) {
+            CP_data.score += 20;
+        }
+        // Random one-hit
+        if(SP_real_damage > Math.floor(CP_real_defense/0.44) 
+           && SP_real_damage < Math.floor(CP_real_defense/0.374)) {
+            CP_data.score += 10;
+        }
+        // 100% one-hit
+        if(SP_real_damage > Math.floor(CP_real_defense/0.374)){
+            CP_data.score -= 10;
+        }
+
+        // Give more score to the counter Pokemon whose speed is faster
+        if (CP_real_spe > SP_real_spe) CP_data.score += Math.min(Math.floor(CP_real_spe - SP_real_spe),15);
+
+        return CP_data;
+    }
+
     // Find counter pokemon of the pokemon
     async function findCounterPokemon(types, SP_stats) {
         // Check that the checkbox is checked
@@ -844,42 +941,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     };
                 }
-    
+                
                 // Increment the score for the pokemon based on matched types
-                pokemonScores[pokemonName].score+=30;
-    
+                pokemonScores[pokemonName].score+=10;
+                
                 // Additional scoring based on pokemons' stats
-                if (pokemonScores[pokemonName].score<=30) {
-                    /* SP_stats[n].value means the search pokemon(SP)'s stats value
-                     * 0: hp
-                     * 1: attack
-                     * 2: defense
-                     * 3: special-attack
-                     * 4: special-defense
-                     * 5: speed */
-
-                    // Check if the pokeomon's defense or special-defense is lower
-                    if (SP_stats[2].value < SP_stats[4].value) {
-                        pokemonScores[pokemonName].score += Math.floor(atk * 0.5);
-                    } else if (SP_stats[2].value > SP_stats[4].value) {
-                        pokemonScores[pokemonName].score += Math.floor(spa * 0.5);
-                    } else if (atk > spa){
-                        pokemonScores[pokemonName].score += Math.floor(atk * 0.5);
-                    } else{
-                        pokemonScores[pokemonName].score += Math.floor(spa * 0.5);
-                    }
-                    
-                    // Def vs SpD based on Atk vs SpA
-                    if (SP_stats[1].value > SP_stats[3].value) {
-                        pokemonScores[pokemonName].score += Math.floor((hp+def)*0.2);
-                    } else if (SP_stats[1].value < SP_stats[3].value) {
-                        pokemonScores[pokemonName].score += Math.floor((hp+spd)*0.2);
-                    } else {
-                        pokemonScores[pokemonName].score += Math.floor((hp+def+spd)*0.1);
-                    }
-
-                    // Give more score to the counter Pokemon whose speed is faster
-                    if (spe > SP_stats[5].value) pokemonScores[pokemonName].score += 10;
+                if (pokemonScores[pokemonName].score<=10) {
+                    pokemonScores[pokemonName] = calculate(pokemonScores[pokemonName], SP_stats);
                 }
             }
         }
