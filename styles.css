@@ -288,12 +288,12 @@ footer a:hover{
 }
 
 /* Checkbox and Text */
-#filter *, #filter ::after, #filter ::before,
-#filter1 *, #filter1 ::after, #filter1 ::before,
-#filter2 *, #filter2 ::after, #filter2 ::before,
-#filter3 *, #filter3 ::after, #filter3 ::before,
-#filter4 *, #filter4 ::after, #filter4 ::before,
-#filter5 *, #filter5 ::after, #filter5 ::before  {
+#filter_bst600 *, #filter_bst600 ::after, #filter_bst600 ::before,
+#filter_mega *, #filter_mega ::after, #filter_mega ::before,
+#filter_type *, #filter_type ::after, #filter_type ::before,
+#filter_abilities *, #filter_abilities ::after, #filter_abilities ::before,
+#filter_baseStat *, #filter_baseStat ::after, #filter_baseStat ::before,
+#filter_shiny *, #filter_shiny ::after, #filter_shiny ::before  {
     box-sizing: border-box;
     vertical-align: top;
     margin-right: 6px;
@@ -301,12 +301,12 @@ footer a:hover{
 }
 
 /* Checkbox styles */
-#filter .cbx,
-#filter1 .cbx1,
-#filter2 .cbx2,
-#filter3 .cbx3,
-#filter4 .cbx4,
-#filter5 .cbx5 {
+#filter_bst600 .cbx_bst600,
+#filter_mega .cbx_mega,
+#filter_type .cbx_type,
+#filter_abilities .cbx_abilities,
+#filter_baseStat .cbx_baseStat,
+#filter_shiny .cbx_shiny {
     position: relative;
     display: block;
     float: left;
@@ -318,12 +318,12 @@ footer a:hover{
 }
 
 /* Checkmark styles */
-#filter .cbx svg,
-#filter1 .cbx1 svg,
-#filter2 .cbx2 svg,
-#filter3 .cbx3 svg,
-#filter4 .cbx4 svg,
-#filter5 .cbx5 svg {
+#filter_bst600 .cbx_bst600 svg,
+#filter_mega .cbx_mega svg,
+#filter_type .cbx_type svg,
+#filter_abilities .cbx_abilities svg,
+#filter_baseStat .cbx_baseStat svg,
+#filter_shiny .cbx_shiny svg {
     position: absolute;
     top: 3px;
     left: 3px;
@@ -337,12 +337,12 @@ footer a:hover{
 }
 
 /* Container styles */
-#filter,
-#filter1,
-#filter2,
-#filter3,
-#filter4,
-#filter5 {
+#filter_bst600,
+#filter_mega,
+#filter_type,
+#filter_abilities,
+#filter_baseStat,
+#filter_shiny {
     user-select: none;
     display: none;
     justify-content: space-between;
@@ -350,44 +350,44 @@ footer a:hover{
 }
 
 /* Label styles */
-#filter label,
-#filter1 label,
-#filter2 label,
-#filter3 label,
-#filter4 label,
-#filter5 label {
+#filter_bst600 label,
+#filter_mega label,
+#filter_type label,
+#filter_abilities label,
+#filter_baseStat label,
+#filter_shiny label {
     display: inline-block;
     cursor: pointer;
 }
 
 /* Hide default checkboxes */
-#filter input[type="checkbox"],
-#filter1 input[type="checkbox"],
-#filter2 input[type="checkbox"],
-#filter3 input[type="checkbox"],
-#filter4 input[type="checkbox"],
-#filter5 input[type="checkbox"] {
+#filter_bst600 input[type="checkbox"],
+#filter_mega input[type="checkbox"],
+#filter_type input[type="checkbox"],
+#filter_abilities input[type="checkbox"],
+#filter_baseStat input[type="checkbox"],
+#filter_shiny input[type="checkbox"] {
     display: none;
     visibility: hidden;
 }
 
 /* Checked state styles */
-#filter input[type="checkbox"]:checked + .cbx,
-#filter1 input[type="checkbox"]:checked + .cbx1,
-#filter2 input[type="checkbox"]:checked + .cbx2,
-#filter3 input[type="checkbox"]:checked + .cbx3,
-#filter4 input[type="checkbox"]:checked + .cbx4,
-#filter5 input[type="checkbox"]:checked + .cbx5 {
+#filter_bst600 input[type="checkbox"]:checked + .cbx_bst600,
+#filter_mega input[type="checkbox"]:checked + .cbx_mega,
+#filter_type input[type="checkbox"]:checked + .cbx_type,
+#filter_abilities input[type="checkbox"]:checked + .cbx_abilities,
+#filter_baseStat input[type="checkbox"]:checked + .cbx_baseStat,
+#filter_shiny input[type="checkbox"]:checked + .cbx_shiny {
     background-color: var(--pokemoncolor, #1288f8);
 }
 
 /* Checked state animation */
-#filter input[type="checkbox"]:checked + .cbx svg,
-#filter1 input[type="checkbox"]:checked + .cbx1 svg,
-#filter2 input[type="checkbox"]:checked + .cbx2 svg,
-#filter3 input[type="checkbox"]:checked + .cbx3 svg,
-#filter4 input[type="checkbox"]:checked + .cbx4 svg,
-#filter5 input[type="checkbox"]:checked + .cbx5 svg {
+#filter_bst600 input[type="checkbox"]:checked + .cbx_bst600 svg,
+#filter_mega input[type="checkbox"]:checked + .cbx_mega svg,
+#filter_type input[type="checkbox"]:checked + .cbx_type svg,
+#filter_abilities input[type="checkbox"]:checked + .cbx_abilities svg,
+#filter_baseStat input[type="checkbox"]:checked + .cbx_baseStat svg,
+#filter_shiny input[type="checkbox"]:checked + .cbx_shiny svg {
     stroke-dashoffset: 0;
     transition: all 0.15s ease;
 }

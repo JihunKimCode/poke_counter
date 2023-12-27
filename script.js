@@ -16,18 +16,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const settingButton = document.getElementById('settingButton');
     const scrollUpButton = document.getElementById('scrollUpButton');
     const scrollDownButton = document.getElementById('scrollDownButton');
-    const filter = document.getElementById('filter');
-    const filter1 = document.getElementById('filter1');
-    const filter2 = document.getElementById('filter2');
-    const filter3 = document.getElementById('filter3');
-    const filter4 = document.getElementById('filter4');
-    const filter5 = document.getElementById('filter5');
-    const filterCheckbox = document.getElementById('filterCheckbox');
-    const filterCheckbox1 = document.getElementById('filterCheckbox1');
-    const filterCheckbox2 = document.getElementById('filterCheckbox2');
-    const filterCheckbox3 = document.getElementById('filterCheckbox3');
-    const filterCheckbox4 = document.getElementById('filterCheckbox4');
-    const filterCheckbox5 = document.getElementById('filterCheckbox5');
+    const filter_bst600 = document.getElementById('filter_bst600');
+    const filter_mega = document.getElementById('filter_mega');
+    const filter_type = document.getElementById('filter_type');
+    const filter_abilities = document.getElementById('filter_abilities');
+    const filter_baseStat = document.getElementById('filter_baseStat');
+    const filter_shiny = document.getElementById('filter_shiny');
+    const filterCheckbox_bst600 = document.getElementById('filterCheckbox_bst600');
+    const filterCheckbox_mega = document.getElementById('filterCheckbox_mega');
+    const filterCheckbox_type = document.getElementById('filterCheckbox_type');
+    const filterCheckbox_abilities = document.getElementById('filterCheckbox_abilities');
+    const filterCheckbox_baseStat = document.getElementById('filterCheckbox_baseStat');
+    const filterCheckbox_shiny = document.getElementById('filterCheckbox_shiny');
     
     const scrollTopButton = document.getElementById("scrollTop");
 
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Function to handle the click event on the filter buttons
-    filter5.addEventListener('click', () => {
+    filter_shiny.addEventListener('click', () => {
         // get updated Sprite
         const updatedImage = getSprite(global_sprites);
         
@@ -194,13 +194,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Get Sprite of the pokemon (front, back, default, shiny)
     function getSprite(sprites){
-        filter5.style.display = 'inline-block';
-        const filterSpe5 = filterCheckbox5.checked;     // Shiny sprite
+        filter_shiny.style.display = 'inline-block';
+        const filterSpe_shiny = filterCheckbox_shiny.checked;     // Shiny sprite
         let image = [];
         const pokeball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
         const masterball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
         
-        if (filterSpe5) {
+        if (filterSpe_shiny) {
             image.push(sprites.front_shiny || masterball);
             image.push(sprites.back_shiny || masterball);
         } else {
@@ -704,7 +704,7 @@ document.addEventListener('DOMContentLoaded', () => {
     settingButton.addEventListener('click', toggleSettingDisplay);     
     
     function toggleSettingDisplay() {
-        const filters = [filter, filter1, filter2, filter3, filter4];
+        const filters = [filter_bst600, filter_mega, filter_type, filter_abilities, filter_baseStat];
     
         filters.forEach(filter => {
             const currentDisplay = window.getComputedStyle(filter).getPropertyValue('display');
@@ -812,11 +812,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Find counter pokemon of the pokemon
     async function findCounterPokemon(types, SP_stats) {
         // Check that the checkbox is checked
-        const filterSpe = filterCheckbox.checked;       // BST > 600
-        const filterSpe1 = filterCheckbox1.checked;     // mega/Gmax
-        const filterSpe2 = filterCheckbox2.checked;     // Types
-        const filterSpe3 = filterCheckbox3.checked;     // Abilities
-        const filterSpe4 = filterCheckbox4.checked;     // Base Stats
+        const filterSpe_bst600 = filterCheckbox_bst600.checked;       // BST > 600
+        const filterSpe_mega = filterCheckbox_mega.checked;     // mega/Gmax
+        const filterSpe_type = filterCheckbox_type.checked;     // Types
+        const filterSpe_abilities = filterCheckbox_abilities.checked;     // Abilities
+        const filterSpe_baseStat = filterCheckbox_baseStat.checked;     // Base Stats
 
         // Clear Content to update
         counterPokemon.innerHTML = '';
@@ -898,7 +898,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         continue;
                     }
 
-                if (filterSpe1 && (pokemonName.includes("-mega"))) {
+                if (filterSpe_mega && (pokemonName.includes("-mega"))) {
                     continue;
                 }
     
@@ -920,7 +920,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const total = hp+atk+def+spa+spd+spe;
                 
                 // Skip Pokemon with BST > 600
-                if (filterSpe && total > 600) continue;
+                if (filterSpe_bst600 && total > 600) continue;
 
                 // Initialize the score and information of the pokemon if not present
                 if (!pokemonScores[pokemonName]) {
@@ -1001,10 +1001,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create the table header
         const headerRow = table.createTHead().insertRow();
         headerRow.innerHTML = '<th>Sprite</th><th>Name</th>'
-        if(!filterSpe2) headerRow.innerHTML += '<th>Types</th>';
-        if(!filterSpe3) headerRow.innerHTML += '<th>Abilities</th>';
+        if(!filterSpe_type) headerRow.innerHTML += '<th>Types</th>';
+        if(!filterSpe_abilities) headerRow.innerHTML += '<th>Abilities</th>';
         headerRow.innerHTML += '<th>Score</th>'
-        if(!filterSpe4) headerRow.innerHTML += '<th>HP</th><th>Atk</th><th>Def</th><th>SpA</th><th>SpD</th><th>Spe</th><th>BST</th>';
+        if(!filterSpe_baseStat) headerRow.innerHTML += '<th>HP</th><th>Atk</th><th>Def</th><th>SpA</th><th>SpD</th><th>Spe</th><th>BST</th>';
 
         // Iterate through the sorted array and add rows to the table
         for (const pokemon of pokemonArray) {    
@@ -1014,17 +1014,17 @@ document.addEventListener('DOMContentLoaded', () => {
             <td><img src="${pokemon.sprite}" alt="${pokemon.name}" width="50"></td>
             <td>${pokemon.name}</td>
             `;
-            if(!filterSpe2){
+            if(!filterSpe_type){
                 row.innerHTML += `<td>${pokemon.types}</td>`;
             }
 
-            if(!filterSpe3){
+            if(!filterSpe_abilities){
                 row.innerHTML += `<td>${pokemon.abilities}</td>`;
             } 
 
             row.innerHTML += `<td>${pokemon.score}</td>`;
             
-            if(!filterSpe4) {
+            if(!filterSpe_baseStat) {
                 row.innerHTML += `
                     <td>${pokemon.stats.hp}</td>
                     <td>${pokemon.stats.atk}</td>
