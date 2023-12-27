@@ -88,9 +88,15 @@ document.addEventListener('DOMContentLoaded', () => {
             .then((response) => response.json())
             .then((data) => {
                 const sprites = data.sprites;
-                const abilities = data.abilities.map((ability) => ability.ability.name).join(', ');
                 const types = data.types.map((type) => type.type.name);
                 const statsData = data.stats.map((stat) => ({ name: stat.stat.name, value: stat.base_stat }));
+                
+                //Check ability, write '(hidden)' if the ability is hidden
+                const abilities = data.abilities.map((ability) => {
+                    const abilityName = ability.ability.name;
+                  
+                    return ability.is_hidden ? `<br>${abilityName} (hidden)` : abilityName;
+                  }).join(', ');                  
                 
                 // global variables for click events
                 global_sprites = sprites;
@@ -104,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 getpokemonInfo(data.name, data.id, sprites, types, data.species.url, abilities);
                 displayStatsHistogram(statsData);
                 showHeldItems(data.held_items);
-                trivia(data.species.url);
+                trivia(data.species.url, data.height, data.weight);
                 findCounterPokemon(types, statsData);
             })
             .catch((error) => {
@@ -368,12 +374,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Write Trivia of the pokemon
-    function trivia(species){
+    function trivia(species, height, weight){
         // Get evolution chain details
         fetch(species)
         .then((response) => response.json())
         .then((speciesData) => {
-            console.log(speciesData);
             // Take English Genera
             let genera, eggGroup = [], flavorTexts = [];
             for(var i = 0; i<speciesData.genera.length; i++){
@@ -401,6 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>${eggGroup.join(', ')}</p>
                 <h3>Trivia</h3>
                 <p>${genera}</p>
+                <p>${(height/10).toFixed(1)}m, ${(weight/10).toFixed(1)}kg</p>
                 <p>${flavorTexts[Math.floor(Math.random()*flavorTexts.length)]}</p>
             `;
         })
@@ -899,10 +905,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
         tableContainer.style.overflow = 'scroll';
-        tableContainer.style.marginTop = '6px';
-        let clientHeight = statsHistogram.clientHeight+heldItems.clientHeight+others.clientHeight;
+        var clientHeight = statsHistogram.clientHeight+heldItems.clientHeight+others.clientHeight;
         if((pokemonInfo.clientHeight)>clientHeight) clientHeight = pokemonInfo.clientHeight;
-        tableContainer.style.height = (clientHeight)+'px';
+        tableContainer.style.height = (clientHeight-20)+'px';
         
         // Create the table element
         const table = document.createElement('table');

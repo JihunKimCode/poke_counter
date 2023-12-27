@@ -61,7 +61,12 @@ h3{
     font-size: 21px;
     margin-block: 13px;
     margin-top: 0px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+}
+
+p{
+    margin-block-start: 0px;
+    margin-block-end: 10px;
 }
 
 /* Top Nav (search bar)*/
