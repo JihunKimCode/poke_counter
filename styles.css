@@ -69,6 +69,10 @@ p{
     margin-block-end: 10px;
 }
 
+footer p{
+    margin-block-start: 10px;
+}
+
 /* Top Nav (search bar)*/
 .topnav {
     font-family: 'NanumB', sans-serif;
@@ -474,9 +478,11 @@ footer a:hover{
     height: auto;
 }
 
+/*Layout for Tablet and split screen*/
 @media (min-width: 768px) and (max-width: 1024px) {
     .set{
         display: table;
+        width: 100%;
     }
 
     .container1,
@@ -491,6 +497,7 @@ footer a:hover{
         display: table-row;
     }
 }
+
 /* Layout for mobile */
 @media (max-width: 767px) {
     .information{
