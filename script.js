@@ -812,11 +812,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Find counter pokemon of the pokemon
     async function findCounterPokemon(types, SP_stats) {
         // Check that the checkbox is checked
-        const filterSpe_bst600 = filterCheckbox_bst600.checked;       // BST > 600
-        const filterSpe_mega = filterCheckbox_mega.checked;     // mega/Gmax
-        const filterSpe_type = filterCheckbox_type.checked;     // Types
-        const filterSpe_abilities = filterCheckbox_abilities.checked;     // Abilities
-        const filterSpe_baseStat = filterCheckbox_baseStat.checked;     // Base Stats
+        const filterSpe_bst600 = filterCheckbox_bst600.checked;      
+        const filterSpe_mega = filterCheckbox_mega.checked;          
+        const filterSpe_type = filterCheckbox_type.checked;          
+        const filterSpe_abilities = filterCheckbox_abilities.checked;
+        const filterSpe_baseStat = filterCheckbox_baseStat.checked;  
 
         // Clear Content to update
         counterPokemon.innerHTML = '';
@@ -876,7 +876,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
             // Iterate through each pokemon for the current weakness type
             for (const entry of typeData.pokemon) {
-
                 // Update Loading Bar
                 progressContainer.innerHTML = '';
                 progress += 1;
@@ -942,11 +941,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                 }
                 
-                // Increment the score for the pokemon based on matched types
-                pokemonScores[pokemonName].score+=10;
-                
-                // Additional scoring based on pokemons' stats
-                if (pokemonScores[pokemonName].score<=10) {
+                if(pokemonScores[pokemonName].score === 0) {
+                    // Score for the pokemon based on matched types
+                    pokemonScores[pokemonName].score+=15;
+                    // Scoring based on pokemon's stats
                     pokemonScores[pokemonName] = calculate(pokemonScores[pokemonName], SP_stats);
                 }
             }
