@@ -269,6 +269,10 @@ footer a:hover{
     display: block;
 }
 
+#others{
+    width: 255px;
+}
+
 #cpHead{
     display: none;
 }
