@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pokemonInfo = document.getElementById('pokemonInfo');
     const statsHistogram = document.getElementById('statsHistogram');
     const heldItems = document.getElementById('heldItems');
+    const others = document.getElementById('others');
     const cpHead = document.getElementById('cpHead');
     const progressContainer = document.getElementById('progress-bar');
     const counterPokemon = document.getElementById('counterPokemon');
@@ -48,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Random Item next to the title
     async function newItem(){
         try{
             const url = `https://pokeapi.co/api/v2/item/`;
@@ -102,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 getpokemonInfo(data.name, data.id, sprites, types, data.species.url, abilities);
                 displayStatsHistogram(statsData);
                 showHeldItems(data.held_items);
+                trivia(data.species.url);
                 findCounterPokemon(types, statsData);
             })
             .catch((error) => {
@@ -110,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+    // Get the information of the pokemon
     function getpokemonInfo(name, id, sprites, types, species, abilities){
         // Trace Pokemon's information
         const image = getSprite(sprites);
@@ -120,9 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const invalid = getInvalid(types);
         
         // Display the weaknesses, resistances, and invalid
-        const weaknessesHtml = weaknesses.length > 0 ? `<p>[Weaknesses]<br>${joinWithLineBreak(weaknesses)}</p>` : '';
-        const resistancesHtml = resistances.length > 0 ? `<p>[Resistances]<br>${joinWithLineBreak(resistances)}</p>` : '';
-        const invalidHtml = invalid.length > 0 ? `<p>[Invalids]<br>${joinWithLineBreak(invalid)}</p>` : '';
+        const weaknessesHtml = weaknesses.length > 0 ? `<h3>Weaknesses</h3><p>${joinWithLineBreak(weaknesses)}</p>` : '';
+        const resistancesHtml = resistances.length > 0 ? `<h3>Resistances</h3><p>${joinWithLineBreak(resistances)}</p>` : '';
+        const invalidHtml = invalid.length > 0 ? `<h3>Invalids</h3><p>${joinWithLineBreak(invalid)}</p>` : '';
 
         // Get evolution chain details
         fetch(species)
@@ -142,12 +146,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             <img src="${image[1]}" alt="${name}" width="130" class="pokemon-image2">
                         </div>
                         <p>Pokédex #${id}</p>
-                        <p>[Types] <br> ${types.join(', ')}</p>
+                        <h3>Types</h3>
+                        <p>${types.join(', ')}</p>
                         ${weaknessesHtml}
                         ${resistancesHtml}
                         ${invalidHtml}
-                        <p>[Evolution Chain] <br> ${evolutionDetails}</p>
-                        <p>[Abilities] <br> ${abilities}</p>
+                        <h3>Abilities</h3>
+                        <p>${abilities}</p>
+                        <h3>Evolution Chain</h3>
+                        <p>${evolutionDetails}</p>
                     `;
                     pokemonInfo.innerHTML = html;
                 })
@@ -179,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (sprite_back) sprite_back.src = updatedImage[1];
     });    
 
+    // Get Sprite of the pokemon (front, back, default, shiny)
     function getSprite(sprites){
         filter5.style.display = 'inline-block';
         const filterSpe5 = filterCheckbox5.checked;     // Shiny sprite
@@ -322,6 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statsHistogram.innerHTML += `<p>Total Base Stats: ${stats}</p>`;
     }
 
+    // Show held item when the pokemon is in the wild
     function showHeldItems(items){
         heldItems.innerHTML=`<h3>Wild Held Items</h3>`;
         for (var i = 0; i < items.length; i++) {
@@ -353,6 +362,48 @@ document.addEventListener('DOMContentLoaded', () => {
                 tooltip.style.display = 'none';
             });
         }
+        if(items.length===0){
+            heldItems.innerHTML+=`<p>None</p>`;
+        }
+    }
+    
+    // Write Trivia of the pokemon
+    function trivia(species){
+        // Get evolution chain details
+        fetch(species)
+        .then((response) => response.json())
+        .then((speciesData) => {
+            console.log(speciesData);
+            // Take English Genera
+            let genera, eggGroup = [], flavorTexts = [];
+            for(var i = 0; i<speciesData.genera.length; i++){
+                if(speciesData.genera[i].language.name==="en"){
+                    genera = speciesData.genera[i].genus;
+                    break;
+                }
+            }
+            // Take All Egg Groups
+            for(var i = 0; i<speciesData.egg_groups.length; i++){
+                eggGroup.push(speciesData.egg_groups[i].name);
+            }
+            if(eggGroup.length===0){
+                eggGroup.push("undefined");
+            }
+            // Take All English Flavor Texts
+            for(var i = 0; i<speciesData.flavor_text_entries.length; i++){
+                if(speciesData.flavor_text_entries[i].language.name==="en"){
+                    flavorTexts.push(speciesData.flavor_text_entries[i].flavor_text);
+                }
+            }
+            others.innerHTML = `
+                <h3>Egg Groups</h3>
+                <p>${eggGroup.join(', ')}</p>
+                <h3>Trivia</h3>
+                <p>${genera}</p>
+                <p>${flavorTexts[Math.floor(Math.random()*flavorTexts.length)]}</p>
+            `;
+        })
+        .catch((error) => console.error(error));
     }
 
     // Get Evolution Chain
@@ -848,7 +899,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const tableContainer = document.createElement('div');
         tableContainer.style.overflow = 'scroll';
         tableContainer.style.marginTop = '6px';
-        tableContainer.style.height = (pokemonInfo.clientHeight)+'px';
+        let clientHeight = statsHistogram.clientHeight+heldItems.clientHeight+others.clientHeight;
+        if((pokemonInfo.clientHeight)>clientHeight) clientHeight = pokemonInfo.clientHeight;
+        tableContainer.style.height = (clientHeight)+'px';
         
         // Create the table element
         const table = document.createElement('table');
