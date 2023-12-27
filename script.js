@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         if(items.length===0){
-            heldItems.innerHTML+=`<p>None</p>`;
+            heldItems.innerHTML+=`<p>none</p>`;
         }
     }
     
@@ -382,19 +382,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 }
             }
+            if(speciesData.genera.length===0) genera = "undefined";
+            
             // Take All Egg Groups
             for(var i = 0; i<speciesData.egg_groups.length; i++){
                 eggGroup.push(speciesData.egg_groups[i].name);
             }
-            if(eggGroup.length===0){
-                eggGroup.push("undefined");
-            }
+            if(speciesData.egg_groups.length===0) eggGroup.push("undefined");
             // Take All English Flavor Texts
             for(var i = 0; i<speciesData.flavor_text_entries.length; i++){
                 if(speciesData.flavor_text_entries[i].language.name==="en"){
                     flavorTexts.push(speciesData.flavor_text_entries[i].flavor_text);
                 }
             }
+            if(speciesData.flavor_text_entries.length===0) flavorTexts.push("undefined");
             others.innerHTML = `
                 <h3>Egg Groups</h3>
                 <p>${eggGroup.join(', ')}</p>
