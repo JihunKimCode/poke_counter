@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pokeHead = document.getElementById('pokemonHead');
     const pokemonInfo = document.getElementById('pokemonInfo');
     const statsHistogram = document.getElementById('statsHistogram');
+    const heldItems = document.getElementById('heldItems');
     const cpHead = document.getElementById('cpHead');
     const progressContainer = document.getElementById('progress-bar');
     const counterPokemon = document.getElementById('counterPokemon');
@@ -32,25 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     //global variables for updating table
     let global_types, global_statsData, global_sprites;
 
-    async function newItem(){
-        try{
-            const url = `https://pokeapi.co/api/v2/item/`;
-            const response = await fetch(url);
-            const data = await response.json();
-            const id = Math.floor(Math.random()*data.count);
-            
-            const itemUrl = `${url}${id}/`;
-
-            const itemResponse = await fetch(itemUrl);
-            if(!itemResponse.ok) throw new Error('Fail to Fetch');
-            
-            const item = await itemResponse.json();
-            randomItem.src = item.sprites.default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucky-egg.png';
-        } catch(error){
-            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucky-egg.png';
-        }
-    }
-
     // Search button click event
     searchButton.addEventListener('click', () => {
         newItem();
@@ -65,6 +47,32 @@ document.addEventListener('DOMContentLoaded', () => {
             performSearch();
         }
     });
+
+    async function newItem(){
+        try{
+            const url = `https://pokeapi.co/api/v2/item/`;
+            const response = await fetch(url);
+            const data = await response.json();
+            const id = Math.floor(Math.random()*data.count);
+            
+            const itemUrl = `${url}${id}/`;
+
+            const itemResponse = await fetch(itemUrl);
+            if(!itemResponse.ok) throw new Error('Fail to Fetch');
+            
+            const item = await itemResponse.json();
+            if(item.sprites.default){
+                randomItem.src = item.sprites.default;
+                randomItem.title = item.name
+            }else{
+                randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucky-egg.png';
+                randomItem.title = "lucky-egg";
+            }
+        } catch(error){
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucky-egg.png';
+            randomItem.title = "lucky-egg";
+        }
+    }
 
     // Function to perform the search
     function performSearch() {
@@ -93,8 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Main Body
                 getpokemonInfo(data.name, data.id, sprites, types, data.species.url, abilities);
                 displayStatsHistogram(statsData);
+                showHeldItems(data.held_items);
                 findCounterPokemon(types, statsData);
-
             })
             .catch((error) => {
                 alert('Pokémon not found. Please try another name or ID.');
@@ -273,7 +281,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Set the image of the button
         scrollTopButton.style.display = 'inline-block';
-        scrollTopButton.innerHTML = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${item}.png" alt="Lucky Egg" width="50px">`;
+        scrollTopButton.innerHTML = `
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${item}.png" 
+            alt="scrollTop" 
+            width="50px">
+        `;
     }
     
     // Set Scroll up Button
@@ -308,6 +320,39 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set the HTML content of the histogram container
         statsHistogram.innerHTML += histogramHTML;
         statsHistogram.innerHTML += `<p>Total Base Stats: ${stats}</p>`;
+    }
+
+    function showHeldItems(items){
+        heldItems.innerHTML=`<h3>Wild Held Items</h3>`;
+        for (var i = 0; i < items.length; i++) {
+            const itemName = items[i].item.name;
+            const itemImage = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${itemName}.png`;
+    
+            const heldItem = document.createElement('div');
+            heldItem.classList.add('held-item');
+    
+            const img = document.createElement('img');
+            img.src = itemImage;
+            img.alt = 'held-item';
+            img.style.width = '50px';
+    
+            const tooltip = document.createElement('div');
+            tooltip.classList.add('tooltip');
+            tooltip.textContent = itemName;
+    
+            heldItem.appendChild(img);
+            heldItem.appendChild(tooltip);
+            heldItems.appendChild(heldItem);
+
+            // Add event listener to show tooltip only when hovering over the image
+            img.addEventListener('mouseenter', () => {
+                tooltip.style.display = 'block';
+            });
+
+            img.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+            });
+        }
     }
 
     // Get Evolution Chain

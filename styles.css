@@ -160,6 +160,32 @@ footer a:hover{
     width: 98%;
 }
 
+/*Webpage Layout*/
+.set{
+    display:contents;
+}
+
+.container1,
+.container2,
+.container3{
+    display: table-cell;
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.container1{
+    width: 30%;
+}
+
+.container2{
+    width: 20%;
+}
+
+.container3{
+    width: 50%;
+}
+
 #pokemonInfo {
     display: table-cell;
     width: fit-content;
@@ -205,30 +231,42 @@ footer a:hover{
     border-radius: 10px;
 }
 
-/*Webpage Layout*/
-.set{
-    display:contents;
+#heldItems{
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-.container1,
-.container2,
-.container3{
-    display: table-cell;
-    flex-direction: column;
-    padding-left: 10px;
-    padding-right: 10px;
+.held-items-container {
+    position: relative;
 }
 
-.container1{
-    width: 30%;
+.tooltip {
+    display: none;
+    position: absolute;
+    background-color: rgba(0,0,0,0.7);
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 1;
 }
 
-.container2{
-    width: 20%;
+.tooltip:after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -30%;
+    border-width: 5px;
+    border: solid;
+    border-color: transparent transparent rgba(0,0,0,0.7) transparent;
+  }
+
+.held-item{
+    display: inline-block;
 }
 
-.container3{
-    width: 50%;
+.held-item:hover .tooltip {
+    display: block;
 }
 
 #cpHead{
