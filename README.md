@@ -1,5 +1,5 @@
 # [jihunkimcode.github.io/poke_counter/](https://jihunkimcode.github.io/poke_counter/)
-Pokemon information searcher. It finds counter Pokemon as well.
+Search Pokémon information as well as counter Pokémon.
 
 # Goals
 - [x] **Sprite**
@@ -32,7 +32,8 @@ Pokemon information searcher. It finds counter Pokemon as well.
         - [x] Hide elements
         - [x] Table length == info length
 - [ ] **Website Design**
-    - [ ] Webpage logo
+    - [x] Webpage logo
+    - [ ] Homemade logo?
     - [x] Table Colors
     - [x] Easter Egg!
 
