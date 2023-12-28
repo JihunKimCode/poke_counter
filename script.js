@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const scrollTopButton = document.getElementById("scrollTop");
 
-    //global variables for updating table
+    // Global variables for updating table
     let global_types, global_statsData, global_sprites;
 
     // Search button click event
@@ -92,14 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const types = data.types.map((type) => type.type.name);
                 const statsData = data.stats.map((stat) => ({ name: stat.stat.name, value: stat.base_stat }));
                 
-                //Check ability, write '(hidden)' if the ability is hidden
+                // Check ability, write '(hidden)' if the ability is hidden
                 const abilities = data.abilities.map((ability) => {
                     const abilityName = ability.ability.name;
                   
                     return ability.is_hidden ? `<br>${abilityName} (hidden)` : abilityName;
                   }).join(', ');                  
                 
-                // global variables for click events
+                // Global variables for click events
                 global_sprites = sprites;
                 global_types = types;
                 global_statsData = statsData;
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 findColors(data.name, data.id);
 
                 // Main Body
-                getpokemonInfo(data.name, data.id, sprites, types, abilities);
+                getPokemonInfo(data.name, data.id, sprites, types, abilities);
                 getEvolution(data.species.url)
                 displayStatsHistogram(statsData);
                 showHeldItems(data.held_items);
@@ -121,35 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // Function to capitalize the first letter of a string
+    // Capitalize the first letter of a string
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-    
-    function evolutionWithImages(evolutionDetails) {
-        const matches = evolutionDetails.match(/(?:<br>-> |<br>or |^)([a-zA-Z-]+)/g);
-      
-        if (!matches) {
-          // No matches found, return the original string
-          return Promise.resolve(evolutionDetails);
-        }
-      
-        const fetchPromises = matches.map(async (match) => {
-          const pokemonName = match.replace(/<br>-> |<br>or /, '');
-          const url = `https://pokeapi.co/api/v2/pokemon/${pokemonName}`;
-      
-          try {
-            const response = await fetch(url);
-            const data = await response.json();
-            const img = data.sprites.front_default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
-      
-            evolutionDetails = evolutionDetails.replace(pokemonName, `<div class="pokemon-tooltip" data-name="${pokemonName}"><img src="${img}" alt="${pokemonName}" width="60px"/></div>`);
-        } catch (error) {
-            console.error(`Error fetching data for ${pokemonName}:`, error);
-          }
-        });
-      
-        return Promise.all(fetchPromises).then(() => evolutionDetails);
     }
       
     // Join elements with comma and add <br> after every three elements
@@ -164,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
       
     // Get the information of the pokemon
-    function getpokemonInfo(name, id, sprites, types, abilities){
+    function getPokemonInfo(name, id, sprites, types, abilities){
         // Trace Pokemon's information
         const image = getSprite(sprites);
 
@@ -178,12 +152,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const resistancesHtml = resistances.length > 0 ? `<h3>Resistances</h3><p>${joinWithLineBreak(resistances)}</p>` : '';
         const invalidHtml = invalid.length > 0 ? `<h3>Invalids</h3><p>${joinWithLineBreak(invalid)}</p>` : '';
 
-        const typeImages = types.map(type => `
+        const typeImages = types.map(type => 
+        `<div class="tooltip-types">
             <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" 
                  alt="${type}" 
                  class="type-image" 
-                 width="40px"
-                 title="${type}">`
+                 width="40px">
+            <span class="tooltiptext">${type}</span>
+        </div>`
         );
     
         pokeHead.innerHTML = `${name.toUpperCase()}`;
@@ -245,7 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } 
             let url = `https://pokeapi.co/api/v2/pokemon-species/${name}`;
             let response = await fetch(url);
-
             if(!response.ok) throw new Error('Fail to Fetch');
     
             const data = await response.json();
@@ -348,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
             stats += stat.value;
             return `
                 <div class="stat-bar">
-                    <div class="bar-label">${stat.name}: ${stat.value}</div>
+                    <div class="bar-label">${capitalizeFirstLetter(stat.name)}: ${stat.value}</div>
                     <div class="bar-container">
                         <div class="bar" style="width: ${barWidth}%;"></div>
                     </div>
@@ -368,30 +343,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const itemName = items[i].item.name;
             const itemImage = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${itemName}.png`;
     
-            const heldItem = document.createElement('div');
-            heldItem.classList.add('held-item');
-    
-            const img = document.createElement('img');
-            img.src = itemImage;
-            img.alt = 'held-item';
-            img.style.width = '50px';
-    
-            const tooltip = document.createElement('div');
-            tooltip.classList.add('tooltip');
-            tooltip.textContent = itemName;
-    
-            heldItem.appendChild(img);
-            heldItem.appendChild(tooltip);
-            heldItems.appendChild(heldItem);
-
-            // Add event listener to show tooltip only when hovering over the image
-            img.addEventListener('mouseenter', () => {
-                tooltip.style.display = 'block';
-            });
-
-            img.addEventListener('mouseleave', () => {
-                tooltip.style.display = 'none';
-            });
+            heldItems.innerHTML+=`
+                <div class="tooltip-items">
+                    <img src="${itemImage}" 
+                         alt = "held-item"
+                         width = "50px">
+                    <span class="tooltiptext">${itemName}</span>
+                </div>
+            `;
         }
         if(items.length===0){
             heldItems.innerHTML+=`<p>none</p>`;
@@ -436,6 +395,43 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         })
         .catch((error) => console.error(error));
+    }
+    
+    // Change Pokemon name in evolution chain into an image
+    function evolutionWithImages(evolutionDetails) {
+        const matches = evolutionDetails.match(/(?:<br>-> |<br>or |^)([a-zA-Z-]+)/g);
+      
+        if (!matches) {
+          // No matches found, return the original string
+          return Promise.resolve(evolutionDetails);
+        }
+      
+        const fetchPromises = matches.map(async (match) => {
+            const pokemonName = match.replace(/<br>-> |<br>or /, '');
+            const url = `https://pokeapi.co/api/v2/pokemon/${pokemonName}`;
+        
+            try {
+                const response = await fetch(url);
+                if(!response.ok) throw new Error('Fail to Fetch');
+                
+                const data = await response.json();
+                const img = data.sprites.front_default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+
+                const imgTooltip = `
+                <div class="tooltip-pokemon">
+                    <img src="${img}" 
+                         alt="${pokemonName}" 
+                         width="60px"/>
+                    <span class="tooltiptext">${pokemonName}</span>
+                </div>`
+        
+                evolutionDetails = evolutionDetails.replace(pokemonName, imgTooltip);
+            } catch (error) {
+                console.error(`Error fetching data for ${pokemonName}:`, error);
+            }
+        });
+      
+        return Promise.all(fetchPromises).then(() => evolutionDetails);
     }
 
     function getEvolution(species){
@@ -588,7 +584,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const evolutionBranches = chain.evolves_to.map((evolve) => parseEvolutionChain(evolve));
             evolutionDetails += ` <br>-> ${evolutionBranches.join(' <br>or ')}`;
         }
-    
         return evolutionDetails;
     }
     
@@ -694,9 +689,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const sortedEffectiveWeaknesses = effectiveWeaknesses.map(({ weakness, count }) => {
             const capitalizedWeakness = capitalizeFirstLetter(weakness);
             const weaknessImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedWeakness}.png`;
-        return `<img src="${weaknessImageUrl}" alt="${capitalizedWeakness}" title="${capitalizedWeakness}" class="type-image" width="40px" > x${count === 2 ? 4 : count === 1 ? 2 : 1}`;
-    });
-        
+            return `
+            <div class="tooltip-types">
+                <img src="${weaknessImageUrl}" 
+                     alt="${weakness}"
+                     class="type-image" 
+                     width="40px" > 
+                x${count === 2 ? 4 : count === 1 ? 2 : 1}
+                <span class="tooltiptext">${weakness}</span>
+            </div>`;
+        });
         return sortedEffectiveWeaknesses;
     }
     
@@ -736,7 +738,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const sortedEffectiveResistances = effectiveResistances.map(({ resistance, count }) => {
             const capitalizedResistance = capitalizeFirstLetter(resistance);
             const resistanceImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedResistance}.png`;
-            return `<img src="${resistanceImageUrl}" alt="${capitalizedResistance}" title="${capitalizedResistance}" class="type-image" width="40px"> x${count === 2 ? 1 / 4 : count === 1 ? 1 / 2 : 1}`;
+            return `
+            <div class="tooltip-types">
+                <img src="${resistanceImageUrl}" 
+                     alt="${resistance}"
+                     class="type-image" 
+                     width="40px"> 
+                x${count === 2 ? 1 / 4 : count === 1 ? 1 / 2 : 1}
+                <span class="tooltiptext">${resistance}</span>
+            </div>`;
         });
         
         return sortedEffectiveResistances;
@@ -755,7 +765,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const invalidWithTypeImages = Array.from(invalid).map((inval) => {
             const capitalizedInval = capitalizeFirstLetter(inval);
             const invalImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedInval}.png`;
-            return `<img src="${invalImageUrl}" alt="${capitalizedInval}" title="${capitalizedInval}" class="type-image" width="40px">`;
+            return `
+            <div class="tooltip-types">
+                <img src="${invalImageUrl}" 
+                    alt="${inval}"
+                    class="type-image" 
+                    width="40px">
+                <span class="tooltiptext">${inval}</span>
+            </div>`;
         });
 
         return invalidWithTypeImages;
