@@ -22,10 +22,11 @@ Pokemon information searcher. It finds counter Pokemon as well.
     - [ ] x1 Type?
     - [x] Reorder by Multiple (x4 to x2; x1/2 to x1/4)
 - [x] **Counter Pokemon**
-    - [ ] Better way to calculate score
+    - [ ] Better way to find counter pokemon
         - [x] Exclude BST > 600
         - [x] Exclude mega
         - [x] Exclude illegal pokemons and gmax
+        - [x] Use Calculation using BS, IV, and EV
     - [x] Beautify Display Table
         - [x] color update
         - [x] Hide elements

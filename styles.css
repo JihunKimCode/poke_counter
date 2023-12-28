@@ -50,6 +50,7 @@ h1{
     margin-left: 20px;
     height: auto;
     font-size: 28px;
+    margin-block-end: 10px;
 }
 
 h2{
@@ -500,6 +501,10 @@ footer a:hover{
 
 /* Layout for mobile */
 @media (max-width: 767px) {
+    h1{
+        margin-block-end: 0px;
+    }
+
     .information{
         flex-direction: column;
         margin: 10px;
