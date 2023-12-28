@@ -649,7 +649,7 @@ document.addEventListener('DOMContentLoaded', () => {
         psychic: [],
         ice: [],
         dragon: [],
-        dark: ['pyschic'],
+        dark: ['psychic'],
         fairy: ['dragon'],
     };
 
