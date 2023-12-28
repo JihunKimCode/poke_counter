@@ -123,7 +123,33 @@ document.addEventListener('DOMContentLoaded', () => {
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
-
+    
+    function replacePokemonNamesWithImages(evolutionDetails) {
+        const matches = evolutionDetails.match(/(?:<br>-> |<br>or |^)([a-zA-Z-]+)/g);
+      
+        if (!matches) {
+          // No matches found, return the original string
+          return Promise.resolve(evolutionDetails);
+        }
+      
+        const fetchPromises = matches.map(async (match) => {
+          const pokemonName = match.replace(/<br>-> |<br>or /, '');
+          const url = `https://pokeapi.co/api/v2/pokemon/${pokemonName}`;
+      
+          try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const img = data.sprites.front_default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+      
+            evolutionDetails = evolutionDetails.replace(pokemonName, `<img src="${img}" alt="${pokemonName}" title=${pokemonName} width="70px"/>`);
+          } catch (error) {
+            console.error(`Error fetching data for ${pokemonName}:`, error);
+          }
+        });
+      
+        return Promise.all(fetchPromises).then(() => evolutionDetails);
+      }
+      
     // Get the information of the pokemon
     function getpokemonInfo(name, id, sprites, types, species, abilities){
         // Trace Pokemon's information
@@ -150,26 +176,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then((response) => response.json())
                 .then((evolutionData) => {
                     const evolutionDetails = parseEvolutionChain(evolutionData.chain);
-
-                    pokeHead.innerHTML = `${name.toUpperCase()}`;
-                    // Display as text
-                    const html = `
-                        <div>
-                            <img src="${image[0]}" alt="${name}" width="130" class="pokemon-image">
-                            <img src="${image[1]}" alt="${name}" width="130" class="pokemon-image2">
-                        </div>
-                        <p>Pokédex #${id}</p>
-                        <h3>Types</h3>
-                        ${typeImages.join('&nbsp&nbsp')}
-                        ${weaknessesHtml}
-                        ${resistancesHtml}
-                        ${invalidHtml}
-                        <h3>Abilities</h3>
-                        <p>${abilities}</p>
-                        <h3>Evolution Chain</h3>
-                        <p>${evolutionDetails}</p>
-                    `;
-                    pokemonInfo.innerHTML = html;
+                    replacePokemonNamesWithImages(evolutionDetails)
+                    .then((evolutionDetailsWithImages) => {
+                        pokeHead.innerHTML = `${name.toUpperCase()}`;
+                        // Display as text
+                        const html = `
+                            <div>
+                                <img src="${image[0]}" alt="${name}" width="130" class="pokemon-image">
+                                <img src="${image[1]}" alt="${name}" width="130" class="pokemon-image2">
+                            </div>
+                            <p>Pokédex #${id}</p>
+                            <h3>Types</h3>
+                            ${typeImages.join('&nbsp&nbsp')}
+                            ${weaknessesHtml}
+                            ${resistancesHtml}
+                            ${invalidHtml}
+                            <h3>Abilities</h3>
+                            <p>${abilities}</p>
+                            <h3>Evolution Chain</h3>
+                            ${evolutionDetailsWithImages}
+                        `;
+                        pokemonInfo.innerHTML = html;
+                    })
+                    .catch((error) => {
+                      console.error('Error:', error);
+                    });
                 })
                 .catch((error) => console.error(error));
         })
