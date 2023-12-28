@@ -7,7 +7,7 @@ Search Pokémon information as well as counter Pokémon.
     - [x] Front/Back Sprite
 - [x] **ID**
 - [x] **Type**
-    - [ ] Type icons?
+    - [x] Type icons
 - [x] **Stats**
 - [x] **Abilities**
 - [ ] **Evolutions**
@@ -18,6 +18,7 @@ Search Pokémon information as well as counter Pokémon.
         - [x] object issue (e.g. moves, locations)
     - [x] Evolution Chains
         - [x] More than one (e.g. eevee, beautifly)
+        - [x] Pokemon with Images
 - [x] **Counter Type** (defense)
     - [ ] x1 Type?
     - [x] Reorder by Multiple (x4 to x2; x1/2 to x1/4)

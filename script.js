@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const statsHistogram = document.getElementById('statsHistogram');
     const heldItems = document.getElementById('heldItems');
     const others = document.getElementById('others');
+    const evolution = document.getElementById('evolution');
     const cpHead = document.getElementById('cpHead');
     const progressContainer = document.getElementById('progress-bar');
     const counterPokemon = document.getElementById('counterPokemon');
@@ -107,7 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 findColors(data.name, data.id);
 
                 // Main Body
-                getpokemonInfo(data.name, data.id, sprites, types, data.species.url, abilities);
+                getpokemonInfo(data.name, data.id, sprites, types, abilities);
+                getEvolution(data.species.url)
                 displayStatsHistogram(statsData);
                 showHeldItems(data.held_items);
                 trivia(data.species.url, data.height, data.weight);
@@ -124,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
     
-    function replacePokemonNamesWithImages(evolutionDetails) {
+    function evolutionWithImages(evolutionDetails) {
         const matches = evolutionDetails.match(/(?:<br>-> |<br>or |^)([a-zA-Z-]+)/g);
       
         if (!matches) {
@@ -141,17 +143,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             const img = data.sprites.front_default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
       
-            evolutionDetails = evolutionDetails.replace(pokemonName, `<img src="${img}" alt="${pokemonName}" title=${pokemonName} width="70px"/>`);
-          } catch (error) {
+            evolutionDetails = evolutionDetails.replace(pokemonName, `<div class="pokemon-tooltip" data-name="${pokemonName}"><img src="${img}" alt="${pokemonName}" width="60px"/></div>`);
+        } catch (error) {
             console.error(`Error fetching data for ${pokemonName}:`, error);
           }
         });
       
         return Promise.all(fetchPromises).then(() => evolutionDetails);
-      }
+    }
+      
+    // Join elements with comma and add <br> after every three elements
+    function joinWithLineBreak(elements) {
+        const result = [];
+
+        for (let i = 0; i < elements.length; i += 3) {
+            result.push(elements.slice(i, i + 3).join('&nbsp&nbsp'));
+        }
+
+        return result.join('<br>');
+    }
       
     // Get the information of the pokemon
-    function getpokemonInfo(name, id, sprites, types, species, abilities){
+    function getpokemonInfo(name, id, sprites, types, abilities){
         // Trace Pokemon's information
         const image = getSprite(sprites);
 
@@ -165,57 +178,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const resistancesHtml = resistances.length > 0 ? `<h3>Resistances</h3><p>${joinWithLineBreak(resistances)}</p>` : '';
         const invalidHtml = invalid.length > 0 ? `<h3>Invalids</h3><p>${joinWithLineBreak(invalid)}</p>` : '';
 
-        const typeImages = types.map(type => `<img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" alt="${type}" class="type-image" width="40px">`);
-        
-        // Get evolution chain details
-        fetch(species)
-        .then((response) => response.json())
-        .then((speciesData) => {
-            const evolutionChainUrl = speciesData.evolution_chain.url;
-            fetch(evolutionChainUrl)
-                .then((response) => response.json())
-                .then((evolutionData) => {
-                    const evolutionDetails = parseEvolutionChain(evolutionData.chain);
-                    replacePokemonNamesWithImages(evolutionDetails)
-                    .then((evolutionDetailsWithImages) => {
-                        pokeHead.innerHTML = `${name.toUpperCase()}`;
-                        // Display as text
-                        const html = `
-                            <div>
-                                <img src="${image[0]}" alt="${name}" width="130" class="pokemon-image">
-                                <img src="${image[1]}" alt="${name}" width="130" class="pokemon-image2">
-                            </div>
-                            <p>Pokédex #${id}</p>
-                            <h3>Types</h3>
-                            ${typeImages.join('&nbsp&nbsp')}
-                            ${weaknessesHtml}
-                            ${resistancesHtml}
-                            ${invalidHtml}
-                            <h3>Abilities</h3>
-                            <p>${abilities}</p>
-                            <h3>Evolution Chain</h3>
-                            ${evolutionDetailsWithImages}
-                        `;
-                        pokemonInfo.innerHTML = html;
-                    })
-                    .catch((error) => {
-                      console.error('Error:', error);
-                    });
-                })
-                .catch((error) => console.error(error));
-        })
-        .catch((error) => console.error(error));
-    }
-
-    // Join elements with comma and add <br> after every three elements
-    function joinWithLineBreak(elements) {
-        const result = [];
-
-        for (let i = 0; i < elements.length; i += 3) {
-            result.push(elements.slice(i, i + 3).join('&nbsp&nbsp'));
-        }
-
-        return result.join('<br>');
+        const typeImages = types.map(type => `
+            <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" 
+                 alt="${type}" 
+                 class="type-image" 
+                 width="40px"
+                 title="${type}">`
+        );
+    
+        pokeHead.innerHTML = `${name.toUpperCase()}`;
+        // Display as text
+        const html = `
+            <div>
+                <img src="${image[0]}" alt="${name}" width="130" class="pokemon-image">
+                <img src="${image[1]}" alt="${name}" width="130" class="pokemon-image2">
+            </div>
+            <p>Pokédex #${id}</p>
+            <h3>Types</h3>
+            ${typeImages.join('&nbsp&nbsp')}
+            ${weaknessesHtml}
+            ${resistancesHtml}
+            ${invalidHtml}
+            <h3>Abilities</h3>
+            <p>${abilities}</p>
+        `;
+        pokemonInfo.innerHTML = html;
     }
 
     // Function to handle the click event on the filter buttons
@@ -451,6 +438,32 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch((error) => console.error(error));
     }
 
+    function getEvolution(species){
+        // Get evolution chain details
+        fetch(species)
+        .then((response) => response.json())
+        .then((speciesData) => {
+            const evolutionChainUrl = speciesData.evolution_chain.url;
+            fetch(evolutionChainUrl)
+                .then((response) => response.json())
+                .then((evolutionData) => {
+                    const evolutionDetails = parseEvolutionChain(evolutionData.chain);
+                    evolutionWithImages(evolutionDetails)
+                    .then((evolutionImages) => {
+                        evolution.innerHTML = `
+                            <h3>Evolution Chain</h3>
+                            ${evolutionImages}
+                        `
+                    })
+                    .catch((error) => {
+                      console.error('Error:', error);
+                    });
+                })
+                .catch((error) => console.error(error));
+        })
+        .catch((error) => console.error(error));
+    }
+
     // Get Evolution Chain
     function parseEvolutionChain(chain) {
         let evolutionDetails = chain.species.name;
@@ -681,7 +694,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sortedEffectiveWeaknesses = effectiveWeaknesses.map(({ weakness, count }) => {
             const capitalizedWeakness = capitalizeFirstLetter(weakness);
             const weaknessImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedWeakness}.png`;
-        return `<img src="${weaknessImageUrl}" alt="${capitalizedWeakness}" class="type-image" width="40px"> x${count === 2 ? 4 : count === 1 ? 2 : 1}`;
+        return `<img src="${weaknessImageUrl}" alt="${capitalizedWeakness}" title="${capitalizedWeakness}" class="type-image" width="40px" > x${count === 2 ? 4 : count === 1 ? 2 : 1}`;
     });
         
         return sortedEffectiveWeaknesses;
@@ -723,7 +736,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sortedEffectiveResistances = effectiveResistances.map(({ resistance, count }) => {
             const capitalizedResistance = capitalizeFirstLetter(resistance);
             const resistanceImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedResistance}.png`;
-            return `<img src="${resistanceImageUrl}" alt="${capitalizedResistance}" class="type-image" width="40px"> x${count === 2 ? 1 / 4 : count === 1 ? 1 / 2 : 1}`;
+            return `<img src="${resistanceImageUrl}" alt="${capitalizedResistance}" title="${capitalizedResistance}" class="type-image" width="40px"> x${count === 2 ? 1 / 4 : count === 1 ? 1 / 2 : 1}`;
         });
         
         return sortedEffectiveResistances;
@@ -742,7 +755,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const invalidWithTypeImages = Array.from(invalid).map((inval) => {
             const capitalizedInval = capitalizeFirstLetter(inval);
             const invalImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedInval}.png`;
-            return `<img src="${invalImageUrl}" alt="${capitalizedInval}" class="type-image" width="40px">`;
+            return `<img src="${invalImageUrl}" alt="${capitalizedInval}" title="${capitalizedInval}" class="type-image" width="40px">`;
         });
 
         return invalidWithTypeImages;
@@ -1025,8 +1038,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
         tableContainer.style.overflow = 'scroll';
-        var clientHeight = statsHistogram.clientHeight+heldItems.clientHeight+others.clientHeight;
-        if((pokemonInfo.clientHeight)>clientHeight) clientHeight = pokemonInfo.clientHeight;
+        var container1 = pokemonInfo.clientHeight+evolution.clientHeight;
+        var container2 = statsHistogram.clientHeight+heldItems.clientHeight+others.clientHeight;
+        var clientHeight = container1 > container2 ? container1 : container2;
         tableContainer.style.height = (clientHeight-20)+'px';
         
         // Create the table element
