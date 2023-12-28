@@ -119,6 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+    // Function to capitalize the first letter of a string
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     // Get the information of the pokemon
     function getpokemonInfo(name, id, sprites, types, species, abilities){
         // Trace Pokemon's information
@@ -134,6 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const resistancesHtml = resistances.length > 0 ? `<h3>Resistances</h3><p>${joinWithLineBreak(resistances)}</p>` : '';
         const invalidHtml = invalid.length > 0 ? `<h3>Invalids</h3><p>${joinWithLineBreak(invalid)}</p>` : '';
 
+        const typeImages = types.map(type => `<img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" alt="${type}" class="type-image" width="40px">`);
+        
         // Get evolution chain details
         fetch(species)
         .then((response) => response.json())
@@ -153,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <p>Pokédex #${id}</p>
                         <h3>Types</h3>
-                        <p>${types.join(', ')}</p>
+                        ${typeImages.join('&nbsp&nbsp')}
                         ${weaknessesHtml}
                         ${resistancesHtml}
                         ${invalidHtml}
@@ -174,10 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const result = [];
 
         for (let i = 0; i < elements.length; i += 3) {
-            result.push(elements.slice(i, i + 3).join(', '));
+            result.push(elements.slice(i, i + 3).join('&nbsp&nbsp'));
         }
 
-        return result.join(',<br>');
+        return result.join('<br>');
     }
 
     // Function to handle the click event on the filter buttons
@@ -639,8 +646,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Sort the weaknesses based on the count in descending order
         effectiveWeaknesses.sort((a, b) => b.count - a.count);
         
-        // Map the sorted weaknesses (x4 and then x2)
-        const sortedEffectiveWeaknesses = effectiveWeaknesses.map(({ weakness, count }) => `${weakness} x${count === 2 ? 4 : count === 1 ? 2 : 1}`);
+        // Map the sorted weaknesses (x4 and then x2) with type images
+        const sortedEffectiveWeaknesses = effectiveWeaknesses.map(({ weakness, count }) => {
+            const capitalizedWeakness = capitalizeFirstLetter(weakness);
+            const weaknessImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedWeakness}.png`;
+        return `<img src="${weaknessImageUrl}" alt="${capitalizedWeakness}" class="type-image" width="40px"> x${count === 2 ? 4 : count === 1 ? 2 : 1}`;
+    });
         
         return sortedEffectiveWeaknesses;
     }
@@ -677,8 +688,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Sort the resistances based on the count in ascending order
         effectiveResistances.sort((a, b) => a.count - b.count);
         
-        // Map the sorted resistances (x1/2 and then x1/4)
-        const sortedEffectiveResistances = effectiveResistances.map(({ resistance, count }) => `${resistance} x${count === 2 ? 1 / 4 : count === 1 ? 1 / 2 : 1}`);
+        // Map the sorted resistances (x1/2 and then x1/4) with type images
+        const sortedEffectiveResistances = effectiveResistances.map(({ resistance, count }) => {
+            const capitalizedResistance = capitalizeFirstLetter(resistance);
+            const resistanceImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedResistance}.png`;
+            return `<img src="${resistanceImageUrl}" alt="${capitalizedResistance}" class="type-image" width="40px"> x${count === 2 ? 1 / 4 : count === 1 ? 1 / 2 : 1}`;
+        });
         
         return sortedEffectiveResistances;
     }
@@ -692,7 +707,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 typeInval.forEach((inval) => invalid.add(inval));
             }
         });
-        return Array.from(invalid);
+        // Map the invalid types with type images
+        const invalidWithTypeImages = Array.from(invalid).map((inval) => {
+            const capitalizedInval = capitalizeFirstLetter(inval);
+            const invalImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedInval}.png`;
+            return `<img src="${invalImageUrl}" alt="${capitalizedInval}" class="type-image" width="40px">`;
+        });
+
+        return invalidWithTypeImages;
     }
 
     // Update Counter Pokemon Table
@@ -804,7 +826,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Give more score to the counter Pokemon whose speed is faster
-        if (CP_real_spe > SP_real_spe) CP_data.score += Math.min(Math.floor(CP_real_spe - SP_real_spe),15);
+        if (CP_real_spe > SP_real_spe) CP_data.score += Math.min(Math.floor(CP_real_spe - SP_real_spe), 15);
+        if (CP_real_spe < SP_real_spe) CP_data.score -= Math.min(Math.floor(SP_real_spe - CP_real_spe), 15);
 
         return CP_data;
     }
