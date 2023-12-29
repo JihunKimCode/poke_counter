@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const evolution = document.getElementById('evolution');
     const statsHistogram = document.getElementById('statsHistogram');
     const progressContainer = document.getElementById('progress-bar');
+    const forms = document.getElementById('forms');
     const heldItems = document.getElementById('heldItems');
     const others = document.getElementById('others');
     const cpHead = document.getElementById('cpHead');
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filter_abilities = document.getElementById('filter_abilities');
     const filter_baseStat = document.getElementById('filter_baseStat');
     const filter_shiny = document.getElementById('filter_shiny');
+    const filter_female = document.getElementById('filter_female');
     
     const filterCheckbox_bst600 = document.getElementById('filterCheckbox_bst600');
     const filterCheckbox_mega = document.getElementById('filterCheckbox_mega');
@@ -33,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterCheckbox_abilities = document.getElementById('filterCheckbox_abilities');
     const filterCheckbox_baseStat = document.getElementById('filterCheckbox_baseStat');
     const filterCheckbox_shiny = document.getElementById('filterCheckbox_shiny');
+    const filterCheckbox_female = document.getElementById('filterCheckbox_female');
 
     const scrollTopButton = document.getElementById("scrollTop");
 
@@ -122,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 getPokemonInfo(data.name, data.id, sprites, types, abilities);
                 getEvolution(data.species.url);
                 displayStatsHistogram(statsData);
+                showForms(data.species.url);
                 showHeldItems(data.held_items);
                 trivia(data.species.url, data.height, data.weight);
                 findCounterPokemon(types, statsData);
@@ -198,7 +202,10 @@ document.addEventListener('DOMContentLoaded', () => {
         chooseSprite.style.display = (currentDisplay === 'none') ? 'block' : 'none';
 
         currentDisplay = window.getComputedStyle(filter_shiny).getPropertyValue('display');
-        filter_shiny.style.display = (currentDisplay === 'none') ? 'block' : 'none';
+        filter_shiny.style.display = (currentDisplay === 'none') ? 'inline-block' : 'none';
+
+        currentDisplay = window.getComputedStyle(filter_female).getPropertyValue('display');
+        filter_female.style.display = (currentDisplay === 'none') ? 'inline-block' : 'none';
     });
 
     var radioButtons = document.querySelectorAll('#chooseSprite input[type="radio"]');
@@ -218,20 +225,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   
     // Function to handle the click event on the filter buttons
-    filter_shiny.addEventListener('click', () => {
-        // get updated Sprite
-        const updatedImage = getSprite(global_sprites);
-        
-        // Update the sprite in the HTML
-        const sprite_front = document.querySelector('.pokemon-image');
-        const sprite_back = document.querySelector('.pokemon-image2');
-        if (sprite_front) sprite_front.src = updatedImage[0];
-        if (sprite_back) sprite_back.src = updatedImage[1];
-    });    
+    function handleFilterClick(filterCheckbox) {
+        filterCheckbox.addEventListener('click', () => {
+            // get updated Sprite
+            const updatedImage = getSprite(global_sprites);
+            
+            // Update the sprite in the HTML
+            const sprite_front = document.querySelector('.pokemon-image');
+            const sprite_back = document.querySelector('.pokemon-image2');
+            if (sprite_front) sprite_front.src = updatedImage[0];
+            if (sprite_back) sprite_back.src = updatedImage[1];
+        });
+    }
+
+    handleFilterClick(filterCheckbox_shiny);
+    handleFilterClick(filterCheckbox_female);
 
     // Get Sprite of the pokemon (front, back, default, shiny)
     function getSprite(sprites){
         spriteButton.style.display = 'inline-block';
+
         //Check what sprite needs to be shown
         var selectedRadioButton = null;
 
@@ -245,57 +258,49 @@ document.addEventListener('DOMContentLoaded', () => {
         // Check if any radio button is selected
         if (selectedRadioButton) var labelText = selectedRadioButton.parentElement.textContent.trim();
 
-        const filterSpe_shiny = filterCheckbox_shiny.checked;     // Shiny sprite
+        const filterSpe_shiny = filterCheckbox_shiny.checked;       // Shiny sprite
+        const filterSpe_female = filterCheckbox_female.checked;     // Female sprite
+
         let image = [];
         const pokeball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
         const masterball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
         const pokeball3D = 'https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/PokeBalls/PokeBall.png'
         const masterball3D = 'https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/PokeBalls/MasterBall.png'
-        
-        if(labelText === "Home") {
-            // Pokemon Home
-            if (filterSpe_shiny) {
-                image.push(sprites.other.home.front_shiny || masterball3D);
-                image.push(sprites.other.home.back_shiny || masterball3D);
+
+        let category, defaultBall, shinyBall;
+        const categoryMappings = {
+            "Home": { category: sprites.other.home, defaultBall: pokeball3D, shinyBall: masterball3D },
+            "Artwork": { category: sprites.other["official-artwork"], defaultBall: pokeball3D, shinyBall: masterball3D },
+            "3D GIF": { category: sprites.other.showdown, defaultBall: pokeball, shinyBall: masterball },
+            "Dot GIF": { category: sprites.versions["generation-v"]["black-white"].animated, defaultBall: pokeball, shinyBall: masterball },
+        };
+
+        // Choose Category to take image
+        if (labelText in categoryMappings) {
+            ({ category, defaultBall, shinyBall } = categoryMappings[labelText]);
+        } else {
+            // Default Images
+            category = sprites;
+            defaultBall = pokeball;
+            shinyBall = masterball;
+        }
+
+        //Take image from category; PokeBall if failed 
+        if (filterSpe_shiny) {
+            if(filterSpe_female&&sprites.front_shiny_female){
+                image.push(category.front_shiny_female || shinyBall);
+                image.push(category.back_shiny_female || shinyBall);
             } else {
-                image.push(sprites.other.home.front_default || pokeball3D);
-                image.push(sprites.other.home.back_default || pokeball3D);
-            }
-        } else if(labelText === "Artwork") {
-            // Artwork design
-            if (filterSpe_shiny) {
-                image.push(sprites.other["official-artwork"].front_shiny || masterball3D);
-                image.push(sprites.other["official-artwork"].back_shiny || masterball3D);
-            } else {
-                image.push(sprites.other["official-artwork"].front_default || pokeball3D);
-                image.push(sprites.other["official-artwork"].back_default || pokeball3D);
-            }
-        } else if(labelText === "3D GIF") {
-            // Sprite using in 3D GIF
-            if (filterSpe_shiny) {
-                image.push(sprites.other.showdown.front_shiny || masterball);
-                image.push(sprites.other.showdown.back_shiny || masterball);
-            } else {
-                image.push(sprites.other.showdown.front_default || pokeball);
-                image.push(sprites.other.showdown.back_default || pokeball);
-            }
-        } else if(labelText === "Dot GIF"){
-            // Dot GIF from BW
-            if (filterSpe_shiny) {
-                image.push(sprites.versions["generation-v"]["black-white"].animated.front_shiny || masterball);
-                image.push(sprites.versions["generation-v"]["black-white"].animated.back_shiny || masterball);
-            } else {
-                image.push(sprites.versions["generation-v"]["black-white"].animated.front_default || pokeball);
-                image.push(sprites.versions["generation-v"]["black-white"].animated.back_default || pokeball);
+                image.push(category.front_shiny || shinyBall);
+                image.push(category.back_shiny || shinyBall);
             }
         } else {
-            // Default Dot Sprite
-            if (filterSpe_shiny) {
-                image.push(sprites.front_shiny || masterball);
-                image.push(sprites.back_shiny || masterball);
-            } else {
-                image.push(sprites.front_default || pokeball);
-                image.push(sprites.back_default || pokeball);
+            if(filterSpe_female&&sprites.front_female){
+                image.push(category.front_female || defaultBall);
+                image.push(category.back_female || defaultBall);
+            } else {                    
+                image.push(category.front_default || defaultBall);
+                image.push(category.back_default || defaultBall);
             }
         }
         return image;
@@ -330,59 +335,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Match color theme to the pokemon color
     async function updateColors(color) {
-        let pokeColor = color;
-        let lightpokeColor;
-        let item = 'lucky-egg';
-
-        // Set color matched to pokemon color
-        if (pokeColor === "black") {
-            pokeColor = "black";
-            lightpokeColor = "gray";
-            item = 'luxury-ball';
-        } else if (pokeColor === "blue") { 
-            pokeColor = "#1288f8";
-            lightpokeColor = "#00d6fa";
-            item = 'dive-ball';
-        } else if (pokeColor === "brown") {
-            pokeColor = "#a66a2e";
-            lightpokeColor = "#622a0f";
-            item = 'fast-ball';
-        } else if (pokeColor === "gray") {
-            pokeColor = "gray";
-            lightpokeColor = "#48494b";
-            item = 'heavy-ball';
-        } else if (pokeColor === "green") {
-            pokeColor = "#4cbb17";
-            lightpokeColor = "#0b6623";
-            item = 'friend-ball';
-        } else if (pokeColor === "pink") {
-            pokeColor = "#fe5bac";
-            lightpokeColor = "pink";
-            item = 'dream-ball';
-        } else if (pokeColor === "purple") {
-            pokeColor = "purple";
-            lightpokeColor = "#b5338a";
-            item = 'master-ball';
-        } else if (pokeColor === "red") {
-            pokeColor = "#ff0800";
-            lightpokeColor = "#c21807";
-            item = 'poke-ball';
-        } else if (pokeColor === "white") {
-            pokeColor = "#b8b8b8";
-            lightpokeColor = "#d9dddc";
-            item = 'premier-ball';
-        } else if (pokeColor === "yellow") {
-            pokeColor = "#ffd300";
-            lightpokeColor = "#ffbf00";
-            item = 'quick-ball';
-        }
-        
+        const colorMappings = {
+            "black": { pokeColor: "black", lightpokeColor: "gray", item: 'luxury-ball' },
+            "blue": { pokeColor: "#1288f8", lightpokeColor: "#00d6fa", item: 'dive-ball' },
+            "brown": { pokeColor: "#a66a2e", lightpokeColor: "#622a0f", item: 'fast-ball' },
+            "gray": { pokeColor: "gray", lightpokeColor: "#48494b", item: 'heavy-ball' },
+            "green": { pokeColor: "#4cbb17", lightpokeColor: "#0b6623", item: 'friend-ball' },
+            "pink": { pokeColor: "#fe5bac", lightpokeColor: "pink", item: 'dream-ball' },
+            "purple": { pokeColor: "purple", lightpokeColor: "#b5338a", item: 'master-ball' },
+            "red": { pokeColor: "#ff0800", lightpokeColor: "#c21807", item: 'poke-ball' },
+            "white": { pokeColor: "#b8b8b8", lightpokeColor: "#d9dddc", item: 'premier-ball' },
+            "yellow": { pokeColor: "#ffd300", lightpokeColor: "#ffbf00", item: 'quick-ball' }
+        };
+    
+        const { pokeColor, lightpokeColor, item } = colorMappings[color] || { pokeColor: color, lightpokeColor: color, item: 'lucky-egg' };
+    
         // Update background color
         document.documentElement.style.setProperty('--pokemoncolor', pokeColor);
         document.documentElement.style.setProperty('--lightpokemoncolor', lightpokeColor);
-
+    
         // Set the image of the button
         scrollTopButton.style.display = 'inline-block';
         scrollTopButton.innerHTML = `
@@ -426,6 +398,29 @@ document.addEventListener('DOMContentLoaded', () => {
         statsHistogram.innerHTML += `<p>Total Base Stats: ${stats}</p>`;
     }
 
+    // Take all forms of the pokemon
+    async function showForms(species){
+        const speciesresponse = await fetch(species);
+        const speciesData = await speciesresponse.json();
+        forms.innerHTML = `<h3>Different Forms</h3>`;
+        
+        for(var i = 0; i<speciesData.varieties.length; i++){
+            const pokemonName = speciesData.varieties[i].pokemon.name;
+            
+            const url = speciesData.varieties[i].pokemon.url;
+            const response = await fetch(url);
+            const data = await response.json();
+            const sprite = data.sprites.front_default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+            forms.innerHTML += `
+                <div class="tooltip-items">
+                    <img src="${sprite}" 
+                         alt = "${pokemonName}"
+                         width = "60px">
+                    <span class="tooltiptext">${pokemonName}</span>
+                </div>`;
+        }
+    } 
+
     // Show held item when the pokemon is in the wild
     function showHeldItems(items){
         heldItems.innerHTML=`<h3>Wild Held Items</h3>`;
@@ -449,12 +444,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Write Trivia of the pokemon
     function trivia(species, height, weight){
-        // Get evolution chain details
         fetch(species)
         .then((response) => response.json())
         .then((speciesData) => {
-            // Take English Genera
             let genera, eggGroup = [], flavorTexts = [];
+
+            // Take All Egg Groups
+            for(var i = 0; i<speciesData.egg_groups.length; i++){
+                eggGroup.push(speciesData.egg_groups[i].name);
+            }
+            if(speciesData.egg_groups.length===0) eggGroup.push("undefined");
+            
+            // Take English Genera
             for(var i = 0; i<speciesData.genera.length; i++){
                 if(speciesData.genera[i].language.name==="en"){
                     genera = speciesData.genera[i].genus;
@@ -463,11 +464,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if(speciesData.genera.length===0) genera = "undefined";
             
-            // Take All Egg Groups
-            for(var i = 0; i<speciesData.egg_groups.length; i++){
-                eggGroup.push(speciesData.egg_groups[i].name);
+            // Take weight, height, and gender rate
+            let bioInfo = `${(height/10).toFixed(1)}m, ${(weight/10).toFixed(1)}kg;`;
+
+            if(speciesData.gender_rate===-1){
+                bioInfo += ` genderless`;
+            } else {
+                bioInfo += `
+                    <i class="fa-solid fa-mars"></i> ${(8-speciesData.gender_rate)/8*100}%  
+                    <i class="fa-solid fa-venus"></i> ${speciesData.gender_rate/8*100}%
+                `;
             }
-            if(speciesData.egg_groups.length===0) eggGroup.push("undefined");
+
             // Take All English Flavor Texts
             for(var i = 0; i<speciesData.flavor_text_entries.length; i++){
                 if(speciesData.flavor_text_entries[i].language.name==="en"){
@@ -475,12 +483,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             if(speciesData.flavor_text_entries.length===0) flavorTexts.push("undefined");
+            
             others.innerHTML = `
                 <h3>Egg Groups</h3>
                 <p>${eggGroup.join(', ')}</p>
                 <h3>Trivia</h3>
                 <p>${genera}</p>
-                <p>${(height/10).toFixed(1)}m, ${(weight/10).toFixed(1)}kg</p>
+                <p>${bioInfo}</p>
                 <p>${flavorTexts[Math.floor(Math.random()*flavorTexts.length)]}</p>
             `;
         })
@@ -629,16 +638,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     evolutionConditions.push(`${evolvePartyType} type in party`);
                 }
                 
-                if(evolveStats != null){
-                    if(evolveStats === 1){
-                        evolutionConditions.push(`ATK > DEF`);
-                    } else if(evolveStats === 0){
-                        evolutionConditions.push(`ATK = DEF`);
-                    } else if(evolveStats === -1){
-                        evolutionConditions.push(`ATK < DEF`);
+                if (evolveStats != null) {
+                    switch (evolveStats) {
+                        case 1:
+                            evolutionConditions.push(`ATK > DEF`);
+                            break;
+                        case 0:
+                            evolutionConditions.push(`ATK = DEF`);
+                            break;
+                        case -1:
+                            evolutionConditions.push(`ATK < DEF`);
+                            break;
                     }
                 }
-                
+                                
                 if(evolveTime) {
                     evolutionConditions.push(`${evolveTime}`);
                 }
@@ -1145,8 +1158,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
         tableContainer.style.overflow = 'scroll';
-        var container1 = chooseSprite.clientHeight+pokemonInfo.clientHeight+evolution.clientHeight;
-        var container2 = statsHistogram.clientHeight+heldItems.clientHeight+others.clientHeight;
+        var container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + evolution.clientHeight;
+        var container2 = statsHistogram.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
         var clientHeight = container1 > container2 ? container1 : container2;
         tableContainer.style.height = (clientHeight-20)+'px';
         
