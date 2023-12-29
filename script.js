@@ -5,12 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const pokeHead = document.getElementById('pokemonHead');
     const chooseSprite = document.getElementById('chooseSprite');
     const pokemonInfo = document.getElementById('pokemonInfo');
+    const evolution = document.getElementById('evolution');
     const statsHistogram = document.getElementById('statsHistogram');
+    const progressContainer = document.getElementById('progress-bar');
     const heldItems = document.getElementById('heldItems');
     const others = document.getElementById('others');
-    const evolution = document.getElementById('evolution');
     const cpHead = document.getElementById('cpHead');
-    const progressContainer = document.getElementById('progress-bar');
     const counterPokemon = document.getElementById('counterPokemon');
     
     // Filter variables to adjust counter pokemon table
@@ -19,19 +19,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateButton = document.getElementById('updateButton');
     const scrollUpButton = document.getElementById('scrollUpButton');
     const scrollDownButton = document.getElementById('scrollDownButton');
+    
     const filter_bst600 = document.getElementById('filter_bst600');
     const filter_mega = document.getElementById('filter_mega');
     const filter_type = document.getElementById('filter_type');
     const filter_abilities = document.getElementById('filter_abilities');
     const filter_baseStat = document.getElementById('filter_baseStat');
     const filter_shiny = document.getElementById('filter_shiny');
+    
     const filterCheckbox_bst600 = document.getElementById('filterCheckbox_bst600');
     const filterCheckbox_mega = document.getElementById('filterCheckbox_mega');
     const filterCheckbox_type = document.getElementById('filterCheckbox_type');
     const filterCheckbox_abilities = document.getElementById('filterCheckbox_abilities');
     const filterCheckbox_baseStat = document.getElementById('filterCheckbox_baseStat');
     const filterCheckbox_shiny = document.getElementById('filterCheckbox_shiny');
-    
+
     const scrollTopButton = document.getElementById("scrollTop");
 
     // Global variables for updating table
