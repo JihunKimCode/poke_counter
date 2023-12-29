@@ -97,12 +97,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 const statsData = data.stats.map((stat) => ({ name: stat.stat.name, value: stat.base_stat }));
                 
                 // Check ability, write '(hidden)' if the ability is hidden
-                const abilities = data.abilities.map((ability) => {
+                let abilities = data.abilities.map((ability) => {
                     const abilityName = ability.ability.name;
                   
                     return ability.is_hidden ? `<br>${abilityName} (hidden)` : abilityName;
                   }).join(', ');                  
                 
+                if(data.past_abilities.length>0){
+                    abilities += `
+                        , <br>
+                        <s>${data.past_abilities[0].abilities[0].ability.name}</s>
+                        (by ${data.past_abilities[0].generation.name})`
+                }
+
                 // Global variables for click events
                 global_sprites = sprites;
                 global_types = types;
@@ -113,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Main Body
                 getPokemonInfo(data.name, data.id, sprites, types, abilities);
-                getEvolution(data.species.url)
+                getEvolution(data.species.url);
                 displayStatsHistogram(statsData);
                 showHeldItems(data.held_items);
                 trivia(data.species.url, data.height, data.weight);
