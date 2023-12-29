@@ -5,6 +5,7 @@ Search Pokémon information as well as counter Pokémon.
 - [x] **Sprite**
     - [x] Shiny Sprite
     - [x] Front/Back Sprite
+    - [x] Pokemon Home, Official Artwork, Showdown, and BW
 - [x] **ID**
 - [x] **Type**
     - [x] Type icons

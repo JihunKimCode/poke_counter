@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchButton');
     const pokeHead = document.getElementById('pokemonHead');
+    const chooseSprite = document.getElementById('chooseSprite');
     const pokemonInfo = document.getElementById('pokemonInfo');
     const statsHistogram = document.getElementById('statsHistogram');
     const heldItems = document.getElementById('heldItems');
@@ -13,8 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const counterPokemon = document.getElementById('counterPokemon');
     
     // Filter variables to adjust counter pokemon table
-    const updateButton = document.getElementById('updateButton');
+    const spriteButton = document.getElementById('spriteButton');
     const settingButton = document.getElementById('settingButton');
+    const updateButton = document.getElementById('updateButton');
     const scrollUpButton = document.getElementById('scrollUpButton');
     const scrollDownButton = document.getElementById('scrollDownButton');
     const filter_bst600 = document.getElementById('filter_bst600');
@@ -181,6 +183,31 @@ document.addEventListener('DOMContentLoaded', () => {
         pokemonInfo.innerHTML = html;
     }
 
+    // Show and hide sprite settings
+    spriteButton.addEventListener('click', ()=>{
+        let currentDisplay = window.getComputedStyle(chooseSprite).getPropertyValue('display');
+        chooseSprite.style.display = (currentDisplay === 'none') ? 'block' : 'none';
+
+        currentDisplay = window.getComputedStyle(filter_shiny).getPropertyValue('display');
+        filter_shiny.style.display = (currentDisplay === 'none') ? 'block' : 'none';
+    });
+
+    var radioButtons = document.querySelectorAll('#chooseSprite input[type="radio"]');
+
+    // Add event listener to each radio button
+    radioButtons.forEach(function(radioButton) {
+        radioButton.addEventListener('change', () => {
+            // get updated Sprite
+            const updatedImage = getSprite(global_sprites);
+            
+            // Update the sprite in the HTML
+            const sprite_front = document.querySelector('.pokemon-image');
+            const sprite_back = document.querySelector('.pokemon-image2');
+            if (sprite_front) sprite_front.src = updatedImage[0];
+            if (sprite_back) sprite_back.src = updatedImage[1];
+        })
+    });
+  
     // Function to handle the click event on the filter buttons
     filter_shiny.addEventListener('click', () => {
         // get updated Sprite
@@ -195,18 +222,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Get Sprite of the pokemon (front, back, default, shiny)
     function getSprite(sprites){
-        filter_shiny.style.display = 'inline-block';
+        spriteButton.style.display = 'inline-block';
+        //Check what sprite needs to be shown
+        var selectedRadioButton = null;
+
+        // Loop through each radio button to find the selected one
+        radioButtons.forEach(function(radioButton) {
+            if (radioButton.checked) {
+                selectedRadioButton = radioButton;
+            }
+        });
+
+        // Check if any radio button is selected
+        if (selectedRadioButton) var labelText = selectedRadioButton.parentElement.textContent.trim();
+
         const filterSpe_shiny = filterCheckbox_shiny.checked;     // Shiny sprite
         let image = [];
         const pokeball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
         const masterball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
+        const pokeball3D = 'https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/PokeBalls/PokeBall.png'
+        const masterball3D = 'https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/PokeBalls/MasterBall.png'
         
-        if (filterSpe_shiny) {
-            image.push(sprites.front_shiny || masterball);
-            image.push(sprites.back_shiny || masterball);
+        if(labelText === "Home") {
+            // Pokemon Home
+            if (filterSpe_shiny) {
+                image.push(sprites.other.home.front_shiny || masterball3D);
+                image.push(sprites.other.home.back_shiny || masterball3D);
+            } else {
+                image.push(sprites.other.home.front_default || pokeball3D);
+                image.push(sprites.other.home.back_default || pokeball3D);
+            }
+        } else if(labelText === "Artwork") {
+            // Artwork design
+            if (filterSpe_shiny) {
+                image.push(sprites.other["official-artwork"].front_shiny || masterball3D);
+                image.push(sprites.other["official-artwork"].back_shiny || masterball3D);
+            } else {
+                image.push(sprites.other["official-artwork"].front_default || pokeball3D);
+                image.push(sprites.other["official-artwork"].back_default || pokeball3D);
+            }
+        } else if(labelText === "3D GIF") {
+            // Sprite using in 3D GIF
+            if (filterSpe_shiny) {
+                image.push(sprites.other.showdown.front_shiny || masterball);
+                image.push(sprites.other.showdown.back_shiny || masterball);
+            } else {
+                image.push(sprites.other.showdown.front_default || pokeball);
+                image.push(sprites.other.showdown.back_default || pokeball);
+            }
+        } else if(labelText === "Dot GIF"){
+            // Dot GIF from BW
+            if (filterSpe_shiny) {
+                image.push(sprites.versions["generation-v"]["black-white"].animated.front_shiny || masterball);
+                image.push(sprites.versions["generation-v"]["black-white"].animated.back_shiny || masterball);
+            } else {
+                image.push(sprites.versions["generation-v"]["black-white"].animated.front_default || pokeball);
+                image.push(sprites.versions["generation-v"]["black-white"].animated.back_default || pokeball);
+            }
         } else {
-            image.push(sprites.front_default || pokeball);
-            image.push(sprites.back_default || pokeball);
+            // Default Dot Sprite
+            if (filterSpe_shiny) {
+                image.push(sprites.front_shiny || masterball);
+                image.push(sprites.back_shiny || masterball);
+            } else {
+                image.push(sprites.front_default || pokeball);
+                image.push(sprites.back_default || pokeball);
+            }
         }
         return image;
     }
@@ -1055,7 +1136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
         tableContainer.style.overflow = 'scroll';
-        var container1 = pokemonInfo.clientHeight+evolution.clientHeight;
+        var container1 = chooseSprite.clientHeight+pokemonInfo.clientHeight+evolution.clientHeight;
         var container2 = statsHistogram.clientHeight+heldItems.clientHeight+others.clientHeight;
         var clientHeight = container1 > container2 ? container1 : container2;
         tableContainer.style.height = (clientHeight-20)+'px';
