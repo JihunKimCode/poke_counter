@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const evolution = document.getElementById('evolution');
     const statsHistogram = document.getElementById('statsHistogram');
     const progressContainer = document.getElementById('progress-bar');
+    const dfHead = document.getElementById('dfHead');
     const forms = document.getElementById('forms');
     const heldItems = document.getElementById('heldItems');
     const others = document.getElementById('others');
@@ -28,6 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const filter_baseStat = document.getElementById('filter_baseStat');
     const filter_shiny = document.getElementById('filter_shiny');
     const filter_female = document.getElementById('filter_female');
+    const filter_shinyform = document.getElementById('filter_shinyform');
+    const filter_back = document.getElementById('filter_back');
     
     const filterCheckbox_bst600 = document.getElementById('filterCheckbox_bst600');
     const filterCheckbox_mega = document.getElementById('filterCheckbox_mega');
@@ -36,11 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterCheckbox_baseStat = document.getElementById('filterCheckbox_baseStat');
     const filterCheckbox_shiny = document.getElementById('filterCheckbox_shiny');
     const filterCheckbox_female = document.getElementById('filterCheckbox_female');
+    const filterCheckbox_shinyform = document.getElementById('filterCheckbox_shinyform');
+    const filterCheckbox_back = document.getElementById('filterCheckbox_back');
 
     const scrollTopButton = document.getElementById("scrollTop");
 
     // Global variables for updating table
-    let global_types, global_statsData, global_sprites;
+    let global_types, global_statsData, global_sprites, global_speciesUrl;
 
     // Search button click event
     searchButton.addEventListener('click', () => {
@@ -98,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const sprites = data.sprites;
                 const types = data.types.map((type) => type.type.name);
                 const statsData = data.stats.map((stat) => ({ name: stat.stat.name, value: stat.base_stat }));
+                const speciesUrl = data.species.url;
                 
                 // Check ability, write '(hidden)' if the ability is hidden
                 let abilities = data.abilities.map((ability) => {
@@ -117,17 +123,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 global_sprites = sprites;
                 global_types = types;
                 global_statsData = statsData;
+                global_speciesUrl = speciesUrl;
                 
                 // Update theme colors
                 findColors(data.name, data.id);
 
                 // Main Body
                 getPokemonInfo(data.name, data.id, sprites, types, abilities);
-                getEvolution(data.species.url);
+                getEvolution(speciesUrl);
                 displayStatsHistogram(statsData);
-                showForms(data.species.url);
+                showForms(speciesUrl);
                 showHeldItems(data.held_items);
-                trivia(data.species.url, data.height, data.weight);
+                trivia(speciesUrl, data.height, data.weight);
                 findCounterPokemon(types, statsData);
             })
             .catch((error) => {
@@ -225,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   
     // Function to handle the click event on the filter buttons
-    function handleFilterClick(filterCheckbox) {
+    function handleGetSprite(filterCheckbox) {
         filterCheckbox.addEventListener('click', () => {
             // get updated Sprite
             const updatedImage = getSprite(global_sprites);
@@ -238,8 +245,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    handleFilterClick(filterCheckbox_shiny);
-    handleFilterClick(filterCheckbox_female);
+    handleGetSprite(filterCheckbox_shiny);
+    handleGetSprite(filterCheckbox_female);
 
     // Get Sprite of the pokemon (front, back, default, shiny)
     function getSprite(sprites){
@@ -397,27 +404,59 @@ document.addEventListener('DOMContentLoaded', () => {
         statsHistogram.innerHTML += histogramHTML;
         statsHistogram.innerHTML += `<p>Total Base Stats: ${stats}</p>`;
     }
+    
+    // Show different style of forms
+    function handleShowForm(filterCheckbox) {
+        filterCheckbox.addEventListener('click', () => {
+            showForms(global_speciesUrl);
+        });
+    }
+
+    handleShowForm(filterCheckbox_shinyform);
+    handleShowForm(filterCheckbox_back);
 
     // Take all forms of the pokemon
     async function showForms(species){
         const speciesresponse = await fetch(species);
         const speciesData = await speciesresponse.json();
-        forms.innerHTML = `<h3>Different Forms</h3>`;
+        dfHead.style.display = 'block';
+        
+        filter_shinyform.style.display = 'inline-block';
+        filter_back.style.display = 'inline-block';
+        const filterSpe_shinyform = filterCheckbox_shinyform.checked;       // Shiny sprite
+        const filterSpe_back = filterCheckbox_back.checked;                 // Back sprite
+        forms.innerHTML = '';
         
         for(var i = 0; i<speciesData.varieties.length; i++){
-            const pokemonName = speciesData.varieties[i].pokemon.name;
-            
             const url = speciesData.varieties[i].pokemon.url;
             const response = await fetch(url);
             const data = await response.json();
-            const sprite = data.sprites.front_default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
-            forms.innerHTML += `
-                <div class="tooltip-items">
-                    <img src="${sprite}" 
-                         alt = "${pokemonName}"
-                         width = "60px">
-                    <span class="tooltiptext">${pokemonName}</span>
-                </div>`;
+
+            for(var j  = 0; j<data.forms.length; j++){
+                const pokemonName = data.forms[j].name;
+                
+                const formUrl = data.forms[j].url;
+                const formResponse = await fetch(formUrl);
+                const formData = await formResponse.json();
+                
+                // Find the sprite based on checkboxes
+                let sprite;
+                if(filterSpe_shinyform){
+                    if(filterSpe_back) sprite = formData.sprites.back_shiny||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
+                    else sprite = formData.sprites.front_shiny||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
+                } else{
+                    if(filterSpe_back) sprite = formData.sprites.back_default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+                    else sprite = formData.sprites.front_default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+                }
+                
+                forms.innerHTML += `
+                    <div class="tooltip-items">
+                        <img src="${sprite}" 
+                             alt = "${pokemonName}"
+                             width = "60px">
+                        <span class="tooltiptext">${pokemonName}</span>
+                    </div>`;
+            }
         }
     } 
 
@@ -1092,9 +1131,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const CP_url = `${base_url}pokemon/${pokemonName}`;
                 const CP_response = await fetch(CP_url);
                 const CP_data = await CP_response.json();
-
-                // Skip when pokemon does not have a sprite 
-                // if(!CP_data.sprites.front_default) continue;
                 
                 // counter pokemon stats in variables
                 const hp = CP_data.stats.find((stat) => stat.stat.name === 'hp').base_stat
@@ -1159,9 +1195,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const tableContainer = document.createElement('div');
         tableContainer.style.overflow = 'scroll';
         var container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + evolution.clientHeight;
-        var container2 = statsHistogram.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
+        var container2 = statsHistogram.clientHeight + dfHead.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
         var clientHeight = container1 > container2 ? container1 : container2;
-        tableContainer.style.height = (clientHeight-20)+'px';
+        var screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+        if(screenWidth>1024) {
+            tableContainer.style.height = clientHeight+'px';
+        } else {
+            tableContainer.style.height = '600px';
+        }
         
         // Create the table element
         const table = document.createElement('table');

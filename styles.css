@@ -321,6 +321,11 @@ footer a:hover{
     border-radius: 10px;
 }
 
+#dfHead{
+    display: none;
+    margin-top: 12px;
+}
+
 #forms{
     margin-top: 12px;
     margin-bottom: 12px;
@@ -420,7 +425,9 @@ footer a:hover{
 #filter_abilities *, #filter_abilities ::after, #filter_abilities ::before,
 #filter_baseStat *, #filter_baseStat ::after, #filter_baseStat ::before,
 #filter_shiny *, #filter_shiny ::after, #filter_shiny ::before,
-#filter_female *, #filter_female ::after, #filter_female ::before  {
+#filter_female *, #filter_female ::after, #filter_female ::before,
+#filter_shinyform *, #filter_shinyform ::after, #filter_shinyform ::before,
+#filter_back *, #filter_back ::after, #filter_back ::before{
     box-sizing: border-box;
     vertical-align: top;
     margin-right: 6px;
@@ -434,7 +441,9 @@ footer a:hover{
 #filter_abilities .cbx_abilities,
 #filter_baseStat .cbx_baseStat,
 #filter_shiny .cbx_shiny,
-#filter_female .cbx_female {
+#filter_female .cbx_female,
+#filter_shinyform .cbx_shinyform,
+#filter_back .cbx_back {
     position: relative;
     display: block;
     float: left;
@@ -452,7 +461,9 @@ footer a:hover{
 #filter_abilities .cbx_abilities svg,
 #filter_baseStat .cbx_baseStat svg,
 #filter_shiny .cbx_shiny svg,
-#filter_female .cbx_female svg {
+#filter_female .cbx_female svg,
+#filter_shinyform .cbx_shinyform svg,
+#filter_back .cbx_back svg {
     position: absolute;
     top: 3px;
     left: 3px;
@@ -472,7 +483,9 @@ footer a:hover{
 #filter_abilities,
 #filter_baseStat,
 #filter_shiny,
-#filter_female {
+#filter_female ,
+#filter_shinyform,
+#filter_back {
     user-select: none;
     display: none;
     justify-content: space-between;
@@ -486,7 +499,9 @@ footer a:hover{
 #filter_abilities label,
 #filter_baseStat label,
 #filter_shiny label,
-#filter_female label {
+#filter_female label,
+#filter_shinyform label,
+#filter_back label {
     display: inline-block;
     cursor: pointer;
 }
@@ -498,7 +513,9 @@ footer a:hover{
 #filter_abilities input[type="checkbox"],
 #filter_baseStat input[type="checkbox"],
 #filter_shiny input[type="checkbox"],
-#filter_female input[type="checkbox"] {
+#filter_female input[type="checkbox"],
+#filter_shinyform input[type="checkbox"],
+#filter_back input[type="checkbox"] {
     display: none;
     visibility: hidden;
 }
@@ -510,7 +527,9 @@ footer a:hover{
 #filter_abilities input[type="checkbox"]:checked + .cbx_abilities,
 #filter_baseStat input[type="checkbox"]:checked + .cbx_baseStat,
 #filter_shiny input[type="checkbox"]:checked + .cbx_shiny,
-#filter_female input[type="checkbox"]:checked + .cbx_female {
+#filter_female input[type="checkbox"]:checked + .cbx_female,
+#filter_shinyform input[type="checkbox"]:checked + .cbx_shinyform,
+#filter_back input[type="checkbox"]:checked + .cbx_back {
     background-color: var(--pokemoncolor, #1288f8);
 }
 
@@ -521,7 +540,9 @@ footer a:hover{
 #filter_abilities input[type="checkbox"]:checked + .cbx_abilities svg,
 #filter_baseStat input[type="checkbox"]:checked + .cbx_baseStat svg,
 #filter_shiny input[type="checkbox"]:checked + .cbx_shiny svg,
-#filter_female input[type="checkbox"]:checked + .cbx_female svg {
+#filter_female input[type="checkbox"]:checked + .cbx_female svg,
+#filter_shinyform input[type="checkbox"]:checked + .cbx_shinyform svg,
+#filter_back input[type="checkbox"]:checked + .cbx_back svg {
     stroke-dashoffset: 0;
     transition: all 0.15s ease;
 }
