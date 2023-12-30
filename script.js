@@ -322,19 +322,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const pokeball3D = 'https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/PokeBalls/PokeBall.png'
         const masterball3D = 'https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/PokeBalls/MasterBall.png'
 
+        console.log(sprites);
         let category, defaultBall, shinyBall;
         const categoryMappings = {
+            "3D Image":{ category: sprites.versions["generation-vii"]["ultra-sun-ultra-moon"], defaultBall: pokeball3D, shinyBall: masterball3D },
+            "Dot GIF": { category: sprites.versions["generation-v"]["black-white"].animated, defaultBall: pokeball, shinyBall: masterball },
+            "3D GIF": { category: sprites.other.showdown, defaultBall: pokeball, shinyBall: masterball },
             "Home": { category: sprites.other.home, defaultBall: pokeball3D, shinyBall: masterball3D },
             "Artwork": { category: sprites.other["official-artwork"], defaultBall: pokeball3D, shinyBall: masterball3D },
-            "3D GIF": { category: sprites.other.showdown, defaultBall: pokeball, shinyBall: masterball },
-            "Dot GIF": { category: sprites.versions["generation-v"]["black-white"].animated, defaultBall: pokeball, shinyBall: masterball },
         };
 
         // Choose Category to take image
         if (labelText in categoryMappings) {
             ({ category, defaultBall, shinyBall } = categoryMappings[labelText]);
         } else {
-            // Default Images
+            // Default Images (2D Image)
             category = sprites;
             defaultBall = pokeball;
             shinyBall = masterball;
