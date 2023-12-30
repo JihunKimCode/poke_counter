@@ -300,6 +300,16 @@ footer a:hover{
 .bar-label {
     font-weight: bold;
     margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-part {
+    text-align: left;
+}
+
+.right-part {
+    text-align: right;
 }
 
 .bar-container {

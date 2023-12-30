@@ -102,7 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .then((data) => {
                 const sprites = data.sprites;
                 const types = data.types.map((type) => type.type.name);
-                const statsData = data.stats.map((stat) => ({ name: stat.stat.name, value: stat.base_stat }));
+                const statsData = data.stats.map((stat) => ({ 
+                    name: stat.stat.name, 
+                    value: stat.base_stat,
+                    effort: stat.effort
+                }));
                 const speciesUrl = data.species.url;
                 
                 // Check ability, write '(hidden)' if the ability is hidden
@@ -392,7 +396,10 @@ document.addEventListener('DOMContentLoaded', () => {
             stats += stat.value;
             return `
                 <div class="stat-bar">
-                    <div class="bar-label">${capitalizeFirstLetter(stat.name)}: ${stat.value}</div>
+                    <div class="bar-label">
+                        <span class="left-part">${capitalizeFirstLetter(stat.name)}: ${stat.value}</span>
+                        <span class="right-part">${stat.effort} EV</span>
+                    </div>            
                     <div class="bar-container">
                         <div class="bar" style="width: ${barWidth}%;"></div>
                     </div>

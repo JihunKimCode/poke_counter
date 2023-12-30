@@ -6,11 +6,16 @@ Search Pokémon information as well as counter Pokémon.
     - [x] Shiny Sprite
     - [x] Front/Back Sprite
     - [x] Pokemon Home, Official Artwork, Showdown, and BW
+    - [x] Female Sprites
+    - [x] Other Forms (e.g. Mega, Gmax, Form-Change)
 - [x] **ID**
 - [x] **Type**
     - [x] Type icons
 - [x] **Stats**
+    - [x] EVs
 - [x] **Abilities**
+    - [x] Hidden
+    - [x] Taken Away
 - [ ] **Evolutions**
     - [x] Evolution Level
     - [x] Evolution Method (Friendship, Item)
