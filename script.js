@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show and hide sprite settings
     spriteButton.addEventListener('click', ()=>{
         let currentDisplay = window.getComputedStyle(chooseSprite).getPropertyValue('display');
-        chooseSprite.style.display = (currentDisplay === 'none') ? 'block' : 'none';
+        chooseSprite.style.display = (currentDisplay === 'none') ? 'inline-block' : 'none';
 
         currentDisplay = window.getComputedStyle(filter_shiny).getPropertyValue('display');
         filter_shiny.style.display = (currentDisplay === 'none') ? 'inline-block' : 'none';
@@ -263,22 +263,20 @@ document.addEventListener('DOMContentLoaded', () => {
         filter_female.style.display = (currentDisplay === 'none') ? 'inline-block' : 'none';
     });
 
-    var radioButtons = document.querySelectorAll('#chooseSprite input[type="radio"]');
+    var selectSprite = document.getElementById('spriteType');
 
-    // Add event listener to each radio button
-    radioButtons.forEach(function(radioButton) {
-        radioButton.addEventListener('change', () => {
-            // get updated Sprite
-            const updatedImage = getSprite(global_sprites);
-            
-            // Update the sprite in the HTML
-            const sprite_front = document.querySelector('.pokemon-image');
-            const sprite_back = document.querySelector('.pokemon-image2');
-            if (sprite_front) sprite_front.src = updatedImage[0];
-            if (sprite_back) sprite_back.src = updatedImage[1];
-        })
+    // Add event listener to the dropdown menu
+    selectSprite.addEventListener('change', () => {
+        // get updated Sprite
+        const updatedImage = getSprite(global_sprites);
+        
+        // Update the sprite in the HTML
+        const sprite_front = document.querySelector('.pokemon-image');
+        const sprite_back = document.querySelector('.pokemon-image2');
+        if (sprite_front) sprite_front.src = updatedImage[0];
+        if (sprite_back) sprite_back.src = updatedImage[1];
     });
-  
+      
     // Function to handle the click event on the filter buttons
     function handleGetSprite(filterCheckbox) {
         filterCheckbox.addEventListener('click', () => {
@@ -300,18 +298,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function getSprite(sprites){
         spriteButton.style.display = 'inline-block';
 
-        // Check what sprite needs to be shown
-        var selectedRadioButton = null;
-
-        // Loop through each radio button to find the selected one
-        radioButtons.forEach(function(radioButton) {
-            if (radioButton.checked) {
-                selectedRadioButton = radioButton;
-            }
-        });
-
-        // Check if any radio button is selected
-        if (selectedRadioButton) var labelText = selectedRadioButton.parentElement.textContent.trim();
+        // Check the initially selected option
+        var labelText = selectSprite.options[selectSprite.selectedIndex].text;
 
         const filterSpe_shiny = filterCheckbox_shiny.checked;       // Shiny sprite
         const filterSpe_female = filterCheckbox_female.checked;     // Female sprite
@@ -322,16 +310,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const pokeball3D = 'https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/PokeBalls/PokeBall.png'
         const masterball3D = 'https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/PokeBalls/MasterBall.png'
 
-        console.log(sprites);
         let category, defaultBall, shinyBall;
         const categoryMappings = {
-            "3D Image":{ category: sprites.versions["generation-vii"]["ultra-sun-ultra-moon"], defaultBall: pokeball3D, shinyBall: masterball3D },
-            "Dot GIF": { category: sprites.versions["generation-v"]["black-white"].animated, defaultBall: pokeball, shinyBall: masterball },
-            "3D GIF": { category: sprites.other.showdown, defaultBall: pokeball, shinyBall: masterball },
-            "Home": { category: sprites.other.home, defaultBall: pokeball3D, shinyBall: masterball3D },
-            "Artwork": { category: sprites.other["official-artwork"], defaultBall: pokeball3D, shinyBall: masterball3D },
+            "Official Artwork": { category: sprites.other["official-artwork"], defaultBall: pokeball3D, shinyBall: masterball3D },
+            "Pokémon Home": { category: sprites.other["home"], defaultBall: pokeball3D, shinyBall: masterball3D },
+            "Dream World": { category: sprites.other["dream_world"], defaultBall: pokeball3D, shinyBall: masterball3D },
+            "Dot Animation": { category: sprites.versions["generation-v"]["black-white"].animated, defaultBall: pokeball, shinyBall: masterball },
+            "3D Animation": { category: sprites.other["showdown"], defaultBall: pokeball3D, shinyBall: masterball3D },
+            "Gen I - RB":{ category: sprites.versions["generation-i"]["red-blue"], defaultBall: pokeball, shinyBall: masterball },
+            "Gen I - Yellow":{ category: sprites.versions["generation-i"]["yellow"], defaultBall: pokeball, shinyBall: masterball },
+            "Gen II - Gold":{ category: sprites.versions["generation-ii"]["gold"], defaultBall: pokeball, shinyBall: masterball },
+            "Gen II - Silver":{ category: sprites.versions["generation-ii"]["silver"], defaultBall: pokeball, shinyBall: masterball },
+            "Gen II - Crystal":{ category: sprites.versions["generation-ii"]["crystal"], defaultBall: pokeball, shinyBall: masterball },
+            "Gen III - RS":{ category: sprites.versions["generation-iii"]["ruby-sapphire"], defaultBall: pokeball, shinyBall: masterball },
+            "Gen III - Emerald":{ category: sprites.versions["generation-iii"]["emerald"], defaultBall: pokeball, shinyBall: masterball },
+            "Gen III - FRLG":{ category: sprites.versions["generation-iii"]["firered-leafgreen"], defaultBall: pokeball, shinyBall: masterball },
+            "Gen IV - DP":{ category: sprites.versions["generation-iv"]["diamond-pearl"], defaultBall: pokeball, shinyBall: masterball },
+            "Gen IV - Platinum":{ category: sprites.versions["generation-iv"]["platinum"], defaultBall: pokeball, shinyBall: masterball },
+            "Gen IV - HGSS":{ category: sprites.versions["generation-iv"]["heartgold-soulsilver"], defaultBall: pokeball, shinyBall: masterball },
+            "Gen V - BW":{ category: sprites.versions["generation-v"]["black-white"], defaultBall: pokeball, shinyBall: masterball },
+            "Gen VI - XY":{ category: sprites.versions["generation-vi"]["x-y"], defaultBall: pokeball3D, shinyBall: masterball3D },
+            "Gen VI - ORAS":{ category: sprites.versions["generation-vi"]["omegaruby-alphasapphire"], defaultBall: pokeball3D, shinyBall: masterball3D },
+            "Gen VII - USUM":{ category: sprites.versions["generation-vii"]["ultra-sun-ultra-moon"], defaultBall: pokeball3D, shinyBall: masterball3D },
+            "Icon - Gen VII":{ category: sprites.versions["generation-vii"]["icons"], defaultBall: pokeball, shinyBall: masterball },
+            "Icon - Gen VIII":{ category: sprites.versions["generation-viii"]["icons"], defaultBall: pokeball, shinyBall: masterball },
         };
-
         // Choose Category to take image
         if (labelText in categoryMappings) {
             ({ category, defaultBall, shinyBall } = categoryMappings[labelText]);
@@ -344,20 +347,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //Take image from category; PokeBall if failed 
         if (filterSpe_shiny) {
-            if(filterSpe_female&&sprites.front_shiny_female){
+            if(filterSpe_female && sprites.front_shiny_female){
                 image.push(category.front_shiny_female || shinyBall);
                 image.push(category.back_shiny_female || shinyBall);
             } else {
-                image.push(category.front_shiny || shinyBall);
-                image.push(category.back_shiny || shinyBall);
+                if(category.front_shiny_transparent && category.back_shiny_transparent) {
+                    image.push(category.front_shiny_transparent || shinyBall);
+                    image.push(category.back_shiny_transparent || shinyBall);
+                } else {
+                    image.push(category.front_shiny || shinyBall);
+                    image.push(category.back_shiny || shinyBall);
+                }
             }
         } else {
-            if(filterSpe_female&&sprites.front_female){
+            if(filterSpe_female && sprites.front_female){
                 image.push(category.front_female || defaultBall);
                 image.push(category.back_female || defaultBall);
-            } else {                    
-                image.push(category.front_default || defaultBall);
-                image.push(category.back_default || defaultBall);
+            } else {
+                if(category.front_transparent && category.back_transparent){
+                    image.push(category.front_transparent || defaultBall);
+                    image.push(category.back_transparent || defaultBall);
+                } else {
+                    image.push(category.front_default || defaultBall);
+                    image.push(category.back_default || defaultBall);
+                }
             }
         }
         return image;

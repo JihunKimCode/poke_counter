@@ -61,55 +61,58 @@
         <div class="container1">
           <h2 id = "pokemonHead"></h2>
           <button id="spriteButton"><i class="fa-solid fa-gear"></i> Sprite Settings</button>
-          <div id="chooseSprite">
-            <label class="container">Dot Image
-              <input type="radio" checked="checked" name="radio">
-              <span class="checkmark"></span>
-            </label>
-            <label class="container">Dot GIF
-              <input type="radio" name="radio">
-              <span class="checkmark"></span>
-            </label>
-            <label class="container">Artwork
-              <input type="radio" name="radio">
-              <span class="checkmark"></span>
-            </label>
-            <br>
-            <label class="container">3D Image
-              <input type="radio" name="radio">
-              <span class="checkmark"></span>
-            </label>
-            <label class="container">3D GIF
-              <input type="radio" name="radio">
-              <span class="checkmark"></span>
-            </label>
-            <label class="container">Home
-              <input type="radio" name="radio">
-              <span class="checkmark"></span>
-            </label>               
-          </div>
-          <div id="cbx_sprite">
-            <div id="filter_shiny">
-              <label for="filterCheckbox_shiny">
-                <input type="checkbox" id="filterCheckbox_shiny">
-                <span class="cbx_shiny">
-                  <svg width="12px" height="11px" viewBox="0 0 12 11">
-                    <polyline points="1 6.3 4.5 10 11 1"></polyline>
-                  </svg>
-                </span>
-                <span>Shiny</span>
-              </label>
+          <div id="spriteSettings">
+            <div id="chooseSprite">
+              <label for="spriteType"></label>
+              <select id="spriteType" name="spriteType">
+                <option selected>Official Artwork</option>
+                <option>Dot Image</option>
+                <option>Pokémon Home</option>
+                <option>Dream World</option>
+                <option>Dot Animation</option>
+                <option>3D Animation</option>
+                <option>Gen I - RB</option>
+                <option>Gen I - Yellow</option>
+                <option>Gen II - Gold</option>
+                <option>Gen II - Silver</option>
+                <option>Gen II - Crystal</option>
+                <option>Gen III - RS</option>
+                <option>Gen III - Emerald</option>
+                <option>Gen III - FRLG</option>
+                <option>Gen IV - DP</option>
+                <option>Gen IV - PT</option>
+                <option>Gen IV - HGSS</option>
+                <option>Gen V - BW</option>
+                <option>Gen VI - XY</option>
+                <option>Gen VI - ORAS</option>
+                <option>Gen VII - USUM</option>
+                <option>Icon - Gen VII</option>
+                <option>Icon - Gen VIII</option>
+              </select>
             </div>
-            <div id="filter_female">
-              <label for="filterCheckbox_female">
-                <input type="checkbox" id="filterCheckbox_female">
-                <span class="cbx_female">
-                  <svg width="12px" height="11px" viewBox="0 0 12 11">
-                    <polyline points="1 6.3 4.5 10 11 1"></polyline>
-                  </svg>
-                </span>
-                <span>Female</span>
-              </label>
+            <div id="cbx_sprite">          
+              <div id="filter_shiny">
+                <label for="filterCheckbox_shiny">
+                  <input type="checkbox" id="filterCheckbox_shiny">
+                  <span class="cbx_shiny">
+                    <svg width="12px" height="11px" viewBox="0 0 12 11">
+                      <polyline points="1 6.3 4.5 10 11 1"></polyline>
+                    </svg>
+                  </span>
+                  <span>Shiny</span>
+                </label>
+              </div>
+              <div id="filter_female">
+                <label for="filterCheckbox_female">
+                  <input type="checkbox" id="filterCheckbox_female">
+                  <span class="cbx_female">
+                    <svg width="12px" height="11px" viewBox="0 0 12 11">
+                      <polyline points="1 6.3 4.5 10 11 1"></polyline>
+                    </svg>
+                  </span>
+                  <span>Female</span>
+                </label>
+              </div>
             </div>
           </div>
           <div id="pokemonInfo"></div>
@@ -117,7 +120,7 @@
         </div>
         <div class = "container2">
           <div id="statsHistogram"></div>
-          <h3 id="dfHead">Different Forms</h3>
+          <h3 id="dfHead">All Forms</h3>
           <div id="cbx_form">
             <div id="filter_shinyform">
               <label for="filterCheckbox_shinyform">
