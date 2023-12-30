@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`)
             .then((response) => response.json())
-            .then((data) => {
+            .then(async (data) => {
                 const sprites = data.sprites;
                 const types = data.types.map((type) => type.type.name);
                 const statsData = data.stats.map((stat) => ({ 
@@ -107,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     value: stat.base_stat,
                     effort: stat.effort
                 }));
-                const speciesUrl = data.species.url;
                 
                 // Check ability, write '(hidden)' if the ability is hidden
                 let abilities = data.abilities.map((ability) => {
@@ -115,13 +114,17 @@ document.addEventListener('DOMContentLoaded', () => {
                   
                     return ability.is_hidden ? `<br>${abilityName} (hidden)` : abilityName;
                   }).join(', ');                  
-                
+                  
                 if(data.past_abilities.length>0){
                     abilities += `
                         , <br>
                         <s>${data.past_abilities[0].abilities[0].ability.name}</s>
                         (by ${data.past_abilities[0].generation.name})`
                 }
+                    
+                const speciesUrl = data.species.url;
+                const response = await fetch(speciesUrl);
+                const speciesData = await response.json();
 
                 // Global variables for click events
                 global_sprites = sprites;
@@ -133,12 +136,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 findColors(data.name, data.id);
 
                 // Main Body
-                getPokemonInfo(data.name, data.id, sprites, types, abilities);
-                getEvolution(speciesUrl);
+                getPokemonInfo(data.name, data.id, sprites, types, abilities, data.height, data.weight, speciesData.gender_rate);
+                getEvolution(speciesData.evolution_chain.url);
                 displayStatsHistogram(statsData);
                 showForms(speciesUrl);
                 showHeldItems(data.held_items);
-                trivia(speciesUrl, data.height, data.weight);
+                trivia(speciesData);
                 findCounterPokemon(types, statsData);
             })
             .catch((error) => {
@@ -159,14 +162,14 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < elements.length; i += 3) {
             result.push(elements.slice(i, i + 3).join('&nbsp&nbsp'));
         }
-
         return result.join('<br>');
     }
       
     // Get the information of the pokemon
-    function getPokemonInfo(name, id, sprites, types, abilities){
+    function getPokemonInfo(name, id, sprites, types, abilities, height, weight, gender_rate){
         // Trace Pokemon's information
         const image = getSprite(sprites);
+        const bioInfo = getBioInfo(height, weight, gender_rate);
 
         // Get weaknesses, resistances, and invalid
         const weaknesses = getWeaknesses(types);
@@ -189,13 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     
         pokeHead.innerHTML = `${name.toUpperCase()}`;
-        // Display as text
         const html = `
             <div>
                 <img src="${image[0]}" alt="${name}" width="130" class="pokemon-image">
                 <img src="${image[1]}" alt="${name}" width="130" class="pokemon-image2">
             </div>
             <p>Pokédex #${id}</p>
+            <p>${bioInfo}</p>
             <h3>Types</h3>
             ${typeImages.join('&nbsp&nbsp')}
             ${weaknessesHtml}
@@ -205,6 +208,47 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>${abilities}</p>
         `;
         pokemonInfo.innerHTML = html;
+    }
+
+    // Take weight, height, and gender rate of the pokemon
+    function getBioInfo(height, weight, gender_rate){
+        let bioInfo = `<div style="display: inline-block; margin-right: 10px;">
+                            <i class="fa-solid fa-ruler-vertical"></i> 
+                            ${(height/10).toFixed(1)}m
+                        </div>`;
+        
+        if(weight<1500){
+            // Weight Scale
+            bioInfo += `<div style="display: inline-block; margin-right: 10px;">
+                            <i class="fa-solid fa-weight-scale"></i>
+                            ${(weight/10).toFixed(1)}kg
+                        </div>`;
+        } else {
+            // Weight Hanging
+            bioInfo += `<div style="display: inline-block; margin-right: 10px;">
+                            <i class="fa-solid fa-weight-hanging"></i> 
+                            ${(weight/10).toFixed(1)}kg
+                        </div>`;
+        }
+
+        if (gender_rate === -1) {
+            bioInfo += `<div style="display: inline-block;">
+                            <i class="fa-solid fa-genderless"></i> 
+                            genderless
+                        </div>`;
+        } else {
+            bioInfo += `
+                <div style="display: inline-block; margin-right: 10px;">
+                    <i class="fa-solid fa-mars"></i> 
+                    ${(8 - gender_rate) / 8 * 100}%
+                </div>
+                <div style="display: inline-block;">
+                    <i class="fa-solid fa-venus"></i> 
+                    ${gender_rate / 8 * 100}%
+                </div>
+            `;
+        }
+        return bioInfo;
     }
 
     // Show and hide sprite settings
@@ -252,11 +296,11 @@ document.addEventListener('DOMContentLoaded', () => {
     handleGetSprite(filterCheckbox_shiny);
     handleGetSprite(filterCheckbox_female);
 
-    // Get Sprite of the pokemon (front, back, default, shiny)
+    // Get Sprites of the Pokemon (front, back, default, shiny, female)
     function getSprite(sprites){
         spriteButton.style.display = 'inline-block';
 
-        //Check what sprite needs to be shown
+        // Check what sprite needs to be shown
         var selectedRadioButton = null;
 
         // Loop through each radio button to find the selected one
@@ -346,6 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Update theme color matched to the Pokemon color
     async function updateColors(color) {
         const colorMappings = {
             "black": { pokeColor: "black", lightpokeColor: "gray", item: 'luxury-ball' },
@@ -383,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });  
 
-    // Function to display the pokemon's stats histogram
+    // Function to display the Pokemon's stats histogram
     function displayStatsHistogram(statsData) {
         // Max value for Each Stats
         const maxValue = 255;
@@ -422,7 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
     handleShowForm(filterCheckbox_shinyform);
     handleShowForm(filterCheckbox_back);
 
-    // Take all forms of the pokemon
+    // Take all forms of the Pokemon
     async function showForms(species){
         const speciesresponse = await fetch(species);
         const speciesData = await speciesresponse.json();
@@ -448,12 +493,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Find the sprite based on checkboxes
                 let sprite;
+                const pokeball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+                const masterball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
+                
                 if(filterSpe_shinyform){
-                    if(filterSpe_back) sprite = formData.sprites.back_shiny||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
-                    else sprite = formData.sprites.front_shiny||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
+                    if(filterSpe_back) sprite = formData.sprites.back_shiny||masterball;
+                    else sprite = formData.sprites.front_shiny||masterball;
                 } else{
-                    if(filterSpe_back) sprite = formData.sprites.back_default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
-                    else sprite = formData.sprites.front_default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+                    if(filterSpe_back) sprite = formData.sprites.back_default||pokeball;
+                    else sprite = formData.sprites.front_default||pokeball;
                 }
                 
                 forms.innerHTML += `
@@ -467,7 +515,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } 
 
-    // Show held item when the pokemon is in the wild
+    // Show held item when the Pokemon is in the wild
     function showHeldItems(items){
         heldItems.innerHTML=`<h3>Wild Held Items</h3>`;
         for (var i = 0; i < items.length; i++) {
@@ -488,58 +536,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Write Trivia of the pokemon
-    function trivia(species, height, weight){
-        fetch(species)
-        .then((response) => response.json())
-        .then((speciesData) => {
-            let genera, eggGroup = [], flavorTexts = [];
+    // Write Trivia of the Pokemon
+    function trivia(speciesData){
+        let genera, eggGroup = [], flavorTexts = [];
 
-            // Take All Egg Groups
-            for(var i = 0; i<speciesData.egg_groups.length; i++){
-                eggGroup.push(speciesData.egg_groups[i].name);
+        // Take All Egg Groups
+        for(var i = 0; i<speciesData.egg_groups.length; i++){
+            eggGroup.push(speciesData.egg_groups[i].name);
+        }
+        if(speciesData.egg_groups.length===0) eggGroup.push("undefined");
+        
+        // Take English Genera
+        for(var i = 0; i<speciesData.genera.length; i++){
+            if(speciesData.genera[i].language.name==="en"){
+                genera = speciesData.genera[i].genus;
+                break;
             }
-            if(speciesData.egg_groups.length===0) eggGroup.push("undefined");
-            
-            // Take English Genera
-            for(var i = 0; i<speciesData.genera.length; i++){
-                if(speciesData.genera[i].language.name==="en"){
-                    genera = speciesData.genera[i].genus;
-                    break;
-                }
-            }
-            if(speciesData.genera.length===0) genera = "undefined";
-            
-            // Take weight, height, and gender rate
-            let bioInfo = `${(height/10).toFixed(1)}m, ${(weight/10).toFixed(1)}kg;`;
+        }
+        if(speciesData.genera.length===0) genera = "undefined";
 
-            if(speciesData.gender_rate===-1){
-                bioInfo += ` genderless`;
-            } else {
-                bioInfo += `
-                    <i class="fa-solid fa-mars"></i> ${(8-speciesData.gender_rate)/8*100}%  
-                    <i class="fa-solid fa-venus"></i> ${speciesData.gender_rate/8*100}%
-                `;
+        // Take All English Flavor Texts
+        for(var i = 0; i<speciesData.flavor_text_entries.length; i++){
+            if(speciesData.flavor_text_entries[i].language.name==="en"){
+                flavorTexts.push(speciesData.flavor_text_entries[i].flavor_text);
             }
-
-            // Take All English Flavor Texts
-            for(var i = 0; i<speciesData.flavor_text_entries.length; i++){
-                if(speciesData.flavor_text_entries[i].language.name==="en"){
-                    flavorTexts.push(speciesData.flavor_text_entries[i].flavor_text);
-                }
-            }
-            if(speciesData.flavor_text_entries.length===0) flavorTexts.push("undefined");
-            
-            others.innerHTML = `
-                <h3>Egg Groups</h3>
-                <p>${eggGroup.join(', ')}</p>
-                <h3>Trivia</h3>
-                <p>${genera}</p>
-                <p>${bioInfo}</p>
-                <p>${flavorTexts[Math.floor(Math.random()*flavorTexts.length)]}</p>
-            `;
-        })
-        .catch((error) => console.error(error));
+        }
+        if(speciesData.flavor_text_entries.length===0) flavorTexts.push("undefined");
+        
+        others.innerHTML = `
+            <h3>Egg Groups</h3>
+            <p>${eggGroup.join(', ')}</p>
+            <h3>Trivia</h3>
+            <p>${genera}</p>
+            <p>${flavorTexts[Math.floor(Math.random()*flavorTexts.length)]}</p>
+        `;
     }
     
     // Change Pokemon name in evolution chain into an image
@@ -579,30 +609,24 @@ document.addEventListener('DOMContentLoaded', () => {
         return Promise.all(fetchPromises).then(() => evolutionDetails);
     }
 
-    function getEvolution(species){
+    function getEvolution(evolutionChainUrl){
         // Get evolution chain details
-        fetch(species)
-        .then((response) => response.json())
-        .then((speciesData) => {
-            const evolutionChainUrl = speciesData.evolution_chain.url;
-            fetch(evolutionChainUrl)
-                .then((response) => response.json())
-                .then((evolutionData) => {
-                    const evolutionDetails = parseEvolutionChain(evolutionData.chain);
-                    evolutionWithImages(evolutionDetails)
-                    .then((evolutionImages) => {
-                        evolution.innerHTML = `
-                            <h3>Evolution Chain</h3>
-                            ${evolutionImages}
-                        `
-                    })
-                    .catch((error) => {
-                      console.error('Error:', error);
-                    });
+        fetch(evolutionChainUrl)
+            .then((response) => response.json())
+            .then((evolutionData) => {
+                const evolutionDetails = parseEvolutionChain(evolutionData.chain);
+                evolutionWithImages(evolutionDetails)
+                .then((evolutionImages) => {
+                    evolution.innerHTML = `
+                        <h3>Evolution Chain</h3>
+                        ${evolutionImages}
+                    `
                 })
-                .catch((error) => console.error(error));
-        })
-        .catch((error) => console.error(error));
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            })
+            .catch((error) => console.error(error));
     }
 
     // Get Evolution Chain
