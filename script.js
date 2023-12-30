@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "Official Artwork": { category: sprites.other["official-artwork"], defaultBall: pokeball3D, shinyBall: masterball3D },
             "Pokémon Home": { category: sprites.other["home"], defaultBall: pokeball3D, shinyBall: masterball3D },
             "Dream World": { category: sprites.other["dream_world"], defaultBall: pokeball3D, shinyBall: masterball3D },
-            "Dot Animation": { category: sprites.versions["generation-v"]["black-white"].animated, defaultBall: pokeball, shinyBall: masterball },
+            "Pixel Animation": { category: sprites.versions["generation-v"]["black-white"].animated, defaultBall: pokeball, shinyBall: masterball },
             "3D Animation": { category: sprites.other["showdown"], defaultBall: pokeball3D, shinyBall: masterball3D },
             "Gen I - RB":{ category: sprites.versions["generation-i"]["red-blue"], defaultBall: pokeball, shinyBall: masterball },
             "Gen I - Yellow":{ category: sprites.versions["generation-i"]["yellow"], defaultBall: pokeball, shinyBall: masterball },
