@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('searchButton');
     const pokeHead = document.getElementById('pokemonHead');
     const chooseSprite = document.getElementById('chooseSprite');
+    const selectSprite = document.getElementById('spriteType');
     const pokemonInfo = document.getElementById('pokemonInfo');
     const evolution = document.getElementById('evolution');
     const statsHistogram = document.getElementById('statsHistogram');
@@ -16,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const counterPokemon = document.getElementById('counterPokemon');
     
     // Filter variables to adjust counter pokemon table
-    const spriteButton = document.getElementById('spriteButton');
     const settingButton = document.getElementById('settingButton');
     const updateButton = document.getElementById('updateButton');
     const scrollUpButton = document.getElementById('scrollUpButton');
@@ -251,20 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return bioInfo;
     }
 
-    // Show and hide sprite settings
-    spriteButton.addEventListener('click', ()=>{
-        let currentDisplay = window.getComputedStyle(chooseSprite).getPropertyValue('display');
-        chooseSprite.style.display = (currentDisplay === 'none') ? 'inline-block' : 'none';
-
-        currentDisplay = window.getComputedStyle(filter_shiny).getPropertyValue('display');
-        filter_shiny.style.display = (currentDisplay === 'none') ? 'inline-block' : 'none';
-
-        currentDisplay = window.getComputedStyle(filter_female).getPropertyValue('display');
-        filter_female.style.display = (currentDisplay === 'none') ? 'inline-block' : 'none';
-    });
-
-    var selectSprite = document.getElementById('spriteType');
-
     // Add event listener to the dropdown menu
     selectSprite.addEventListener('change', () => {
         // get updated Sprite
@@ -296,7 +282,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Get Sprites of the Pokemon (front, back, default, shiny, female)
     function getSprite(sprites){
-        spriteButton.style.display = 'inline-block';
+        chooseSprite.style.display = 'inline-block';
+        filter_shiny.style.display = 'inline-block';
+        filter_female.style.display = 'inline-block';
 
         // Check the initially selected option
         var labelText = selectSprite.options[selectSprite.selectedIndex].text;
