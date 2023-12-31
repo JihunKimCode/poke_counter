@@ -258,8 +258,6 @@ footer a:hover{
 #statsHistogram{
     display: table-cell;
     width: fit-content;
-    padding-left: 10px;
-    padding-right: 10px;
 }
 
 .stat-bar {
