@@ -340,7 +340,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             orig_name = modifiedName;
         }
-        console.log(orig_name);
         
         let audio = `https://play.pokemonshowdown.com/audio/cries/${orig_name}.mp3`;
         return audio;
