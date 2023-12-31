@@ -9,6 +9,12 @@ Search Pokémon information as well as counter Pokémon.
     - [x] Female Sprites
     - [x] Other Forms (e.g. Mega, Gmax, Form-Change)
 - [x] **ID**
+- [x] **Pokemon Information**
+    - [x] Height, weight, gender rate
+    - [x] Pokemon cry
+    - [x] Wild Pokemon (EVs, held-item)
+    - [x] Egg Groups
+    - [x] Trivia
 - [x] **Type**
     - [x] Type icons
 - [x] **Stats**

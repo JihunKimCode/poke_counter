@@ -170,6 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Trace Pokemon's information
         const image = getSprite(sprites);
         const bioInfo = getBioInfo(height, weight, gender_rate);
+        
+        const audio = getAudio(name);
 
         // Get weaknesses, resistances, and invalid
         const weaknesses = getWeaknesses(types);
@@ -199,6 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <p>Pokédex #${id}</p>
             <p>${bioInfo}</p>
+            <audio controls>
+                <source src="${audio}" type="audio/mp3">
+                Your browser does not support the audio element.
+            </audio>
             <h3>Types</h3>
             ${typeImages.join('&nbsp&nbsp')}
             ${weaknessesHtml}
@@ -249,6 +255,95 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
         return bioInfo;
+    }  
+
+    function getAudio(name){
+        let orig_name;
+        const specialMapping = {
+            "dudunsparce-three-segment": { orig_name: "dudunsparce" },
+            "eiscue-ice": { orig_name: "eiscue" },
+            "enamorus-incarnate": { orig_name: "enamorus" },
+            "giratina-altered": { orig_name: "giratina" },
+            "indeedee-female": { orig_name: "indeedee-f" },
+            "indeedee-male": { orig_name: "indeedee" },
+            "landorus-incarnate": { orig_name: "landorus" },
+            "lycanroc-midday": { orig_name: "lycanroc" },
+            "maushold-family-of-three": { orig_name: "maushold" },
+            "morpeko-full-belly": { orig_name: "morpeko" },
+            "necrozma-dusk": { orig_name: "necrozma-duskmane" },
+            "necrozma-dawnwings": { orig_name: "necrozma-dawnwings" },
+            "oinkologne-female": { orig_name: "oinkologne-f" },
+            "oricorio-baile": { orig_name: "oricorio" },
+            "oricorio-pom-pom": { orig_name: "oricorio-pompom" },
+            "rockruff-own-tempo": { orig_name: "rockruff" },
+            "shaymin-land": { orig_name: "shaymin" },
+            "thundurus-incarnate": { orig_name: "thundurus" },
+            "tornadus-incarnate": { orig_name: "tornadus" },
+            "toxtricity-amped": { orig_name: "toxtricity" },
+            "toxtricity-low-key": { orig_name: "toxtricity-lowkey" },
+            "ursaluna-bloodmoon": { orig_name: "ursaluna" },
+            "ursaluna-bloodmoon": { orig_name: "ursaluna" },
+            "urshifu-rapid-strike": { orig_name: "urshifu-rapidstrike" },
+            "urshifu-single-strike": { orig_name: "urshifu" },
+            "wishiwashi-solo": { orig_name: "wishiwashi" },
+            "zarude-dada": { orig_name: "zarude" }
+        };
+        
+        let modifiedName = name;
+        // Assuming 'name' is the original name with or without "-gmax"
+        modifiedName = modifiedName.replace(/aegislash-.*/i, "aegislash");
+        modifiedName = modifiedName.replace(/basculin-.*/i, "basculin");
+        modifiedName = modifiedName.replace(/basculegion-.*/i, "basculegion");
+        modifiedName = modifiedName.replace(/castform-.*/i, "castform");
+        modifiedName = modifiedName.replace(/deoxys-.*/i, "deoxys");
+        modifiedName = modifiedName.replace(/darmanitan-.*/i, "darmanitan");
+        modifiedName = modifiedName.replace(/pikachu-.*/i, "pikachu");
+        modifiedName = modifiedName.replace(/rotom-.*/i, "rotom");
+        if(modifiedName!="gourgeist-super") modifiedName = modifiedName.replace(/gourgeist-.*/i, "gourgeist");
+        if(modifiedName!="pumpkaboo-super") modifiedName = modifiedName.replace(/pumpkaboo-.*/i, "pumpkaboo");
+        modifiedName = modifiedName.replace(/greninja-.*/i, "greninja");
+        modifiedName = modifiedName.replace(/keldeo-.*/i, "keldeo");
+        modifiedName = modifiedName.replace(/koraidon-.*/i, "koraidon");
+        modifiedName = modifiedName.replace(/meloetta-.*/i, "meloetta");
+        modifiedName = modifiedName.replace(/meowstic-.*/i, "meowstic");
+        modifiedName = modifiedName.replace(/mimikyu-.*/i, "mimikyu");
+        modifiedName = modifiedName.replace(/minior-.*/i, "minior");
+        modifiedName = modifiedName.replace(/miraidon-.*/i, "miraidon");
+        modifiedName = modifiedName.replace(/ogerpon-.*/i, "ogerpon");
+        modifiedName = modifiedName.replace(/squawkabilly-.*/i, "squawkabilly");
+        modifiedName = modifiedName.replace(/tauros-.*/i, "tauros");
+        modifiedName = modifiedName.replace(/terapagos-.*/i, "terapagos");
+        modifiedName = modifiedName.replace(/wormadam-.*/i, "wormadam");
+        
+        let nohyphen = 
+            ["brute-bonnet", "chi-yu","chien-pao","flutter-mane", "gouging-fire", "great-tusk", "hakamo-o", "jangmo-o", "kommo-o",
+             "mime-jr", "mrmime", "mrrime", "nidoran-f","nidoran-m", "porygon-z", "raging-bolt", "roaring-mmon", "sandy-shocks", "scream-tail",
+             "tapu-bulu","tapu-fini","tapu-koko","tapu-lele", "ting-lu", "type-null", "walking-wake", "wo-chien"]
+
+        if(nohyphen.includes(modifiedName)) modifiedName = modifiedName.replace("-","");
+
+        modifiedName = modifiedName.replace("-gmax", "");
+        modifiedName = modifiedName.replace("-alola", "");
+        modifiedName = modifiedName.replace("-totem", "");
+        modifiedName = modifiedName.replace("-paldea", "");
+        modifiedName = modifiedName.replace("-galar", "");
+        modifiedName = modifiedName.replace("-hisui", "");
+        modifiedName = modifiedName.replace("-original", "");
+        modifiedName = modifiedName.replace("-origin", "");
+        modifiedName = modifiedName.replace("-power-construct", "");
+        modifiedName = modifiedName.replace("-mega-x", "-megax");
+        modifiedName = modifiedName.replace("-mega-y", "-megay");
+        modifiedName = modifiedName.replace("iron-", "iron");
+
+        if (modifiedName in specialMapping) {
+            ({ orig_name } = specialMapping[modifiedName]);
+        } else {
+            orig_name = modifiedName;
+        }
+        console.log(orig_name);
+        
+        let audio = `https://play.pokemonshowdown.com/audio/cries/${orig_name}.mp3`;
+        return audio;
     }
 
     // Add event listener to the dropdown menu
