@@ -1,19 +1,45 @@
+// Clear context in search input
+function clearInput() {
+    searchInput.value = '';
+    pokemonDropdown.style.display = 'none';
+    clearButton.style.display = 'none';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const randomItem = document.getElementById('randomItem');
+
+    // Search Bar
     const searchInput = document.getElementById('searchInput');
+    const clearButton = document.getElementById('clearButton');
     const pokemonDropdown = document.getElementById('pokemonDropdown');
     const searchButton = document.getElementById('searchButton');
+    
+    // Contaianer 1
     const pokeHead = document.getElementById('pokemonHead');
     const chooseSprite = document.getElementById('chooseSprite');
     const selectSprite = document.getElementById('spriteType');
     const pokemonInfo = document.getElementById('pokemonInfo');
     const evolution = document.getElementById('evolution');
+    
+    const filter_shiny = document.getElementById('filter_shiny');
+    const filter_female = document.getElementById('filter_female');
+    const filterCheckbox_shiny = document.getElementById('filterCheckbox_shiny');
+    const filterCheckbox_female = document.getElementById('filterCheckbox_female');
+
+    // Container 2
     const statsHistogram = document.getElementById('statsHistogram');
     const progressContainer = document.getElementById('progress-bar');
     const dfHead = document.getElementById('dfHead');
     const forms = document.getElementById('forms');
     const heldItems = document.getElementById('heldItems');
     const others = document.getElementById('others');
+    
+    const filter_shinyform = document.getElementById('filter_shinyform');
+    const filter_back = document.getElementById('filter_back');
+    const filterCheckbox_shinyform = document.getElementById('filterCheckbox_shinyform');
+    const filterCheckbox_back = document.getElementById('filterCheckbox_back');
+
+    // Container 3
     const cpHead = document.getElementById('cpHead');
     const counterPokemon = document.getElementById('counterPokemon');
     
@@ -28,21 +54,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const filter_type = document.getElementById('filter_type');
     const filter_abilities = document.getElementById('filter_abilities');
     const filter_baseStat = document.getElementById('filter_baseStat');
-    const filter_shiny = document.getElementById('filter_shiny');
-    const filter_female = document.getElementById('filter_female');
-    const filter_shinyform = document.getElementById('filter_shinyform');
-    const filter_back = document.getElementById('filter_back');
     
     const filterCheckbox_bst600 = document.getElementById('filterCheckbox_bst600');
     const filterCheckbox_mega = document.getElementById('filterCheckbox_mega');
     const filterCheckbox_type = document.getElementById('filterCheckbox_type');
     const filterCheckbox_abilities = document.getElementById('filterCheckbox_abilities');
     const filterCheckbox_baseStat = document.getElementById('filterCheckbox_baseStat');
-    const filterCheckbox_shiny = document.getElementById('filterCheckbox_shiny');
-    const filterCheckbox_female = document.getElementById('filterCheckbox_female');
-    const filterCheckbox_shinyform = document.getElementById('filterCheckbox_shinyform');
-    const filterCheckbox_back = document.getElementById('filterCheckbox_back');
 
+    // Footer
     const scrollTopButton = document.getElementById("scrollTop");
 
     // Global variables for updating table
@@ -101,18 +120,22 @@ document.addEventListener('DOMContentLoaded', () => {
             searchInput.addEventListener('input', () => {
                 if (searchInput.value.length >= 1) {
                     suggestPokemon(pokemonNames);
+                    clearButton.style.display = 'block';
                 } else {
                     // Hide dropdown if input is empty
                     pokemonDropdown.style.display = 'none'; 
+                    clearButton.style.display = 'none';
                 }
             });
             searchInput.addEventListener('keydown', handleKeydown);
             searchInput.addEventListener('click', () => {
                 if (searchInput.value.length >= 1) {
                     suggestPokemon(pokemonNames);
+                    clearButton.style.display = 'block';
                 } else {
                     // Hide dropdown if input is empty
-                    pokemonDropdown.style.display = 'none'; 
+                    pokemonDropdown.style.display = 'none';
+                    clearButton.style.display = 'none';
                 }
                 scrollIntoView();
             });
