@@ -51,6 +51,7 @@ Search Pokémon information as well as counter Pokémon.
     - [x] Easter Egg!
 
 # Stretch Goals
-- [ ] Better Pokemon Search (NIDORAN-F, NIDORAN-M)
-- [ ] Related Pokemon lists on serach bar
+- [x] Better Pokemon Search (NIDORAN-F, NIDORAN-M)
+- [x] Related Pokemon lists on serach bar
+    - [x] Add pokemonNames.txt to fetch the pokemonName list
 - [ ] Move table (HM/TM/TR/Egg/Move Tutor)

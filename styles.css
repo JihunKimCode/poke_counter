@@ -83,36 +83,65 @@ footer p{
 /* Top Nav (search bar)*/
 .topnav {
     font-family: 'NanumB', sans-serif;
-    overflow: hidden;
+    overflow: visible;
 }
   
 .topnav .search-container {
     float: right;
-    margin-top: 20px;
+    margin-top: 25px;
+    position: relative;
 }
-  
+
 .topnav input[type=text] {
+    font-family: 'NanumS', sans-serif;
     padding: 6px;
-    margin-top: 8px;
     font-size: 17px;
     border: none;
+    box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2);
 }
   
+#searchInput {
+    width: 255px;
+}
+
 .topnav .search-container button {
     float: right;
     padding: 6px 10px;
-    margin-top: 8px;
     margin-right: 16px;
     background: var(--pokemoncolor, #1288f8);
     font-size: 17px;
     border: none;
     cursor: pointer;
     color: white;
+    box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2);
 }
   
 .topnav .search-container button:hover {
     background: var(--lightpokemoncolor, #00d6fa);
 }  
+
+#pokemonDropdown {
+    font-family: 'NanumS', sans-serif;
+    display: none;
+    position: absolute;
+    width: 100%;
+    background-color: #fff;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 3;
+    top: 100%; /* Position the dropdown below the search input */
+    width: 267px;
+    box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2);
+}
+
+#pokemonDropdown div{
+    padding: 10px;
+    cursor: pointer;
+}
+
+#pokemonDropdown div.active {
+    background-color: #ddd;
+}
 
 /* Github Button */
 .btn {
@@ -650,6 +679,10 @@ audio::-webkit-media-controls-panel {
     h1{
         margin-block-end: 0px;
         font-size: 20px;
+    }
+
+    .topnav .search-container {
+        margin-top: 10px;
     }
 
     .information{

@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const randomItem = document.getElementById('randomItem');
     const searchInput = document.getElementById('searchInput');
+    const pokemonDropdown = document.getElementById('pokemonDropdown');
     const searchButton = document.getElementById('searchButton');
     const pokeHead = document.getElementById('pokemonHead');
     const chooseSprite = document.getElementById('chooseSprite');
@@ -46,6 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Global variables for updating table
     let global_types, global_statsData, global_sprites, global_speciesUrl;
+    
+    // Search Dropdown Highlight
+    let currentFocus = -1;
 
     // Search button click event
     searchButton.addEventListener('click', () => {
@@ -86,6 +90,126 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch(error){
             randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucky-egg.png';
             randomItem.title = "lucky-egg";
+        }
+    }
+
+    // Fetch Pokémon names from the text file
+    fetch('https://raw.githubusercontent.com/JihunKimCode/poke_counter/main/pokemonNames.txt')
+        .then(response => response.text())
+        .then(data => {
+            const pokemonNames = data.split('\n').filter(name => name.trim() !== '');
+            searchInput.addEventListener('input', () => {
+                if (searchInput.value.length >= 1) {
+                    suggestPokemon(pokemonNames);
+                } else {
+                    // Hide dropdown if input is empty
+                    pokemonDropdown.style.display = 'none'; 
+                }
+            });
+            searchInput.addEventListener('keydown', handleKeydown);
+            searchInput.addEventListener('click', () => {
+                if (searchInput.value.length >= 1) {
+                    suggestPokemon(pokemonNames);
+                } else {
+                    // Hide dropdown if input is empty
+                    pokemonDropdown.style.display = 'none'; 
+                }
+                scrollIntoView();
+            });
+        });
+
+    // Hide the dropdown when clicking outside of it
+    window.addEventListener('click', (event) => {
+        if (!event.target.matches('#searchInput')) {
+            pokemonDropdown.style.display = 'none';
+        }
+    });
+    
+    // Show related Pokemon in the dropdown menu
+    function suggestPokemon(pokemonNames) {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+
+        // Filter Pokémon names based on the user's input
+        const suggestions = pokemonNames.filter(name =>
+            name.toLowerCase().includes(searchTerm)
+        );
+        updateDropdown(suggestions);
+    }
+    
+    // Update the dropdown with suggestions
+    function updateDropdown(suggestions) {
+        pokemonDropdown.innerHTML = '';
+
+        // Populate the dropdown with new suggestions
+        suggestions.forEach((name, index) => {
+            const suggestionItem = document.createElement('div');
+            suggestionItem.textContent = name;
+            suggestionItem.addEventListener('click', () => {
+                // Set the selected suggestion in the search input and perform search
+                searchInput.value = name;
+                pokemonDropdown.style.display = 'none';
+                performSearch();
+            });
+
+            // Highlight the suggestion on hover
+            suggestionItem.addEventListener('mouseover', () => {
+                currentFocus = index;
+                addActive();
+            });
+
+            pokemonDropdown.appendChild(suggestionItem);
+        });
+
+        // Display the dropdown if there are suggestions, otherwise hide it
+        pokemonDropdown.style.display = suggestions.length > 0 ? 'block' : 'none';
+        currentFocus = -1; // Reset the focus when updating the suggestions
+
+        scrollIntoView();
+    }
+
+    // Manage Key Input (Down, Up, Enter)
+    function handleKeydown(event) {
+        const suggestions = document.querySelectorAll('#pokemonDropdown div');
+    
+        if (event.key === 'ArrowDown' && suggestions.length > 0 && searchInput.value.length >= 1) {
+            currentFocus = (currentFocus + 1) % suggestions.length;
+            addActive();
+        } else if (event.key === 'ArrowUp' && suggestions.length > 0 && searchInput.value.length >= 1) {
+            currentFocus = (currentFocus - 1 + suggestions.length) % suggestions.length;
+            addActive();
+        } else if (event.key === 'Enter') {
+            if (currentFocus > -1) {
+                // Set the selected suggestion in the search input and perform search
+                searchInput.value = suggestions[currentFocus].textContent;
+                pokemonDropdown.innerHTML = '';
+                pokemonDropdown.style.display = 'none';
+            }
+        }
+        scrollIntoView();
+    }
+    
+    // Change menu color when highlighted
+    function addActive() {
+        const suggestions = document.querySelectorAll('#pokemonDropdown div');
+        
+        suggestions.forEach((item, index) => {
+            if (index === currentFocus) {
+                item.classList.add('active');
+                searchInput.value = item.textContent; // Update input box with the selected suggestion
+            } else {
+                item.classList.remove('active');
+            }
+        });
+        scrollIntoView();
+    }
+
+    // Adjust the scroll position to make the focused suggestion visible
+    function scrollIntoView() {
+        const activeItem = document.querySelector('.active');
+        if (activeItem) {
+            activeItem.scrollIntoView({
+                block: 'nearest',
+            });
         }
     }
 
