@@ -448,7 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let nohyphen = 
             ["brute-bonnet", "chi-yu","chien-pao","flutter-mane", "gouging-fire", "great-tusk", "hakamo-o", "jangmo-o", "kommo-o",
-             "mime-jr", "mrmime", "mrrime", "nidoran-f","nidoran-m", "porygon-z", "raging-bolt", "roaring-mmon", "sandy-shocks", "scream-tail",
+             "mime-jr", "mr-mime", "mr-rime", "nidoran-f","nidoran-m", "porygon-z", "raging-bolt", "roaring-mmon", "sandy-shocks", "scream-tail",
              "tapu-bulu","tapu-fini","tapu-koko","tapu-lele", "ting-lu", "type-null", "walking-wake", "wo-chien"]
 
         if(nohyphen.includes(modifiedName)) modifiedName = modifiedName.replace("-","");
