@@ -125,17 +125,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Show related Pokemon in the dropdown menu
+    // Function to suggest Pokémon with flexible matching
     function suggestPokemon(pokemonNames) {
         const searchTerm = searchInput.value.toLowerCase().trim();
 
-        // Filter Pokémon names based on the user's input
+        // Escape special characters in the search term
+        const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+        // Create a regular expression for flexible matching
+        const regex = new RegExp(escapedSearchTerm.split('').join('.*'));
+
+        // Filter Pokémon names based on the user's input and flexible matching
         const suggestions = pokemonNames.filter(name =>
-            name.toLowerCase().includes(searchTerm)
+            name.toLowerCase().match(regex)
         );
+
         updateDropdown(suggestions);
     }
-    
+
     // Update the dropdown with suggestions
     function updateDropdown(suggestions) {
         pokemonDropdown.innerHTML = '';
