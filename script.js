@@ -112,21 +112,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Fetch Pokémon names from the text file
-    fetch('https://raw.githubusercontent.com/JihunKimCode/poke_counter/main/pokemonNames.txt')
+    // Fetch Pokémon data from the CSV file
+    fetch('https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon.csv')
         .then(response => response.text())
         .then(data => {
-            const pokemonNames = data.split('\n').filter(name => name.trim() !== '');
+            const pokemonData = data.split('\n').slice(1); // Exclude header row
+            const pokemonNames = pokemonData.map(row => {
+                const columns = row.split(',');
+                // Extract and trim the second column (identifier) as a string, handle undefined
+                const name = columns[1] ? columns[1].toString().trim() : ''; 
+                return name !== '' ? name : null; // Exclude empty names
+            }).filter(name => name !== null); // Remove null values
+
             searchInput.addEventListener('input', () => {
                 if (searchInput.value.length >= 1) {
                     suggestPokemon(pokemonNames);
                     clearButton.style.display = 'block';
                 } else {
                     // Hide dropdown if input is empty
-                    pokemonDropdown.style.display = 'none'; 
+                    pokemonDropdown.style.display = 'none';
                     clearButton.style.display = 'none';
                 }
             });
+
             searchInput.addEventListener('keydown', handleKeydown);
             searchInput.addEventListener('click', () => {
                 if (searchInput.value.length >= 1) {
@@ -139,7 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 scrollIntoView();
             });
-        });
+        })
+        .catch(error => console.error('Error fetching Pokémon data:', error));
 
     // Hide the dropdown when clicking outside of it
     window.addEventListener('click', (event) => {
@@ -148,7 +157,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Function to suggest Pokémon with flexible matching
+    // Function to calculate Levenshtein distance between two strings
+    function levenshteinDistance(str1, str2) {
+        const lenStr1 = str1.length + 1;
+        const lenStr2 = str2.length + 1;
+    
+        // Create a matrix to store the distances
+        const matrix = new Array(lenStr1);
+        for (let i = 0; i < lenStr1; i++) {
+            matrix[i] = new Array(lenStr2);
+            matrix[i][0] = i;
+        }
+    
+        for (let j = 0; j < lenStr2; j++) {
+            matrix[0][j] = j;
+        }
+    
+        // Fill in the matrix with the minimum distances
+        for (let i = 1; i < lenStr1; i++) {
+            for (let j = 1; j < lenStr2; j++) {
+                const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j] + 1,       // deletion
+                    matrix[i][j - 1] + 1,       // insertion
+                    matrix[i - 1][j - 1] + cost // substitution
+                );
+            }
+        }
+    
+        // The bottom-right cell of the matrix contains the Levenshtein distance
+        return matrix[lenStr1 - 1][lenStr2 - 1];
+    }
+
+    // Function to suggest Pokémon with flexible matching and sort by relevance
     function suggestPokemon(pokemonNames) {
         const searchTerm = searchInput.value.toLowerCase().trim();
 
@@ -163,9 +204,21 @@ document.addEventListener('DOMContentLoaded', () => {
             name.toLowerCase().match(regex)
         );
 
-        updateDropdown(suggestions);
-    }
+        // Sort suggestions by Levenshtein distance and then alphabetically
+        const sortedSuggestions = suggestions.sort((a, b) => {
+            const distanceA = levenshteinDistance(a, searchTerm);
+            const distanceB = levenshteinDistance(b, searchTerm);
 
+            if (distanceA !== distanceB) {
+                return distanceA - distanceB;
+            } else {
+                return a.localeCompare(b);
+            }
+        });
+        
+        updateDropdown(sortedSuggestions);
+    }
+    
     // Update the dropdown with suggestions
     function updateDropdown(suggestions) {
         pokemonDropdown.innerHTML = '';
@@ -212,7 +265,11 @@ document.addEventListener('DOMContentLoaded', () => {
             searchInput.value = suggestions[currentFocus].textContent;
             addActive();
         } else if (event.key === 'ArrowUp' && suggestions.length > 0 && searchInput.value.length >= 1) {
-            currentFocus = (currentFocus - 1 + suggestions.length) % suggestions.length;
+            if (currentFocus === -1) {
+                currentFocus = suggestions.length - 1;
+            } else {
+                currentFocus = (currentFocus - 1 + suggestions.length) % suggestions.length;
+            }
             searchInput.value = suggestions[currentFocus].textContent;
             addActive();
         } else if (event.key === 'Enter') {
