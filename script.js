@@ -530,16 +530,47 @@ document.addEventListener('DOMContentLoaded', () => {
         // Max value for Each Stats
         const maxValue = 255;
         let stats = 0;
+        let name, minRealStat = 0, maxRealStat = 0;
 
         statsHistogram.innerHTML = `<h3>Pokémon Stats</h3>`
         // Create HTML for the histogram
         const histogramHTML = statsData.map((stat) => {
             const barWidth = (stat.value / maxValue) * 100;
             stats += stat.value;
+
+            // Calculate Real Stat at LV.50
+            if(stat.name === "hp") {
+                name = "HP";
+                minRealStat = Math.floor(stat.value+0/2+0/8+10+50);
+                maxRealStat = Math.floor(stat.value+31/2+252/8+10+50);
+            } else if (stat.name === "attack"){
+                name = "ATK";
+                minRealStat = Math.floor((stat.value+0/2+0/8+5)*0.9);
+                maxRealStat = Math.floor((stat.value+31/2+252/8+5)*1.1);
+            } else if (stat.name === "defense"){
+                name = "DEF";
+                minRealStat = Math.floor((stat.value+0/2+0/8+5)*0.9);
+                maxRealStat = Math.floor((stat.value+31/2+252/8+5)*1.1);
+            } else if (stat.name === "special-attack"){
+                name = "SPA";
+                minRealStat = Math.floor((stat.value+0/2+0/8+5)*0.9);
+                maxRealStat = Math.floor((stat.value+31/2+252/8+5)*1.1);
+            } else if (stat.name === "special-defense"){
+                name = "SPD";
+                minRealStat = Math.floor((stat.value+0/2+0/8+5)*0.9);
+                maxRealStat = Math.floor((stat.value+31/2+252/8+5)*1.1);
+            } else if (stat.name === "speed"){
+                name = "SPE";
+                minRealStat = Math.floor((stat.value+0/2+0/8+5)*0.9);
+                maxRealStat = Math.floor((stat.value+31/2+252/8+5)*1.1);
+            }
+
             return `
                 <div class="stat-bar">
                     <div class="bar-label">
-                        <span class="left-part">${capitalizeFirstLetter(stat.name)}: ${stat.value}</span>
+                        <span class="left-part">
+                            ${name}: ${stat.value} (${minRealStat} - ${maxRealStat})
+                        </span>
                         <span class="right-part">${stat.effort} EV</span>
                     </div>            
                     <div class="bar-container">
