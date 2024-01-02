@@ -164,6 +164,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 addActive();
             });
 
+            // Remove highlight when mouse moves away
+            suggestionItem.addEventListener('mouseout', () => {
+                currentFocus = -1;
+                addActive();
+            });
+
             pokemonDropdown.appendChild(suggestionItem);
         });
 
@@ -180,14 +186,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
         if (event.key === 'ArrowDown' && suggestions.length > 0 && searchInput.value.length >= 1) {
             currentFocus = (currentFocus + 1) % suggestions.length;
+            searchInput.value = suggestions[currentFocus].textContent;
             addActive();
         } else if (event.key === 'ArrowUp' && suggestions.length > 0 && searchInput.value.length >= 1) {
             currentFocus = (currentFocus - 1 + suggestions.length) % suggestions.length;
+            searchInput.value = suggestions[currentFocus].textContent;
             addActive();
         } else if (event.key === 'Enter') {
             if (currentFocus > -1) {
-                // Set the selected suggestion in the search input and perform search
-                searchInput.value = suggestions[currentFocus].textContent;
                 pokemonDropdown.innerHTML = '';
                 pokemonDropdown.style.display = 'none';
             }
@@ -202,7 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
         suggestions.forEach((item, index) => {
             if (index === currentFocus) {
                 item.classList.add('active');
-                searchInput.value = item.textContent; // Update input box with the selected suggestion
             } else {
                 item.classList.remove('active');
             }
