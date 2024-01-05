@@ -477,6 +477,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "indeedee-male": { orig_name: "indeedee" },
             "landorus-incarnate": { orig_name: "landorus" },
             "lycanroc-midday": { orig_name: "lycanroc" },
+            "maushold": { orig_name: "maushold-four" },
             "maushold-family-of-three": { orig_name: "maushold" },
             "morpeko-full-belly": { orig_name: "morpeko" },
             "necrozma-dusk": { orig_name: "necrozma-duskmane" },
@@ -525,7 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Names to remove hyphen
         let nohyphen = 
-            ["brute-bonnet", "chi-yu","chien-pao","flutter-mane", "gouging-fire", "great-tusk", "hakamo-o", "jangmo-o", "kommo-o",
+            ["brute-bonnet", "chi-yu","chien-pao","flutter-mane", "gouging-fire", "great-tusk", "hakamo-o", "ho-oh", "jangmo-o", "kommo-o",
              "mime-jr", "mr-mime", "mr-rime", "nidoran-f","nidoran-m", "porygon-z", "raging-bolt", "roaring-mmon", "sandy-shocks", 
              "scream-tail", "tapu-bulu","tapu-fini","tapu-koko","tapu-lele", "ting-lu", "type-null", "walking-wake", "wo-chien"]
 
