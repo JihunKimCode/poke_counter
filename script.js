@@ -371,16 +371,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
       
-    // Join elements with comma and add <br> after every three elements
-    function joinWithLineBreak(elements) {
-        const result = [];
-
-        for (let i = 0; i < elements.length; i += 3) {
-            result.push(elements.slice(i, i + 3).join('&nbsp&nbsp'));
-        }
-        return result.join('<br>');
-    }
-      
     // Get the information of the pokemon
     function getPokemonInfo(name, id, sprites, types, abilities, height, weight, gender_rate){
         // Trace Pokemon's information
@@ -395,9 +385,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const invalid = getInvalid(types);
         
         // Display the weaknesses, resistances, and invalid
-        const weaknessesHtml = weaknesses.length > 0 ? `<h3>Weaknesses</h3><p>${joinWithLineBreak(weaknesses)}</p>` : '';
-        const resistancesHtml = resistances.length > 0 ? `<h3>Resistances</h3><p>${joinWithLineBreak(resistances)}</p>` : '';
-        const invalidHtml = invalid.length > 0 ? `<h3>Invalids</h3><p>${joinWithLineBreak(invalid)}</p>` : '';
+        const weaknessesHtml = weaknesses.length > 0 ? `<h3>Weaknesses</h3><p>${weaknesses.join('&nbsp')}</p>` : '';
+        const resistancesHtml = resistances.length > 0 ? `<h3>Resistances</h3><p>${resistances.join('&nbsp')}</p>` : '';
+        const invalidHtml = invalid.length > 0 ? `<h3>Invalids</h3><p>${invalid.join('&nbsp')}</p>` : '';
 
         const typeImages = types.map(type => 
         `<div class="tooltip-types">
@@ -422,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Your browser does not support the audio element.
             </audio>
             <h3>Types</h3>
-            ${typeImages.join('&nbsp&nbsp&nbsp')}
+            ${typeImages.join('&nbsp&nbsp')}
             ${weaknessesHtml}
             ${resistancesHtml}
             ${invalidHtml}
