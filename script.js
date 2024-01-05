@@ -422,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Your browser does not support the audio element.
             </audio>
             <h3>Types</h3>
-            ${typeImages.join('&nbsp&nbsp')}
+            ${typeImages.join('&nbsp&nbsp&nbsp')}
             ${weaknessesHtml}
             ${resistancesHtml}
             ${invalidHtml}
