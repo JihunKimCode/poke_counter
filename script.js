@@ -1410,14 +1410,143 @@ document.addEventListener('DOMContentLoaded', () => {
         return CP_data;
     }
 
+    // Resize Counter Pokemon Table when the screen is resized
+    window.addEventListener('resize', function() {
+        updateTableSize();
+    });
+
+    // Update table width and height when user resize the screen
+    function updateTableSize(){
+        const tableContainer = document.querySelector('.tableContainer');
+        const table = document.querySelector('.table');
+        if (tableContainer) {
+            const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + evolution.clientHeight;
+            const container2 = statsHistogram.clientHeight + dfHead.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
+            const clientHeight = container1 > container2 ? container1 : container2;
+            const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+            const screenHeight = (window.innerHeight > 0) ? window.innerHeight : screen.height;
+    
+        // Set width and height of the screen
+        if (screenWidth > 1024) {
+            tableContainer.style.width = Math.floor(screenWidth / 2) + 'px';
+        } else if(screenWidth > 767 && screenWidth <= 1024){
+            tableContainer.style.width = (screenWidth - 30) + 'px';
+        } else {
+            tableContainer.style.width = (screenWidth - 20) + 'px';
+        }
+        tableContainer.style.height = (screenWidth > 1024) ? clientHeight + 'px' : Math.floor(screenHeight*0.7) + 'px';
+        }
+
+        if(table){
+            // Guarantee space for scroll bar
+            table.style.width = parseFloat(tableContainer.style.width)-8 + 'px';
+        }
+    }
+ 
+    // Make Counter Pokemon Table
+    function makeTable(pokemonArray){
+        if(!pokemonArray) return;
+        
+        const filterSpe_type = filterCheckbox_type.checked;          
+        const filterSpe_abilities = filterCheckbox_abilities.checked;
+        const filterSpe_baseStat = filterCheckbox_baseStat.checked;  
+        
+        counterPokemon.innerHTML = '';
+
+        // Create a container for the scrollable table
+        const tableContainer = document.createElement('div');
+        tableContainer.className = 'tableContainer';
+        const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + evolution.clientHeight;
+        const container2 = statsHistogram.clientHeight + dfHead.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
+        const clientHeight = container1 > container2 ? container1 : container2;
+        const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+        const screenHeight = (window.innerHeight > 0) ? window.innerHeight : screen.height;
+
+        // Set width and height of the screen
+        if (screenWidth > 1024) {
+            tableContainer.style.width = Math.floor(screenWidth / 2) + 'px';
+        } else if(screenWidth > 767 && screenWidth <= 1024){
+            tableContainer.style.width = (screenWidth - 30) + 'px';
+        } else {
+            tableContainer.style.width = (screenWidth - 20) + 'px';
+        }
+        tableContainer.style.height = (screenWidth > 1024) ? clientHeight + 'px' : Math.floor(screenHeight*0.7) + 'px';
+
+        // Create the table element
+        const table = document.createElement('table');
+        table.className = 'table';
+        table.innerHTML = '';
+        
+        // Guarantee space for scroll bar
+        table.style.width = parseFloat(tableContainer.style.width)-8 + 'px';
+
+        // Scroll to the top
+        scrollUpButton.addEventListener('click', () => {
+            tableContainer.scroll({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Scroll to the bottom
+        scrollDownButton.addEventListener('click', () => {
+            tableContainer.scroll({
+                top: tableContainer.scrollHeight,
+                behavior: 'smooth'
+            });
+        });
+
+        // Create the table header
+        const headerRow = table.createTHead().insertRow();
+        headerRow.className = 'thead'
+        headerRow.innerHTML = '<th>Sprite</th><th>Name</th>'
+        if(!filterSpe_type) headerRow.innerHTML += '<th>Types</th>';
+        if(!filterSpe_abilities) headerRow.innerHTML += '<th>Abilities</th>';
+        headerRow.innerHTML += '<th>Score</th>'
+        if(!filterSpe_baseStat) headerRow.innerHTML += '<th>HP</th><th>Atk</th><th>Def</th><th>SpA</th><th>SpD</th><th>Spe</th><th>BST</th>';
+
+        // Iterate through the sorted array and add rows to the table
+        for (const pokemon of pokemonArray) {    
+            // Add row to the table
+            const row = table.insertRow();
+            row.innerHTML = `
+            <td><img src="${pokemon.sprite}" alt="${pokemon.name}" width="50"></td>
+            <td>${pokemon.name}</td>
+            `;
+            if(!filterSpe_type){
+                row.innerHTML += `<td>${pokemon.types}</td>`;
+            }
+
+            if(!filterSpe_abilities){
+                row.innerHTML += `<td>${pokemon.abilities}</td>`;
+            } 
+
+            row.innerHTML += `<td>${pokemon.score}</td>`;
+            
+            if(!filterSpe_baseStat) {
+                row.innerHTML += `
+                    <td>${pokemon.stats.hp}</td>
+                    <td>${pokemon.stats.atk}</td>
+                    <td>${pokemon.stats.def}</td>
+                    <td>${pokemon.stats.spa}</td>
+                    <td>${pokemon.stats.spd}</td>
+                    <td>${pokemon.stats.spe}</td>
+                    <td>${pokemon.stats.total}</td>
+                `;
+            }
+        }
+        // Append the table to the container
+        tableContainer.appendChild(table);
+        
+        // Append the container to the counterPokemon element
+        counterPokemon.appendChild(tableContainer);
+    }
+
     // Find counter pokemon of the pokemon
     async function findCounterPokemon(types, SP_stats) {
         // Check that the checkbox is checked
         const filterSpe_bst600 = filterCheckbox_bst600.checked;      
         const filterSpe_mega = filterCheckbox_mega.checked;          
-        const filterSpe_type = filterCheckbox_type.checked;          
-        const filterSpe_abilities = filterCheckbox_abilities.checked;
-        const filterSpe_baseStat = filterCheckbox_baseStat.checked;  
 
         // Clear Content to update
         counterPokemon.innerHTML = '';
@@ -1564,84 +1693,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear contents to prevent Race Condition
         progressContainer.style.width = `0%`;
         progressContainer.innerHTML = '';
-        counterPokemon.innerHTML = '';
 
-        // Create a container for the scrollable table
-        const tableContainer = document.createElement('div');
-        tableContainer.style.overflow = 'scroll';
-        var container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + evolution.clientHeight;
-        var container2 = statsHistogram.clientHeight + dfHead.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
-        var clientHeight = container1 > container2 ? container1 : container2;
-        var screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-        if(screenWidth>1024) {
-            tableContainer.style.height = clientHeight+'px';
-        } else {
-            tableContainer.style.height = '600px';
-        }
-        
-        // Create the table element
-        const table = document.createElement('table');
-        table.className = 'table';
-        table.innerHTML = '';
-
-        // Scroll to the top
-        scrollUpButton.addEventListener('click', () => {
-            tableContainer.scroll({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // Scroll to the bottom
-        scrollDownButton.addEventListener('click', () => {
-            tableContainer.scroll({
-                top: tableContainer.scrollHeight,
-                behavior: 'smooth'
-            });
-        });
-
-        // Create the table header
-        const headerRow = table.createTHead().insertRow();
-        headerRow.innerHTML = '<th>Sprite</th><th>Name</th>'
-        if(!filterSpe_type) headerRow.innerHTML += '<th>Types</th>';
-        if(!filterSpe_abilities) headerRow.innerHTML += '<th>Abilities</th>';
-        headerRow.innerHTML += '<th>Score</th>'
-        if(!filterSpe_baseStat) headerRow.innerHTML += '<th>HP</th><th>Atk</th><th>Def</th><th>SpA</th><th>SpD</th><th>Spe</th><th>BST</th>';
-
-        // Iterate through the sorted array and add rows to the table
-        for (const pokemon of pokemonArray) {    
-            // Add row to the table
-            const row = table.insertRow();
-            row.innerHTML = `
-            <td><img src="${pokemon.sprite}" alt="${pokemon.name}" width="50"></td>
-            <td>${pokemon.name}</td>
-            `;
-            if(!filterSpe_type){
-                row.innerHTML += `<td>${pokemon.types}</td>`;
-            }
-
-            if(!filterSpe_abilities){
-                row.innerHTML += `<td>${pokemon.abilities}</td>`;
-            } 
-
-            row.innerHTML += `<td>${pokemon.score}</td>`;
-            
-            if(!filterSpe_baseStat) {
-                row.innerHTML += `
-                    <td>${pokemon.stats.hp}</td>
-                    <td>${pokemon.stats.atk}</td>
-                    <td>${pokemon.stats.def}</td>
-                    <td>${pokemon.stats.spa}</td>
-                    <td>${pokemon.stats.spd}</td>
-                    <td>${pokemon.stats.spe}</td>
-                    <td>${pokemon.stats.total}</td>
-                `;
-            }
-        }
-        // Append the table to the container
-        tableContainer.appendChild(table);
-    
-        // Append the container to the counterPokemon element
-        counterPokemon.appendChild(tableContainer);
-    }  
+        makeTable(pokemonArray);
+    }
 });

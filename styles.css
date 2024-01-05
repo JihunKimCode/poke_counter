@@ -12,30 +12,35 @@
     font-style: normal;
 }
 
-/* Scroll Bar Width */
+/* Scroll Bar */
 ::-webkit-scrollbar {
-    scroll-behavior: smooth;
     width: 8px;
-    height: calc(100% - 3em);
-    overflow-y: auto;
+    height: 8px;
+    scroll-behavior: smooth;
+    overflow: scroll;
 }
 
-/* Scroll Bar Track */
+/* Track */
 ::-webkit-scrollbar-track {
     border: none;
     border-radius: 10px;
 }
 
-/* Scroll Bar Handle */
+/* Handle */
 ::-webkit-scrollbar-thumb {
-    background: var(--pokemoncolor, #1288f8);  
+    background: var(--pokemoncolor, #1288f8);
     border-radius: 20px;
 }
 
-/* Scroll Bar Handle on hover */
+/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--lightpokemoncolor, #00d6fa);  
+    background: var(--lightpokemoncolor, #00d6fa);
 }
+
+/* Down-right corner color */
+::-webkit-scrollbar-corner {
+    background: #f2f2f2;
+  }  
 
 body {
     font-family: 'NanumS', sans-serif;
@@ -43,6 +48,7 @@ body {
     margin: 0;
     padding: 0;
     font-size: 16px;
+    overflow-x: hidden;
 }
 
 h1{
@@ -658,17 +664,25 @@ audio::-webkit-media-controls-panel {
     display: table-row;
 }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    max-height: 600px;
+.tableContainer{
     overflow: scroll;
+    width: 100%;
+}
+
+.table {
+    border-collapse: collapse;
+}
+
+.table .thead{
+    position: sticky;
+    z-index: 1;
+    top: 0;
 }
 
 .table th, .table td {
     border: 2px solid #ddd;
     padding: 8px;
-    text-align: left;
+    text-align: center;
 }
 
 .table th {
