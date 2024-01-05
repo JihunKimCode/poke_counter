@@ -473,8 +473,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return bioInfo;
     }  
 
+    // Change pokemonName to get correct audio file
     function getAudio(name){
         let orig_name;
+
+        // Names for Substitute
         const specialMapping = {
             "dudunsparce-three-segment": { orig_name: "dudunsparce" },
             "eiscue-ice": { orig_name: "eiscue" },
@@ -498,7 +501,6 @@ document.addEventListener('DOMContentLoaded', () => {
             "toxtricity-amped": { orig_name: "toxtricity" },
             "toxtricity-low-key": { orig_name: "toxtricity-lowkey" },
             "ursaluna-bloodmoon": { orig_name: "ursaluna" },
-            "ursaluna-bloodmoon": { orig_name: "ursaluna" },
             "urshifu-rapid-strike": { orig_name: "urshifu-rapidstrike" },
             "urshifu-single-strike": { orig_name: "urshifu" },
             "wishiwashi-solo": { orig_name: "wishiwashi" },
@@ -506,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         let modifiedName = name;
-        // Assuming 'name' is the original name with or without "-gmax"
+        // Name that needs to remove description using regex
         modifiedName = modifiedName.replace(/aegislash-.*/i, "aegislash");
         modifiedName = modifiedName.replace(/basculin-.*/i, "basculin");
         modifiedName = modifiedName.replace(/basculegion-.*/i, "basculegion");
@@ -531,13 +533,15 @@ document.addEventListener('DOMContentLoaded', () => {
         modifiedName = modifiedName.replace(/terapagos-.*/i, "terapagos");
         modifiedName = modifiedName.replace(/wormadam-.*/i, "wormadam");
         
+        // Names to remove hyphen
         let nohyphen = 
             ["brute-bonnet", "chi-yu","chien-pao","flutter-mane", "gouging-fire", "great-tusk", "hakamo-o", "jangmo-o", "kommo-o",
-             "mime-jr", "mr-mime", "mr-rime", "nidoran-f","nidoran-m", "porygon-z", "raging-bolt", "roaring-mmon", "sandy-shocks", "scream-tail",
-             "tapu-bulu","tapu-fini","tapu-koko","tapu-lele", "ting-lu", "type-null", "walking-wake", "wo-chien"]
+             "mime-jr", "mr-mime", "mr-rime", "nidoran-f","nidoran-m", "porygon-z", "raging-bolt", "roaring-mmon", "sandy-shocks", 
+             "scream-tail", "tapu-bulu","tapu-fini","tapu-koko","tapu-lele", "ting-lu", "type-null", "walking-wake", "wo-chien"]
 
         if(nohyphen.includes(modifiedName)) modifiedName = modifiedName.replace("-","");
 
+        // Names to remove gimmick using simple replace
         modifiedName = modifiedName.replace("-gmax", "");
         modifiedName = modifiedName.replace("-alola", "");
         modifiedName = modifiedName.replace("-totem", "");
