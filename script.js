@@ -5,6 +5,73 @@ function clearInput() {
     clearButton.style.display = 'none';
 }
 
+// Trace whether TTS is on or off
+let currentUtterance = null;
+
+// Event listener for page refresh
+window.addEventListener('beforeunload', function () {
+    if (currentUtterance) {
+        // If ongoing speech, stop it before leaving the page
+        window.speechSynthesis.cancel();
+        currentUtterance = null;
+    }
+});
+
+// TTS Trivia
+function speakText(textToSpeak) {
+    // Check if there is an ongoing speech
+    if (currentUtterance) {
+        // If ongoing, stop the current speech
+        window.speechSynthesis.cancel();
+        currentUtterance = null;
+        return;
+    }
+
+    // Wrap the voice loading in a promise
+    function loadVoices() {
+        return new Promise(function (resolve) {
+            if (speechSynthesis.getVoices().length > 0) {
+                resolve();
+            } else {
+                window.speechSynthesis.onvoiceschanged = function () {
+                    resolve();
+                };
+            }
+        });
+    }
+
+    // Use the promise to ensure voices are loaded before proceeding
+    loadVoices().then(function () {
+        var utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+        var selectedVoice = speechSynthesis.getVoices().find(function (voice) {
+            return voice.name === 'Microsoft Mark - English (United States)';
+        });
+
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        } else {
+            console.error('Voice not found.');
+            return;
+        }
+
+        // Set the speed
+        utterance.rate = 1.0;
+
+        // Speak the text
+        window.speechSynthesis.speak(utterance);
+
+        // Update the currentUtterance variable
+        currentUtterance = utterance;
+
+        // Listen for the end of speech
+        utterance.onend = function () {
+            // Reset the currentUtterance variable when speech ends
+            currentUtterance = null;
+        };
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const randomItem = document.getElementById('randomItem');
 
@@ -74,6 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
     searchButton.addEventListener('click', () => {
         newItem();
         performSearch();
+
+        // If ongoing speech, stop it when the search button is clicked
+        if (currentUtterance) {
+            window.speechSynthesis.cancel();
+            currentUtterance = null;
+        }    
     });
 
     // Add a keydown event listener to the input field
@@ -83,6 +156,12 @@ document.addEventListener('DOMContentLoaded', () => {
             newItem();
             performSearch();
         }
+
+        // If ongoing speech, stop it when the search box is activated
+        if (currentUtterance) {
+            window.speechSynthesis.cancel();
+            currentUtterance = null;
+        }    
     });
 
     // Random Item next to the title
@@ -845,9 +924,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 forms.innerHTML += `
                     <div class="tooltip-items">
-                        <img src="${sprite}" 
-                             alt = "${pokemonName}"
-                             width = "60px">
+                        <img src="${sprite}" alt = "${pokemonName}" width = "60px">
                         <span class="tooltiptext">${pokemonName}</span>
                     </div>`;
             }
@@ -863,9 +940,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
             heldItems.innerHTML+=`
                 <div class="tooltip-items">
-                    <img src="${itemImage}" 
-                         alt = "held-item"
-                         width = "50px">
+                    <img src="${itemImage}" alt = "held-item" width = "50px">
                     <span class="tooltiptext">${itemName}</span>
                 </div>
             `;
@@ -901,13 +976,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         if(speciesData.flavor_text_entries.length===0) flavorTexts.push("undefined");
-        
+        const flavorText = flavorTexts[Math.floor(Math.random()*flavorTexts.length)];
+
         others.innerHTML = `
             <h3>Egg Groups</h3>
             <p>${eggGroup.join(', ')}</p>
-            <h3>Trivia</h3>
+            <h3>
+                Trivia
+                <img id="speakButton" 
+                     onclick="speakText('${speciesData.name}, ${genera}, ${flavorText.replace(/\n/g, '').replace(/'/g, '’')}')"
+                     src='https://archives.bulbagarden.net/media/upload/1/10/0479Rotom-Pok%C3%A9dex.png'
+                     alt = "pokeDex">
+            </h3>
             <p>${genera}</p>
-            <p>${flavorTexts[Math.floor(Math.random()*flavorTexts.length)]}</p>
+            <p>${flavorText}</p>
         `;
     }
     
@@ -933,9 +1015,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const imgTooltip = `
                 <div class="tooltip-pokemon">
-                    <img src="${img}" 
-                         alt="${pokemonName}" 
-                         width="60px"/>
+                    <img src="${img}" alt="${pokemonName}" width="60px"/>
                     <span class="tooltiptext">${pokemonName}</span>
                 </div>`
         
@@ -1203,10 +1283,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const weaknessImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedWeakness}.png`;
             return `
             <div class="tooltip-types">
-                <img src="${weaknessImageUrl}" 
-                     alt="${weakness}"
-                     class="type-image" 
-                     width="40px" > 
+                <img src="${weaknessImageUrl}" alt="${weakness}" class="type-image" width="40px" > 
                 x${count === 2 ? 4 : count === 1 ? 2 : 1}
                 <span class="tooltiptext">${weakness}</span>
             </div>`;
@@ -1252,10 +1329,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const resistanceImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedResistance}.png`;
             return `
             <div class="tooltip-types">
-                <img src="${resistanceImageUrl}" 
-                     alt="${resistance}"
-                     class="type-image" 
-                     width="40px"> 
+                <img src="${resistanceImageUrl}" alt="${resistance}" class="type-image"  width="40px"> 
                 x${count === 2 ? 1 / 4 : count === 1 ? 1 / 2 : 1}
                 <span class="tooltiptext">${resistance}</span>
             </div>`;
@@ -1279,10 +1353,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const invalImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedInval}.png`;
             return `
             <div class="tooltip-types">
-                <img src="${invalImageUrl}" 
-                    alt="${inval}"
-                    class="type-image" 
-                    width="40px">
+                <img src="${invalImageUrl}" alt="${inval}" class="type-image"  width="40px">
                 <span class="tooltiptext">${inval}</span>
             </div>`;
         });

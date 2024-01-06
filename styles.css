@@ -462,6 +462,11 @@ audio::-webkit-media-controls-panel {
     visibility: visible;
 }
 
+#speakButton{
+    width: 25px;
+    height: auto;
+}
+
 #others{
     width: 90%;
     line-height: 1.5;
