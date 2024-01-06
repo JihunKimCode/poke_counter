@@ -10,7 +10,7 @@ Search Pokémon information as well as counter Pokémon.
     - [x] Other Forms (e.g. Mega, Gmax, Form-Change)
 - [x] **ID**
 - [x] **Pokemon Information**
-    - [x] Height, weight, gender rate
+    - [x] Height, weight, gender rate, shape
     - [x] Pokemon cry
     - [x] Wild Pokemon (EVs, held-item)
     - [x] Egg Groups

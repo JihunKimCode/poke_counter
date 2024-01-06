@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chooseSprite = document.getElementById('chooseSprite');
     const selectSprite = document.getElementById('spriteType');
     const pokemonInfo = document.getElementById('pokemonInfo');
+    const typeAbility = document.getElementById('typeAbility');
     const evolution = document.getElementById('evolution');
     
     const filter_shiny = document.getElementById('filter_shiny');
@@ -431,7 +432,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 findColors(data.name, data.id);
 
                 // Main Body
-                getPokemonInfo(data.name, data.id, sprites, types, abilities, data.height, data.weight, speciesData.gender_rate);
+                getPokemonInfo(data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, speciesData.shape.name);
+                getTypeAbility(types, abilities);
                 getEvolution(speciesData.evolution_chain.url);
                 displayStatsHistogram(statsData);
                 showForms(speciesUrl);
@@ -450,95 +452,97 @@ document.addEventListener('DOMContentLoaded', () => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
       
-    // Get the information of the pokemon
-    function getPokemonInfo(name, id, sprites, types, abilities, height, weight, gender_rate){
+    // Get the bioInfo of the pokemon
+    function getPokemonInfo(name, id, sprites, height, weight, gender_rate, shape){
         // Trace Pokemon's information
         const image = getSprite(sprites);
-        const bioInfo = getBioInfo(height, weight, gender_rate);
+        const bioInfo = getBioInfo(height, weight, gender_rate, shape);
         
         const audio = getAudio(name);
-
-        // Get weaknesses, resistances, and invalid
-        const weaknesses = getWeaknesses(types);
-        const resistances = getResistances(types);
-        const invalid = getInvalid(types);
-        
-        // Display the weaknesses, resistances, and invalid
-        const weaknessesHtml = weaknesses.length > 0 ? `<h3>Weaknesses</h3><p>${weaknesses.join('&nbsp')}</p>` : '';
-        const resistancesHtml = resistances.length > 0 ? `<h3>Resistances</h3><p>${resistances.join('&nbsp')}</p>` : '';
-        const invalidHtml = invalid.length > 0 ? `<h3>Invalids</h3><p>${invalid.join('&nbsp')}</p>` : '';
-
-        const typeImages = types.map(type => 
-        `<div class="tooltip-types">
-            <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" 
-                 alt="${type}" 
-                 class="type-image" 
-                 width="40px">
-            <span class="tooltiptext">${type}</span>
-        </div>`
-        );
     
         pokeHead.innerHTML = `${name.toUpperCase()}`;
-        const html = `
+        pokemonInfo.innerHTML = `
             <div>
                 <img src="${image[0]}" alt="${name}" width="130" class="pokemon-image">
                 <img src="${image[1]}" alt="${name}" width="130" class="pokemon-image2">
             </div>
             <p>Pokédex #${id}</p>
-            <p>${bioInfo}</p>
+            <div class="bioInfo">${bioInfo}</div>
             <audio controls>
                 <source src="${audio}" type="audio/mp3">
                 Your browser does not support the audio element.
             </audio>
-            <h3>Types</h3>
-            ${typeImages.join('&nbsp&nbsp')}
-            ${weaknessesHtml}
-            ${resistancesHtml}
-            ${invalidHtml}
-            <h3>Abilities</h3>
-            <p>${abilities}</p>
         `;
-        pokemonInfo.innerHTML = html;
     }
 
     // Take weight, height, and gender rate of the pokemon
-    function getBioInfo(height, weight, gender_rate){
-        let bioInfo = `<div style="display: inline-block; margin-right: 10px;">
+    function getBioInfo(height, weight, gender_rate, shape){
+        let bioInfo = `<div class="bioInfoBlock">
                             <i class="fa-solid fa-ruler-vertical"></i> 
                             ${(height/10).toFixed(1)}m
                         </div>`;
         
         if(weight<1500){
             // Weight Scale
-            bioInfo += `<div style="display: inline-block; margin-right: 10px;">
+            bioInfo += `<div class="bioInfoBlock">
                             <i class="fa-solid fa-weight-scale"></i>
                             ${(weight/10).toFixed(1)}kg
                         </div>`;
         } else {
             // Weight Hanging
-            bioInfo += `<div style="display: inline-block; margin-right: 10px;">
+            bioInfo += `<div class="bioInfoBlock">
                             <i class="fa-solid fa-weight-hanging"></i> 
                             ${(weight/10).toFixed(1)}kg
                         </div>`;
         }
 
         if (gender_rate === -1) {
-            bioInfo += `<div style="display: inline-block;">
+            bioInfo += `<div class="bioInfoBlock">
                             <i class="fa-solid fa-genderless"></i> 
                             genderless
                         </div>`;
         } else {
             bioInfo += `
-                <div style="display: inline-block; margin-right: 10px;">
+                <div class="bioInfoBlock">
                     <i class="fa-solid fa-mars"></i> 
                     ${(8 - gender_rate) / 8 * 100}%
                 </div>
-                <div style="display: inline-block;">
+                <div class="bioInfoBlock">
                     <i class="fa-solid fa-venus"></i> 
                     ${gender_rate / 8 * 100}%
                 </div>
             `;
         }
+
+        // Take image matched to the shape name
+        const shapeMapping = {
+            "ball": {image: "https://static.wikia.nocookie.net/pokemon/images/9/9d/Shape01.png/revision/latest?cb=20210318214329"},
+            "squiggle" : {image: "https://static.wikia.nocookie.net/pokemon/images/4/4c/Shape02.png/revision/latest?cb=20210318214404"},
+            "fish" : {image: "https://static.wikia.nocookie.net/pokemon/images/d/de/Shape03.png/revision/latest?cb=20210318214437"},
+            "arms" : {image: "https://static.wikia.nocookie.net/pokemon/images/8/8a/Shape04.png/revision/latest?cb=20210318214533"},
+            "blob" : {image: "https://static.wikia.nocookie.net/pokemon/images/8/86/Shape05.png/revision/latest?cb=20210318214621"},
+            "upright" : {image: "https://static.wikia.nocookie.net/pokemon/images/1/16/Shape06.png/revision/latest?cb=20210318214549"},
+            "legs" : {image: "https://static.wikia.nocookie.net/pokemon/images/a/a7/Shape07.png/revision/latest?cb=20210318214451"},
+            "quadruped" : {image: "https://static.wikia.nocookie.net/pokemon/images/6/6f/Shape08.png/revision/latest?cb=20210318214345"},
+            "wings" : {image: "https://static.wikia.nocookie.net/pokemon/images/2/22/Shape09.png/revision/latest?cb=20210318214250"},
+            "tentacles" : {image: "https://static.wikia.nocookie.net/pokemon/images/6/65/Shape10.png/revision/latest?cb=20210318214504"},
+            "heads" : {image: "https://static.wikia.nocookie.net/pokemon/images/0/06/Shape11.png/revision/latest?cb=20210318214636"},
+            "humanoid" : {image: "https://static.wikia.nocookie.net/pokemon/images/b/b6/Shape12.png/revision/latest?cb=20210318214606"},
+            "bug-wings" : {image: "https://static.wikia.nocookie.net/pokemon/images/5/5a/Shape13.png/revision/latest?cb=20210318214520"},
+            "armor" : {image: "https://static.wikia.nocookie.net/pokemon/images/0/06/Shape14.png/revision/latest?cb=20210318214421"}
+        }
+
+        let image;
+        if (shape in shapeMapping) {
+            ({ image } = shapeMapping[shape]);
+        } else {
+            image = "";
+        }
+
+        bioInfo += `<div>
+                        <img src="${image}" alt="${shape}" width="25" class="shape">
+                    </div>`;
+
         return bioInfo;
     }  
 
@@ -633,6 +637,39 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let audio = `https://play.pokemonshowdown.com/audio/cries/${orig_name}.mp3`;
         return audio;
+    }
+
+    // Get type and ability info of the pokemon
+    function getTypeAbility(types, abilities){
+        // Get weaknesses, resistances, and invalid
+        const weaknesses = getWeaknesses(types);
+        const resistances = getResistances(types);
+        const invalid = getInvalid(types);
+        
+        // Display the weaknesses, resistances, and invalid
+        const weaknessesHtml = weaknesses.length > 0 ? `<h3>Weaknesses</h3><p>${weaknesses.join('&nbsp')}</p>` : '';
+        const resistancesHtml = resistances.length > 0 ? `<h3>Resistances</h3><p>${resistances.join('&nbsp')}</p>` : '';
+        const invalidHtml = invalid.length > 0 ? `<h3>Invalids</h3><p>${invalid.join('&nbsp')}</p>` : '';
+
+        const typeImages = types.map(type => 
+            `<div class="tooltip-types">
+                <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" 
+                     alt="${type}" 
+                     class="type-image" 
+                     width="40px">
+                <span class="tooltiptext">${type}</span>
+            </div>`
+            );
+
+        typeAbility.innerHTML = `
+            <h3>Types</h3>
+                ${typeImages.join('&nbsp&nbsp')}
+                ${weaknessesHtml}
+                ${resistancesHtml}
+                ${invalidHtml}
+                <h3>Abilities</h3>
+                <p>${abilities}</p>
+            `;
     }
 
     // Add event listener to the dropdown menu
@@ -981,12 +1018,12 @@ document.addEventListener('DOMContentLoaded', () => {
         others.innerHTML = `
             <h3>Egg Groups</h3>
             <p>${eggGroup.join(', ')}</p>
-            <h3>
+            <h3 id="pokedex">
                 Trivia
                 <img id="speakButton" 
                      onclick="speakText('${speciesData.name}, ${genera}, ${flavorText.replace(/\n/g, '').replace(/'/g, '’')}')"
-                     src='https://archives.bulbagarden.net/media/upload/1/10/0479Rotom-Pok%C3%A9dex.png'
-                     alt = "pokeDex">
+                     src = 'https://static.wikia.nocookie.net/pokemon/images/4/4c/%EB%A1%9C%ED%86%A0%EB%AC%B4_%EB%8F%84%EA%B0%90_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/1000?cb=20161201094125&path-prefix=ko'
+                     alt = "">
             </h3>
             <p>${genera}</p>
             <p>${flavorText}</p>
@@ -1486,7 +1523,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tableContainer = document.querySelector('.tableContainer');
         const table = document.querySelector('.table');
         if (tableContainer) {
-            const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + evolution.clientHeight;
+            const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + typeAbility.clientHeight + evolution.clientHeight;
             const container2 = statsHistogram.clientHeight + dfHead.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
             const clientHeight = container1 > container2 ? container1 : container2;
             const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
@@ -1522,7 +1559,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create a container for the scrollable table
         const tableContainer = document.createElement('div');
         tableContainer.className = 'tableContainer';
-        const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + evolution.clientHeight;
+        const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + typeAbility.clientHeight + evolution.clientHeight;
         const container2 = statsHistogram.clientHeight + dfHead.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
         const clientHeight = container1 > container2 ? container1 : container2;
         const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
