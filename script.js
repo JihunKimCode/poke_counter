@@ -428,7 +428,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 global_statsData = statsData;
                 global_speciesUrl = speciesUrl;
                 
-                console.log(speciesData);
                 // Update theme colors
                 findColors(data.name, data.id);
 
