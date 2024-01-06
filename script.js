@@ -428,6 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 global_statsData = statsData;
                 global_speciesUrl = speciesUrl;
                 
+                console.log(speciesData);
                 // Update theme colors
                 findColors(data.name, data.id);
 
@@ -993,8 +994,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 Trivia
                 <img id="speakButton" 
                      onclick="speakText('${speciesData.name}, ${genera}, ${flavorText.replace(/\n/g, '').replace(/'/g, '’')}')"
-                     src = 'https://static.wikia.nocookie.net/pokemon/images/4/4c/%EB%A1%9C%ED%86%A0%EB%AC%B4_%EB%8F%84%EA%B0%90_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/1000?cb=20161201094125&path-prefix=ko'
-                     alt = "">
+                     src = 'https://www.tv-tokyo.co.jp/anime/pokemon_sunmoon/images/chara/chara02.png'
+                     alt = ""
+                     onerror="this.style.display='none';">
             </h3>
             <p>${genera}</p>
             <p>${flavorText}</p>
