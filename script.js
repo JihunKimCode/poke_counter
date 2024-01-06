@@ -432,7 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 findColors(data.name, data.id);
 
                 // Main Body
-                getPokemonInfo(data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, speciesData.shape.name);
+                getPokemonInfo(data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate);
                 getTypeAbility(types, abilities);
                 getEvolution(speciesData.evolution_chain.url);
                 displayStatsHistogram(statsData);
@@ -453,10 +453,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
       
     // Get the bioInfo of the pokemon
-    function getPokemonInfo(name, id, sprites, height, weight, gender_rate, shape){
+    function getPokemonInfo(name, id, sprites, height, weight, gender_rate){
         // Trace Pokemon's information
         const image = getSprite(sprites);
-        const bioInfo = getBioInfo(height, weight, gender_rate, shape);
+        const bioInfo = getBioInfo(height, weight, gender_rate);
         
         const audio = getAudio(name);
     
@@ -476,7 +476,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Take weight, height, and gender rate of the pokemon
-    function getBioInfo(height, weight, gender_rate, shape){
+    function getBioInfo(height, weight, gender_rate){
         let bioInfo = `<div class="bioInfoBlock">
                             <i class="fa-solid fa-ruler-vertical"></i> 
                             ${(height/10).toFixed(1)}m
@@ -513,35 +513,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         }
-
-        // Take image matched to the shape name
-        const shapeMapping = {
-            "ball": {image: "https://static.wikia.nocookie.net/pokemon/images/9/9d/Shape01.png/revision/latest?cb=20210318214329"},
-            "squiggle" : {image: "https://static.wikia.nocookie.net/pokemon/images/4/4c/Shape02.png/revision/latest?cb=20210318214404"},
-            "fish" : {image: "https://static.wikia.nocookie.net/pokemon/images/d/de/Shape03.png/revision/latest?cb=20210318214437"},
-            "arms" : {image: "https://static.wikia.nocookie.net/pokemon/images/8/8a/Shape04.png/revision/latest?cb=20210318214533"},
-            "blob" : {image: "https://static.wikia.nocookie.net/pokemon/images/8/86/Shape05.png/revision/latest?cb=20210318214621"},
-            "upright" : {image: "https://static.wikia.nocookie.net/pokemon/images/1/16/Shape06.png/revision/latest?cb=20210318214549"},
-            "legs" : {image: "https://static.wikia.nocookie.net/pokemon/images/a/a7/Shape07.png/revision/latest?cb=20210318214451"},
-            "quadruped" : {image: "https://static.wikia.nocookie.net/pokemon/images/6/6f/Shape08.png/revision/latest?cb=20210318214345"},
-            "wings" : {image: "https://static.wikia.nocookie.net/pokemon/images/2/22/Shape09.png/revision/latest?cb=20210318214250"},
-            "tentacles" : {image: "https://static.wikia.nocookie.net/pokemon/images/6/65/Shape10.png/revision/latest?cb=20210318214504"},
-            "heads" : {image: "https://static.wikia.nocookie.net/pokemon/images/0/06/Shape11.png/revision/latest?cb=20210318214636"},
-            "humanoid" : {image: "https://static.wikia.nocookie.net/pokemon/images/b/b6/Shape12.png/revision/latest?cb=20210318214606"},
-            "bug-wings" : {image: "https://static.wikia.nocookie.net/pokemon/images/5/5a/Shape13.png/revision/latest?cb=20210318214520"},
-            "armor" : {image: "https://static.wikia.nocookie.net/pokemon/images/0/06/Shape14.png/revision/latest?cb=20210318214421"}
-        }
-
-        let image;
-        if (shape in shapeMapping) {
-            ({ image } = shapeMapping[shape]);
-        } else {
-            image = "";
-        }
-
-        bioInfo += `<div>
-                        <img src="${image}" alt="${shape}" width="25" class="shape">
-                    </div>`;
 
         return bioInfo;
     }  
