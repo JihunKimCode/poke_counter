@@ -1,3 +1,8 @@
+// Capitalize the first letter of a string
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 // Clear context in search input
 function clearInput() {
     searchInput.value = '';
@@ -73,8 +78,6 @@ function speakText(textToSpeak) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const randomItem = document.getElementById('randomItem');
-
     // Search Bar
     const searchInput = document.getElementById('searchInput');
     const clearButton = document.getElementById('clearButton');
@@ -432,8 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 findColors(data.name, data.id);
 
                 // Main Body
-                getPokemonInfo(data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate);
-                getTypeAbility(types, abilities);
+                getPokemonInfo(data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, speciesData.shape.name);                getTypeAbility(types, abilities);
                 getEvolution(speciesData.evolution_chain.url);
                 displayStatsHistogram(statsData);
                 showForms(speciesUrl);
@@ -446,18 +448,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error(error);
             });
     }
-
-    // Capitalize the first letter of a string
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
       
     // Get the bioInfo of the pokemon
-    function getPokemonInfo(name, id, sprites, height, weight, gender_rate){
+    function getPokemonInfo(name, id, sprites, height, weight, gender_rate, shape){
         // Trace Pokemon's information
         const image = getSprite(sprites);
-        const bioInfo = getBioInfo(height, weight, gender_rate);
-        
+        const bioInfo = getBioInfo(height, weight, gender_rate, shape);        
         const audio = getAudio(name);
     
         pokeHead.innerHTML = `${name.toUpperCase()}`;
@@ -476,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Take weight, height, and gender rate of the pokemon
-    function getBioInfo(height, weight, gender_rate){
+    function getBioInfo(height, weight, gender_rate, shape){
         let bioInfo = `<div class="bioInfoBlock">
                             <i class="fa-solid fa-ruler-vertical"></i> 
                             ${(height/10).toFixed(1)}m
@@ -513,6 +509,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         }
+
+        // Take image matched to the shape name
+        const shapeMapping = {
+            "ball": {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/head-gen8.png"},
+            "squiggle" : {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/serpentine-gen8.png"},
+            "fish" : {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/fins-gen8.png"},
+            "arms" : {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/head-arms-gen8.png"},
+            "blob" : {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/head-base-gen8.png"},
+            "upright" : {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/bipedal-tailed-gen8.png"},
+            "legs" : {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/head-legs-gen8.png"},
+            "quadruped" : {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/quadruped-gen8.png"},
+            "wings" : {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/wings-single-gen8.png"},
+            "tentacles" : {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/tentacles-gen8.png"},
+            "heads" : {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/multiple-gen8.png"},
+            "humanoid" : {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/bipedal-tailless-gen8.png"},
+            "bug-wings" : {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/wings-multiple-gen8.png"},
+            "armor" : {image: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/body-style/insectoid-gen8.png"}
+        }
+
+        let image;
+        if (shape in shapeMapping) {
+            ({ image } = shapeMapping[shape]);
+        } else {
+            image = "";
+        }
+
+        bioInfo += `<div>
+                        <img src="${image}" alt="${shape}" width="25" class="shape">
+                    </div>`;
 
         return bioInfo;
     }  
@@ -960,32 +985,30 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Write Trivia of the Pokemon
     function trivia(speciesData){
-        let genera, eggGroup = [], flavorTexts = [];
-
-        // Take All Egg Groups
-        for(var i = 0; i<speciesData.egg_groups.length; i++){
-            eggGroup.push(speciesData.egg_groups[i].name);
-        }
-        if(speciesData.egg_groups.length===0) eggGroup.push("undefined");
+        let genera = "undefined";
+        let eggGroup = ["undefined"];
+        let flavorTexts = ["undefined"];
         
         // Take English Genera
-        for(var i = 0; i<speciesData.genera.length; i++){
-            if(speciesData.genera[i].language.name==="en"){
+        for (let i = 0; i < speciesData.genera.length; i++) {
+            if (speciesData.genera[i].language.name === "en") {
                 genera = speciesData.genera[i].genus;
                 break;
             }
         }
-        if(speciesData.genera.length===0) genera = "undefined";
-
+        
+        // Take All Egg Groups
+        eggGroup = speciesData.egg_groups.map(group => group.name);
+        if (eggGroup.length === 0) eggGroup = ["undefined"];
+        
         // Take All English Flavor Texts
-        for(var i = 0; i<speciesData.flavor_text_entries.length; i++){
-            if(speciesData.flavor_text_entries[i].language.name==="en"){
-                flavorTexts.push(speciesData.flavor_text_entries[i].flavor_text);
-            }
-        }
-        if(speciesData.flavor_text_entries.length===0) flavorTexts.push("undefined");
-        const flavorText = flavorTexts[Math.floor(Math.random()*flavorTexts.length)];
-
+        flavorTexts = speciesData.flavor_text_entries
+            .filter(entry => entry.language.name === "en")
+            .map(entry => entry.flavor_text);
+        if (flavorTexts.length === 0) flavorTexts = ["undefined"];
+        
+        const flavorText = flavorTexts[Math.floor(Math.random() * flavorTexts.length)];
+        
         others.innerHTML = `
             <h3>Egg Groups</h3>
             <p>${eggGroup.join(', ')}</p>
@@ -1772,3 +1795,182 @@ document.addEventListener('DOMContentLoaded', () => {
         makeTable(pokemonArray);
     }
 });
+
+/***************
+ *  Move.html  *
+ ***************/
+const randomItem = document.getElementById('randomItem');
+const moveName = document.getElementById('moveName');
+
+const moveDetailsDiv = document.getElementById("moveDetails");
+const learnGroupDiv = document.getElementById("learnGroup");
+
+const moveNameDisplay = document.getElementById("moveNameDisplay");
+const moveType = document.getElementById("moveType");
+const moveDamageClass = document.getElementById("moveDamageClass");
+
+const moveInfo = document.getElementById("moveInfo");
+const movePower = document.getElementById("movePower");
+const moveAccuracy = document.getElementById("moveAccuracy");
+const movePP = document.getElementById("movePP");
+const effect = document.getElementById("effect");
+const ailment = document.getElementById("ailment");
+const moveAilmentChance = document.getElementById("moveAilmentChance");
+const ailmentEffect = document.getElementById("left-half-effect");
+const moveGeneration = document.getElementById("moveGeneration");
+
+const moveTarget = document.getElementById("moveTarget");
+const moveStatChanges = document.getElementById("moveStatChanges");
+const movePriority = document.getElementById("movePriority");
+const learnedByPokemon = document.getElementById("learnedByPokemon");  
+
+// Add a keydown event listener to the input field
+moveName.addEventListener('keydown', (event) => {
+    // Check if the key pressed is the Enter key (key code 13)
+    if (event.keyCode === 13) {
+        searchMove();
+    }
+});
+
+async function searchMove() {
+    const moveNameInput = document.getElementById("moveName").value.toLowerCase().replace(/\s+/g, '-');
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/move/${moveNameInput}/`);
+        const moveData = await response.json();
+        console.log(moveData);
+
+        moveNameDisplay.textContent = moveData.name.toUpperCase();
+        moveType.innerHTML =  `
+            <div class="tooltip-types">
+                <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(moveData.type.name)}.png" 
+                    alt="${moveData.type.name}" 
+                    class="type-image" 
+                    width="60px">
+                <span class="tooltiptext">${moveData.type.name}</span>
+            </div>
+            <div class="tooltip-types">
+                <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/misc/seals/home/move-${moveData.damage_class.name}.png" 
+                    alt="${moveData.damage_class.name}" 
+                    class="type-image" 
+                    width="60px">
+                <span class="tooltiptext">${moveData.damage_class.name}</span>
+            </div>
+            `
+        if(moveData.damage_class.name==="physical"){
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-band.png';
+            randomItem.title = 'choice-band';
+        } else if(moveData.damage_class.name==="special"){
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-specs.png';
+            randomItem.title = 'choice-specs';
+        } else {
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/focus-sash.png';
+            randomItem.title = 'focus-sash';
+        }
+
+        movePower.textContent = moveData.power || "N/A";
+        moveAccuracy.textContent = moveData.accuracy || "N/A";
+        movePP.textContent = moveData.pp || "N/A";
+        
+        if(moveData.effect_entries.length>0){
+            effect.innerHTML = `
+                <h3>Short Description</h3>
+                <p>${moveData.effect_entries[0].short_effect || ""}</p>
+                <h3>Long Description</h3>
+                <p>${moveData.effect_entries[0].effect || ""}</p>
+            `;
+        }
+        
+        moveTarget.textContent = moveData.target.name || "N/A";
+        moveStatChanges.textContent = JSON.stringify(moveData.stat_changes) || "N/A";
+        
+        ailment.textContent = moveData.meta.ailment.name==="none" ? "Effect" : capitalizeFirstLetter(moveData.meta.ailment.name);
+        moveAilmentChance.textContent = moveData.meta.ailment_chance === 0? moveData.effect_chance||"N/A" : moveData.meta.ailment_chance || "N/A";
+        if(moveData.meta.ailment.name === "freeze") {
+            ailmentEffect.style.backgroundColor="#00d6fa";
+        } else if(moveData.meta.ailment.name === "burn") {
+            ailmentEffect.style.backgroundColor="#ff0800";
+        } else if(moveData.meta.ailment.name === "paralysis") {
+            ailmentEffect.style.backgroundColor="#ffd300";
+        } else if(moveData.meta.ailment.name === "poison") {
+            ailmentEffect.style.backgroundColor="purple";
+        } else if(moveData.meta.ailment.name === "none") {
+            ailmentEffect.style.backgroundColor="black";
+        } else {
+            ailmentEffect.style.backgroundColor="gray";
+        }
+
+        movePriority.textContent = moveData.priority || moveData.priority === 0 ? 0 : "N/A";
+        moveGeneration.textContent = (moveData.generation.name).split('-')[1].toUpperCase() || "N/A";
+        
+        const flavorTextEntries = moveData.flavor_text_entries.filter(entry => entry.language.name === "en");
+
+        if (flavorTextEntries.length > 0) {
+            const randomIndex = Math.floor(Math.random() * flavorTextEntries.length);
+            const randomFlavorTextEntry = flavorTextEntries[randomIndex];
+            effect.innerHTML += `<h3>PokéDex Description</h3>`;
+            effect.innerHTML += randomFlavorTextEntry.flavor_text;
+        } else {
+            effect.textContent = "N/A";
+        }
+
+        if (moveData.learned_by_pokemon) {
+            const pokemonList = moveData.learned_by_pokemon;
+            const sprites = await Promise.all(pokemonList.map(async pokemon => {
+                const pokemonData = await fetch(pokemon.url);
+                const pokemonDetails = await pokemonData.json();
+                return pokemonDetails.sprites.front_default;
+            }));
+
+            learnedByPokemon.innerHTML = '';
+            for (let i = 0; i < pokemonList.length; i++) {
+                const sprite = sprites[i];
+                const pokemonName = pokemonList[i].name;
+                const img = document.createElement('img');
+                img.src = sprite || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+                img.alt = pokemonName;
+                img.title = pokemonName;
+                img.style.width = "60px"
+                learnedByPokemon.appendChild(img);
+            }
+        } else {
+            learnedByPokemon.textContent = "N/A";
+        }
+
+        const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+        if (screenWidth > 767) {
+            moveDetailsDiv.style.display = "table-cell";
+            learnGroupDiv.style.display = "table-cell";  
+            moveDetailsDiv.style.height = "850px";    
+            learnGroupDiv.style.height = "850px";      
+        } else {
+            moveDetailsDiv.style.display = "table-cell";
+            learnGroupDiv.style.display = "table-row";
+            moveDetailsDiv.style.height = "100%";    
+            learnGroupDiv.style.height = "100%";    
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Move not found. Please try again.");
+    }
+}
+
+// Resize Counter Pokemon Table when the screen is resized
+window.addEventListener('resize', function() {
+    updateDisplay();
+});
+
+// Update table width and height when user resize the screen
+function updateDisplay(){
+    const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+    if (screenWidth > 767) {
+        moveDetailsDiv.style.display = "table-cell";
+        learnGroupDiv.style.display = "table-cell";  
+        moveDetailsDiv.style.height = "850px";    
+        learnGroupDiv.style.height = "850px";      
+    } else {
+        moveDetailsDiv.style.display = "table-cell";
+        learnGroupDiv.style.display = "table-row";
+        moveDetailsDiv.style.height = "100%";    
+        learnGroupDiv.style.height = "100%";    
+    }
+}

@@ -1,0 +1,122 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Move Searcher</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+</head>
+<body>
+    <div class="topnav">
+        <div>
+            <h1>
+            <a
+                href="https://github.com/JihunKimCode/poke_counter"
+                class="btn btn-github"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <i class="fab fa-github"></i>
+            </a>
+            <img id = "randomItem" 
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/focus-sash.png" 
+            alt="focus-sash" 
+            title="focus-sash">
+            <a
+                href="https://jihunkimcode.github.io/poke_counter/"
+                rel="noopener noreferrer"
+            >
+            Pokémon Move Searcher
+            </a>
+            </h1>
+        </div>
+        <!-- Top nav and search bar-->
+        <div class="search-container">
+            <input type="text" id="moveName" placeholder="Enter move name" autocomplete="off">
+            <button id="moveSearchButton" onclick="searchMove()"><i class="fa fa-search"></i></button>
+            <div id="clearButton" ><i class="fa-solid fa-xmark"></i></div>
+            <div id="pokemonDropdown"></div>
+        </div>
+    </div>
+    <div class="information">
+        <div id="moveDetails">
+            <h2 id="moveNameDisplay"></h2>
+            <p id="moveType"></p>
+            <div id="moveInfo">
+                <div class="split-box">
+                    <div class="left-half">
+                    <strong>Power</strong>
+                    </div>
+                    <div class="right-half">
+                    <p id="movePower"></p>
+                    </div>
+                </div>      
+                <div class="split-box">
+                    <div class="left-half">
+                    <strong>Accuracy</strong>
+                    </div>
+                    <div class="right-half">
+                    <p id="moveAccuracy"></p>
+                    </div>
+                </div>   
+                <div class="split-box">
+                    <div class="left-half">
+                    <strong>PP</strong>
+                    </div>
+                    <div class="right-half">
+                    <p id="movePP"></p>
+                    </div>
+                </div>
+            </div>   
+            <div id="moveInfo">
+                <div class="split-box">
+                    <div class="left-half">
+                    <strong>Priority</strong>
+                    </div>
+                    <div class="right-half">
+                    <p id="movePriority"></p>
+                    </div>
+                </div>              
+                <div class="split-box">
+                    <div id="left-half-effect">
+                    <strong id="ailment"></strong>
+                    </div>
+                    <div class="right-half">
+                    <p id="moveAilmentChance"></p>
+                    </div>
+                </div>
+                <div class="split-box">
+                    <div class="left-half">
+                    <strong>Gen</strong>
+                    </div>
+                    <div class="right-half">
+                    <p id="moveGeneration"></p>
+                    </div>
+                </div>
+            </div>
+            <div id="moveMoreInfo">
+                <p><strong>Target:</strong> <span id="moveTarget"></span></p>
+                <p><strong>Stat Changes:</strong> <span id="moveStatChanges"></span></p>
+            </div>
+            <div id="effect"></div>
+        </div>
+        <div id="learnGroup">
+            <div id="learnedByPokemon"></div>
+        </div>
+    </div>
+    <footer>
+        <div class="footerContent">
+          <p>
+            Images and data are sourced from
+            <a href="https://github.com/CajunAvenger/cajunavenger.github.io" target="_blank" rel="noopener noreferrer">CajunAvenger</a>, 
+            <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer">PokéAPI</a>,
+            and <a href="https://msikma.github.io/pokesprite/index.html" target="_blank" rel="noopener noreferrer">PokéSprite</a>.
+            <br>© 2023 Pokémon. © 1995-2023 Nintendo/Creatures Inc./GAME FREAK inc.
+          </p>
+        </div>
+      </footer>    
+    <script src="script.js"></script>
+</body>
+</html>
