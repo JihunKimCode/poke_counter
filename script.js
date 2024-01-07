@@ -3,6 +3,17 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+// Footer
+const scrollTopButton = document.getElementById("scrollTop");
+
+// Set Scroll up Button
+scrollTopButton.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+});  
+
 // Clear context in search input
 function clearInput() {
     searchInput.value = '';
@@ -131,9 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterCheckbox_type = document.getElementById('filterCheckbox_type');
     const filterCheckbox_abilities = document.getElementById('filterCheckbox_abilities');
     const filterCheckbox_baseStat = document.getElementById('filterCheckbox_baseStat');
-
-    // Footer
-    const scrollTopButton = document.getElementById("scrollTop");
 
     // Global variables for updating table
     let global_types, global_statsData, global_sprites, global_speciesUrl;
@@ -839,14 +847,6 @@ document.addEventListener('DOMContentLoaded', () => {
             width="50px">
         `;
     }
-    
-    // Set Scroll up Button
-    scrollTopButton.addEventListener("click", () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    });  
 
     // Function to display the Pokemon's stats histogram
     function displayStatsHistogram(statsData) {
@@ -1813,6 +1813,8 @@ const moveInfo = document.getElementById("moveInfo");
 const movePower = document.getElementById("movePower");
 const moveAccuracy = document.getElementById("moveAccuracy");
 const movePP = document.getElementById("movePP");
+
+const moveInfo2 = document.getElementById("moveInfo2");
 const effect = document.getElementById("effect");
 const ailment = document.getElementById("ailment");
 const moveAilmentChance = document.getElementById("moveAilmentChance");
@@ -1820,7 +1822,16 @@ const ailmentEffect = document.getElementById("left-half-effect");
 const moveGeneration = document.getElementById("moveGeneration");
 
 const moveTarget = document.getElementById("moveTarget");
+const moveTargetInfo = document.getElementById("moveTargetInfo");
 const moveStatChanges = document.getElementById("moveStatChanges");
+const moveMoreInfo = document.getElementById("moveMoreInfo");
+const hp = document.getElementById("HP");
+const atk = document.getElementById("ATK");
+const def = document.getElementById("DEF");
+const spa = document.getElementById("SPA");
+const spd = document.getElementById("SPD");
+const spe = document.getElementById("SPE");
+
 const movePriority = document.getElementById("movePriority");
 const learnedByPokemon = document.getElementById("learnedByPokemon");  
 
@@ -1838,6 +1849,12 @@ async function searchMove() {
         const response = await fetch(`https://pokeapi.co/api/v2/move/${moveNameInput}/`);
         const moveData = await response.json();
         console.log(moveData);
+        scrollTopButton.style.display = 'inline-block';
+        moveInfo.style.display = "inline-flex";
+        moveInfo2.style.display = "flex";
+        moveMoreInfo.style.display = "inline-flex";
+        moveTarget.style.display = "grid";
+        effect.style.display = "table-cell";
 
         moveNameDisplay.textContent = moveData.name.toUpperCase();
         moveType.innerHTML =  `
@@ -1880,24 +1897,35 @@ async function searchMove() {
             `;
         }
         
-        moveTarget.textContent = moveData.target.name || "N/A";
-        moveStatChanges.textContent = JSON.stringify(moveData.stat_changes) || "N/A";
+        moveTargetInfo.textContent = moveData.target.name || "N/A";
+        // moveStatChanges.textContent = JSON.stringify(moveData.stat_changes) || "N/A";
+
+        // for(var i = 0; i<moveData.stat_changes.length; i++){
+        //     if(moveData.stat_changes[0].stat.name===""
+        // }
         
-        ailment.textContent = moveData.meta.ailment.name==="none" ? "Effect" : capitalizeFirstLetter(moveData.meta.ailment.name);
-        moveAilmentChance.textContent = moveData.meta.ailment_chance === 0? moveData.effect_chance||"N/A" : moveData.meta.ailment_chance || "N/A";
-        if(moveData.meta.ailment.name === "freeze") {
-            ailmentEffect.style.backgroundColor="#00d6fa";
-        } else if(moveData.meta.ailment.name === "burn") {
-            ailmentEffect.style.backgroundColor="#ff0800";
-        } else if(moveData.meta.ailment.name === "paralysis") {
-            ailmentEffect.style.backgroundColor="#ffd300";
-        } else if(moveData.meta.ailment.name === "poison") {
-            ailmentEffect.style.backgroundColor="purple";
-        } else if(moveData.meta.ailment.name === "none") {
-            ailmentEffect.style.backgroundColor="black";
+        if(moveData.meta){
+            ailment.textContent = moveData.meta.ailment.name==="none" ? "Effect" : capitalizeFirstLetter(moveData.meta.ailment.name);
+            moveAilmentChance.textContent = moveData.meta.ailment_chance === 0? moveData.effect_chance||"N/A" : moveData.meta.ailment_chance || "N/A";
+            if(moveData.meta.ailment.name === "freeze") {
+                ailmentEffect.style.backgroundColor="#00d6fa";
+            } else if(moveData.meta.ailment.name === "burn") {
+                ailmentEffect.style.backgroundColor="#ff0800";
+            } else if(moveData.meta.ailment.name === "paralysis") {
+                ailmentEffect.style.backgroundColor="#ffd300";
+            } else if(moveData.meta.ailment.name === "poison") {
+                ailmentEffect.style.backgroundColor="purple";
+            } else if(moveData.meta.ailment.name === "none") {
+                ailmentEffect.style.backgroundColor="black";
+            } else {
+                ailmentEffect.style.backgroundColor="gray";
+            }
         } else {
-            ailmentEffect.style.backgroundColor="gray";
+            ailment.textContent = "Effect";
+            moveAilmentChance.textContent = "N/A";
+            ailmentEffect.style.backgroundColor="black";
         }
+
 
         movePriority.textContent = moveData.priority || moveData.priority === 0 ? 0 : "N/A";
         moveGeneration.textContent = (moveData.generation.name).split('-')[1].toUpperCase() || "N/A";
@@ -1921,6 +1949,9 @@ async function searchMove() {
                 return pokemonDetails.sprites.front_default;
             }));
 
+            if(pokemonList.length > 0) learnedByPokemon.style.display = "block";
+            else learnedByPokemon.style.display = "none";
+
             learnedByPokemon.innerHTML = '';
             for (let i = 0; i < pokemonList.length; i++) {
                 const sprite = sprites[i];
@@ -1935,42 +1966,8 @@ async function searchMove() {
         } else {
             learnedByPokemon.textContent = "N/A";
         }
-
-        const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-        if (screenWidth > 767) {
-            moveDetailsDiv.style.display = "table-cell";
-            learnGroupDiv.style.display = "table-cell";  
-            moveDetailsDiv.style.height = "850px";    
-            learnGroupDiv.style.height = "850px";      
-        } else {
-            moveDetailsDiv.style.display = "table-cell";
-            learnGroupDiv.style.display = "table-row";
-            moveDetailsDiv.style.height = "100%";    
-            learnGroupDiv.style.height = "100%";    
-        }
     } catch (error) {
         console.error(error);
         alert("Move not found. Please try again.");
-    }
-}
-
-// Resize Counter Pokemon Table when the screen is resized
-window.addEventListener('resize', function() {
-    updateDisplay();
-});
-
-// Update table width and height when user resize the screen
-function updateDisplay(){
-    const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-    if (screenWidth > 767) {
-        moveDetailsDiv.style.display = "table-cell";
-        learnGroupDiv.style.display = "table-cell";  
-        moveDetailsDiv.style.height = "850px";    
-        learnGroupDiv.style.height = "850px";      
-    } else {
-        moveDetailsDiv.style.display = "table-cell";
-        learnGroupDiv.style.display = "table-row";
-        moveDetailsDiv.style.height = "100%";    
-        learnGroupDiv.style.height = "100%";    
     }
 }

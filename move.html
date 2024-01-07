@@ -31,17 +31,9 @@
     <div class="topnav">
         <div>
             <h1>
-            <a
-                href="https://github.com/JihunKimCode/poke_counter"
-                class="btn btn-github"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                <i class="fab fa-github"></i>
-            </a>
 
             <a
-            href="https://jihunkimcode.github.io/poke_counter/info.html"
+            href="https://jihunkimcode.github.io/poke_counter/"
             class="btn btn-github"
             rel="noopener noreferrer"
             >
@@ -69,82 +61,164 @@
         </div>
     </div>
     <div class="information">
-        <div id="moveDetails">
+        <div class="moveDetails">
             <h2 id="moveNameDisplay"></h2>
-            <p id="moveType"></p>
-            <div id="moveInfo">
-                <div class="split-box">
-                    <div class="left-half">
-                    <strong>Power</strong>
-                    </div>
-                    <div class="right-half">
-                    <p id="movePower"></p>
-                    </div>
-                </div>      
-                <div class="split-box">
-                    <div class="left-half">
-                    <strong>Accuracy</strong>
-                    </div>
-                    <div class="right-half">
-                    <p id="moveAccuracy"></p>
+            <div class="move">
+                <div id="moveType"></div>
+                <div id="moveInfo">
+                    <div class="split-box">
+                        <div class="left-half">
+                        <p>Power</p>
+                        </div>
+                        <div class="right-half">
+                        <p id="movePower"></p>
+                        </div>
+                    </div>      
+                    <div class="split-box">
+                        <div class="left-half">
+                        <p>Accuracy</p>
+                        </div>
+                        <div class="right-half">
+                        <p id="moveAccuracy"></p>
+                        </div>
+                    </div>   
+                    <div class="split-box">
+                        <div class="left-half">
+                        <p>PP</p>
+                        </div>
+                        <div class="right-half">
+                        <p id="movePP"></p>
+                        </div>
                     </div>
                 </div>   
-                <div class="split-box">
-                    <div class="left-half">
-                    <strong>PP</strong>
+                <div id="moveInfo2">
+                    <div class="split-box">
+                        <div class="left-half">
+                        <p>Priority</p>
+                        </div>
+                        <div class="right-half">
+                        <p id="movePriority"></p>
+                        </div>
+                    </div>              
+                    <div class="split-box">
+                        <div id="left-half-effect">
+                        <p id="ailment"></p>
+                        </div>
+                        <div class="right-half">
+                        <p id="moveAilmentChance"></p>
+                        </div>
                     </div>
-                    <div class="right-half">
-                    <p id="movePP"></p>
+                    <div class="split-box">
+                        <div class="left-half">
+                        <p>Gen</p>
+                        </div>
+                        <div class="right-half">
+                        <p id="moveGeneration"></p>
+                        </div>
                     </div>
                 </div>
-            </div>   
-            <div id="moveInfo">
-                <div class="split-box">
-                    <div class="left-half">
-                    <strong>Priority</strong>
+                <div id="moveMoreInfo">
+                    <div class="split-box2">
+                        <div class="top-half">
+                        <p>HP</p>
+                        </div>
+                        <div class="bottom-half">
+                        <p id="HP">0</p>
+                        </div>
                     </div>
-                    <div class="right-half">
-                    <p id="movePriority"></p>
+                    <div class="split-box2">
+                        <div class="top-half">
+                        <p>ATK</p>
+                        </div>
+                        <div class="bottom-half">
+                        <p id="ATK">0</p>
+                        </div>
                     </div>
-                </div>              
-                <div class="split-box">
-                    <div id="left-half-effect">
-                    <strong id="ailment"></strong>
+                    <div class="split-box2">
+                        <div class="top-half">
+                        <p>DEF</p>
+                        </div>
+                        <div class="bottom-half">
+                        <p id="DEF">0</p>
+                        </div>
                     </div>
-                    <div class="right-half">
-                    <p id="moveAilmentChance"></p>
+                    <div class="split-box2">
+                        <div class="top-half">
+                        <p>SPA</p>
+                        </div>
+                        <div class="bottom-half">
+                        <p id="SPA">0</p>
+                        </div>
                     </div>
-                </div>
-                <div class="split-box">
-                    <div class="left-half">
-                    <strong>Gen</strong>
+                    <div class="split-box2">
+                        <div class="top-half">
+                        <p>SPD</p>
+                        </div>
+                        <div class="bottom-half">
+                        <p id="SPD">0</p>
+                        </div>
                     </div>
-                    <div class="right-half">
-                    <p id="moveGeneration"></p>
+                    <div class="split-box2">
+                        <div class="top-half">
+                        <p>SPE</p>
+                        </div>
+                        <div class="bottom-half">
+                        <p id="SPE">0</p>
+                        </div>
+                    </div>
+                    <div class="split-box2">
+                        <div class="top-half">
+                        <p>ACC</p>
+                        </div>
+                        <div class="bottom-half">
+                        <p id="ACC">0</p>
+                        </div>
+                    </div>
+                    <div class="split-box2">
+                        <div class="top-half">
+                        <p>EVA</p>
+                        </div>
+                        <div class="bottom-half">
+                        <p id="EVA">0</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div id="moveMoreInfo">
-                <p><strong>Target:</strong> <span id="moveTarget"></span></p>
-                <p><strong>Stat Changes:</strong> <span id="moveStatChanges"></span></p>
+            <div class="range">
+                <h3 id="moveTargetInfo"></h3>
+                <div id="moveTarget">
+                    <div class="box" id="box1">Foe</div>
+                    <div class="box" id="box2">Foe</div>
+                    <div class="box" id="box3">Foe</div>
+                    <div class="box" id="box4">Self</div>
+                    <div class="box" id="box5">Ally</div>
+                    <div class="box" id="box6">Ally</div>                  
+                </div>
             </div>
-            <div id="effect"></div>
+            <div class="effects">
+                <div id="effect"></div>
+            </div>
         </div>
-        <div id="learnGroup">
+        <div class="learnGroup">
             <div id="learnedByPokemon"></div>
         </div>
     </div>
-    <footer>
-        <div class="footerContent">
-          <p>
+</body>
+<footer>
+    <div class="footerContent">
+        <p>
             Images and data are sourced from
             <a href="https://github.com/CajunAvenger/cajunavenger.github.io" target="_blank" rel="noopener noreferrer">CajunAvenger</a>, 
             <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer">PokéAPI</a>,
             and <a href="https://msikma.github.io/pokesprite/index.html" target="_blank" rel="noopener noreferrer">PokéSprite</a>.
             <br>© 2023 Pokémon. © 1995-2023 Nintendo/Creatures Inc./GAME FREAK inc.
-          </p>
-        </div>
-      </footer>    
-    <script src="script.js"></script>
-</body>
+        </p>
+        <button id="scrollTop">            
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dive-ball.png" 
+            alt="scrollTop" 
+            width="50px">
+        </button>
+    </div>
+</footer>    
+<script src="script.js"></script>
 </html>

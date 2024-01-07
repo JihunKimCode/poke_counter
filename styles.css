@@ -106,7 +106,7 @@ footer p{
     box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2);
 }
   
-#searchInput {
+#searchInput, #moveName {
     width: 255px;
 }
 
@@ -726,6 +726,7 @@ audio::-webkit-media-controls-panel {
  *  Move.html  *
  ***************/
 #learnedByPokemon{
+    display: none;
     height: 100%;
     overflow: auto;
     border: 2px solid #000;
@@ -733,9 +734,18 @@ audio::-webkit-media-controls-panel {
     padding: 10px;
 }
 
-#moveInfo{
-  display: flex;
+#moveInfo, #moveInfo2, #moveMoreInfo, #moveTarget{
+  display: none;
   margin-bottom: 20px;
+}
+
+#moveType{
+    display: block;
+}
+
+#effect {
+    display: none;
+    width: 100%;
 }
 
 .split-box {
@@ -748,7 +758,7 @@ audio::-webkit-media-controls-panel {
 .right-half,
 #left-half-effect {
     width: fit-content;
-    padding: 15px;
+    padding: 15px 8px 15px 8px;
     box-sizing: border-box;
     height: 10px;
     display: flex;
@@ -769,17 +779,111 @@ audio::-webkit-media-controls-panel {
     border-bottom-right-radius: 10px;  
 }
 
-.right-half p {
+.left-half p, #left-half-effect p, .right-half p,
+.top-half p, .bottom-half p{
     margin-block-end: 0px;
+    font-size: 14px;
 }
 
-#moveDetails, #learnGroup{
-    display: none;
+.split-box2 {
+    display: block;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.top-half,
+.bottom-half {
+    height: fit-content;
+    padding: 5px 16px 5px 16px;
+    box-sizing: border-box;
+    width: 10px; /* Change width to height */
+    display: flex;
+    justify-content: center; /* Align content to center vertically */
+}
+
+.top-half {
+    background-color: black;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px; /* Adjust border radius for top */
+}
+
+.bottom-half {
+    background-color: white;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px; /* Adjust border radius for bottom */
+}
+
+.moveDetails, .learnGroup{
+    display: table-cell;
     width: 40%;
-    height: 700px;
     margin: 20px;
     padding: 10px;
     line-height: 1.5;
+}
+
+.learnGroup{
+    height: 600px;
+}
+
+.move, .range{
+    display: table-cell;
+    width: 50%;
+}
+
+.effects{
+    display: inline-block;
+    width: 100%;
+}
+
+.range{
+    justify-content: space-around;
+    align-items: center;
+}
+
+#moveTarget{
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 10px;
+    margin-left: 50px;
+}
+
+#moveTargetInfo{
+    margin-left: 50px;
+}
+
+.box {
+    width: 70px;
+    height: 70px;
+    border: 2px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#box1 {
+    background-color: #ffcc00;
+}
+
+#box2 {
+    background-color: #66cc66;
+}
+
+#box3 {
+    background-color: #3399ff;
+}
+
+#box4 {
+    background-color: #ff6666;
+}
+
+#box5 {
+    background-color: #cc99ff;
+}
+
+#box6 {
+    background-color: #ff9966;
 }
 
 #moveDetails h2{
@@ -805,6 +909,30 @@ audio::-webkit-media-controls-panel {
     .container3{
         display: table-row;
     }
+
+    .moveDetails{
+        display: table-cell;
+        width: 100%;
+    }
+
+    .learnGroup{
+        display: table-row;
+        width: 100%;
+        height: auto;
+    }
+
+    .move, .range{
+        display: flow-root;
+    }
+
+    #moveTarget{
+        margin-left: 0px;
+    }
+    
+    #moveTargetInfo{
+        margin-left: 0px;
+        margin-bottom: 10px;
+    }    
 }
 
 /* Layout for mobile */
@@ -853,5 +981,30 @@ audio::-webkit-media-controls-panel {
     footer{
         margin-top: 25px;
         font-size: 12px;
+    }
+
+    .moveDetails{
+        display: table-cell;
+        width: 100%;
+    }
+
+    .learnGroup{
+        display: table-row;
+        width: 100%;
+        height: auto;
+    }
+
+    .move, .range{
+        display: flow-root;
+        width: 100%;
+    }
+
+    #moveTarget{
+        margin-left: 0px;
+    }
+    
+    #moveTargetInfo{
+        margin-left: 0px;
+        margin-bottom: 10px;
     }
 }
