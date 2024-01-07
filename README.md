@@ -1,5 +1,8 @@
-# [jihunkimcode.github.io/poke_counter/](https://jihunkimcode.github.io/poke_counter/)
+# [jihunkimcode.github.io/poke_counter/info.html](https://jihunkimcode.github.io/poke_counter/info.html)
 Search Pokémon information as well as counter Pokémon.
+
+# [jihunkimcode.github.io/poke_counter/move.html](https://jihunkimcode.github.io/poke_counter/move.html)
+Search Pokémon move information
 
 # Goals
 - [x] **Sprite**
@@ -54,4 +57,4 @@ Search Pokémon information as well as counter Pokémon.
 - [x] Better Pokemon Search (NIDORAN-F, NIDORAN-M)
 - [x] Related Pokemon lists on serach bar
     - [x] Add pokemonNames.txt to fetch the pokemonName list
-- [ ] Move table (HM/TM/TR/Egg/Move Tutor)
+- [x] Move Searcher
