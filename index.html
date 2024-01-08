@@ -1,0 +1,103 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Website Thumbnail -->
+    <title>Pokémon Info Searcher</title>
+    <meta property="og:url" content="https://jihunkimcode.github.io/poke_counter/">
+    <meta property="og:title" content="Pokémon Information">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/exp-share.png">
+    <meta property="og:description" content="Retrieve details about Pokémon.">
+    <!-- Website Information -->
+    <meta name="author" content="Jihun Kim">
+    <meta name="keywords" content="Pokémon, Pokemon, Pokemon Information">
+    <meta name="description" content="Retrieve details about Pokémon">        
+    <!-- Website Settings -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <link 
+        rel="icon" 
+        type="image/x-icon" 
+        href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/exp-share.png"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />    
+</head>
+<body>
+    <div class="topnav">
+        <div>
+            <h1>
+
+            <a
+            href="https://github.com/JihunKimCode/poke_counter"
+            class="btn btn-github"
+            rel="noopener noreferrer"
+            >
+                <i class="fa-brands fa-github"></i>
+            </a>
+
+            <img id = "randomItem" 
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/exp-share.png" 
+            alt="exp-share" 
+            title="exp-share">
+            <a
+                href="https://jihunkimcode.github.io/poke_counter/"
+                rel="noopener noreferrer"
+            >
+            Pokémon Info Searcher
+            </a>
+            </h1>
+        </div>
+    </div>
+    <div class="allCategories">
+        <div class="category">
+            <a href="https://github.com/JihunKimCode/poke_counter" rel="noopener noreferrer">
+                <img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" alt="Image 1" width="50px">
+                <div class="content">
+                <h3>Source Code</h3>
+                <p>Check our Github!</p>
+                </div>
+            </a>
+          </div>
+        
+          <div class="category">
+            <a href="https://jihunkimcode.github.io/poke_counter/info.html" rel="noopener noreferrer">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/focus-sash.png" alt="Image 2" width="50px">
+                <div class="content">
+                <h3>Counter Pokémon Searcher</h3>
+                <p>Explore information on Pokémon and discover effective counters for them.</p>
+                </div>
+            </a>
+          </div>
+        
+          <div class="category">
+            <a href="https://jihunkimcode.github.io/poke_counter/move.html" rel="noopener noreferrer">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-scarf.png" alt="Image 3" width="50px">
+                <div class="content">
+                <h3>Pokémon Move Searcher</h3>
+                <p>Retrieve information on Pokémon moves.</p>
+                </div>
+            </a>
+          </div>        
+    </div>
+</body>
+<footer>
+    <div class="footerContent">
+      <p>
+      Images are sourced from
+      <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer">PokéAPI</a>.
+      <br>© <span id="year"></span> Pokémon. © 1995-<span id="year2"></span> Nintendo/Creatures Inc./GAME FREAK inc.
+    </p>
+    <button id="scrollTop">            
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dive-ball.png" 
+      alt="scrollTop" 
+      width="50px">
+    </button>
+  </div>
+</footer>
+<script src="script.js"></script>
+</html>

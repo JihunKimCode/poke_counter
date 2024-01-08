@@ -1,3 +1,8 @@
+// Copyright year setting
+var currentYear = new Date().getFullYear();
+document.getElementById("year").innerHTML = currentYear;
+document.getElementById("year2").innerHTML = currentYear;
+
 // Capitalize the first letter of a string
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -439,11 +444,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 global_statsData = statsData;
                 global_speciesUrl = speciesUrl;
                 
+                const shape = speciesData.shape != null ? speciesData.shape.name : "null";
+
                 // Update theme colors
                 findColors(data.name, data.id);
-
                 // Main Body
-                getPokemonInfo(data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, speciesData.shape.name);                getTypeAbility(types, abilities);
+                getPokemonInfo(data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, shape);
+                getTypeAbility(types, abilities);
                 getEvolution(speciesData.evolution_chain.url);
                 displayStatsHistogram(statsData);
                 showForms(speciesUrl);
@@ -543,9 +550,11 @@ document.addEventListener('DOMContentLoaded', () => {
             image = "";
         }
 
-        bioInfo += `<div>
-                        <img src="${image}" alt="${shape}" width="25" class="shape">
-                    </div>`;
+        if(shape!="null"){
+            bioInfo += `<div>
+                            <img src="${image}" alt="${shape}" width="25" class="shape">
+                        </div>`;
+        }
 
         return bioInfo;
     }  
@@ -1841,7 +1850,7 @@ async function searchMove() {
     try {
         const response = await fetch(`https://pokeapi.co/api/v2/move/${moveNameInput}/`);
         const moveData = await response.json();
-        console.log(moveData);
+
         scrollTopButton.style.display = 'inline-block';
         moveInfo.style.display = "inline-flex";
         moveInfo2.style.display = "flex";
@@ -1851,14 +1860,14 @@ async function searchMove() {
 
         moveNameDisplay.textContent = moveData.name.toUpperCase();
         moveType.innerHTML =  `
-            <div class="tooltip-types">
+            <div class="tooltip-moves">
                 <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(moveData.type.name)}.png" 
                     alt="${moveData.type.name}" 
                     class="type-image" 
                     width="60px">
                 <span class="tooltiptext">${moveData.type.name}</span>
             </div>
-            <div class="tooltip-types">
+            <div class="tooltip-moves">
                 <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/misc/seals/home/move-${moveData.damage_class.name}.png" 
                     alt="${moveData.damage_class.name}" 
                     class="type-image" 
@@ -1933,7 +1942,10 @@ async function searchMove() {
         };
 
         // Initialize all stat elements to 0
-        Object.values(statElements).forEach(element => element.textContent = 0);
+        Object.values(statElements).forEach(element => {
+            element.textContent = 0;
+            element.style.color = "black";
+        });
 
         // Loop through stat_changes and update corresponding elements
         for (const statChange of moveData.stat_changes) {
@@ -1942,30 +1954,33 @@ async function searchMove() {
 
             if (statElement) {
                 statElement.textContent = statChange.change;
+                if(statChange.change<0) statElement.style.color = "#00d6fa";
+                else if(statChange.change>0) statElement.style.color = "#ff0800";
+                else statElement.style.color = "black";
             }
         }
         
-        if(moveData.meta){
-            ailment.textContent = moveData.meta.ailment.name==="none" ? "Effect" : capitalizeFirstLetter(moveData.meta.ailment.name);
-            moveAilmentChance.textContent = moveData.meta.ailment_chance === 0? moveData.effect_chance||"N/A" : moveData.meta.ailment_chance || "N/A";
-            if(moveData.meta.ailment.name === "freeze") {
-                ailmentEffect.style.backgroundColor="#00d6fa";
-            } else if(moveData.meta.ailment.name === "burn") {
-                ailmentEffect.style.backgroundColor="#ff0800";
-            } else if(moveData.meta.ailment.name === "paralysis") {
-                ailmentEffect.style.backgroundColor="#ffd300";
-            } else if(moveData.meta.ailment.name === "poison") {
-                ailmentEffect.style.backgroundColor="purple";
-            } else if(moveData.meta.ailment.name === "none") {
-                ailmentEffect.style.backgroundColor="black";
-            } else {
-                ailmentEffect.style.backgroundColor="gray";
-            }
+        // Define color map for ailments
+        const ailmentColors = {
+            freeze: "#00d6fa",
+            burn: "#ff0800",
+            paralysis: "#ffd300",
+            poison: "purple",
+            none: "black",
+        };
+
+        if (moveData.meta) {
+            ailment.textContent = moveData.meta.ailment.name === "none" ? "Effect" : capitalizeFirstLetter(moveData.meta.ailment.name);
+            moveAilmentChance.textContent = moveData.meta.ailment_chance === 0 ? moveData.effect_chance || "N/A" : moveData.meta.ailment_chance || "N/A";
+            ailmentEffect.style.backgroundColor = ailmentColors[moveData.meta.ailment.name] || "gray";
         } else {
+            // Set default values when moveData.meta is not available
             ailment.textContent = "Effect";
             moveAilmentChance.textContent = "N/A";
-            ailmentEffect.style.backgroundColor="black";
+            ailmentEffect.style.backgroundColor = "black";
         }
+
+        moveAilmentChance.textContent += "%"
 
         movePriority.textContent = (moveData.priority !== undefined && moveData.priority !== null) ? moveData.priority : "N/A";
         moveGeneration.textContent = (moveData.generation.name).split('-')[1].toUpperCase() || "N/A";

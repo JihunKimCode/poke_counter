@@ -408,6 +408,7 @@ audio::-webkit-media-controls-panel {
 
 /*Tooltip for types*/
 .tooltip-types,
+.tooltip-moves,
 .tooltip-items,
 .tooltip-pokemon {
     position: relative;
@@ -415,6 +416,7 @@ audio::-webkit-media-controls-panel {
 }
 
 .tooltip-types .tooltiptext,
+.tooltip-moves .tooltiptext,
 .tooltip-items .tooltiptext,
 .tooltip-pokemon .tooltiptext {
     visibility: hidden;
@@ -432,6 +434,12 @@ audio::-webkit-media-controls-panel {
     left: 0%;
 }
 
+.tooltip-moves .tooltiptext{
+    bottom: 120%;
+    top: auto;
+    left: 0%;
+}
+
 .tooltip-items .tooltiptext {
     top: 100%;
     left: 0%;
@@ -446,7 +454,7 @@ audio::-webkit-media-controls-panel {
 .tooltip-items .tooltiptext::after {
     content: " ";
     position: absolute;
-    bottom: 100%;  /* At the top of the tooltip */
+    bottom: 100%;
     left: 30%;
     border-width: 5px;
     border-style: solid;
@@ -468,7 +476,19 @@ audio::-webkit-media-controls-panel {
     border-color: transparent rgba(0,0,0,0.7) transparent transparent;
   }
 
+  .tooltip-moves .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0,0,0,0.7) transparent transparent transparent;
+    }
+
 .tooltip-types:hover .tooltiptext,
+.tooltip-moves:hover .tooltiptext,
 .tooltip-items:hover .tooltiptext,
 .tooltip-pokemon:hover .tooltiptext {
     visibility: visible;
@@ -741,6 +761,7 @@ audio::-webkit-media-controls-panel {
 
 #moveType{
     display: block;
+    margin-bottom: 10px;
 }
 
 #effect {
@@ -870,6 +891,52 @@ audio::-webkit-media-controls-panel {
     margin-block-start: 0px;
 }
 
+/****************
+ *  index.html  *
+ ****************/
+.allCategories{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+/* CSS for category and content */
+.category {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 25%;
+    margin: 10px 2.5%; 
+    box-shadow: 0 6px 6px 0 rgba(0,0,0,0.2);
+}
+  
+.category img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    background-color: white;
+}
+
+.category .content {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    background-color: #e2e2e2;
+    box-sizing: border-box;
+    line-height: 1.5;
+}
+
+.category h2 {
+    margin-top: 0;
+}
+
+.category:hover {
+    transform: scale(1.05);    
+}   
+
+.category:active {
+    transform: scale(1);    
+}   
+
 /*Layout for Tablet and split screen*/
 @media (min-width: 768px) and (max-width: 1024px) {
     .set{
@@ -912,7 +979,10 @@ audio::-webkit-media-controls-panel {
     #moveTargetInfo{
         margin-left: 0px;
         margin-bottom: 10px;
-    }    
+    }
+    .category .content {
+        height: 200px;
+    }
 }
 
 /* Layout for mobile */
@@ -987,4 +1057,24 @@ audio::-webkit-media-controls-panel {
         margin-left: 0px;
         margin-bottom: 10px;
     }
+
+    .allCategories{
+        display: grid;
+    }
+    
+    .category {
+        display: block;
+        margin: 10px;
+        width: 80%;
+    }
+    
+    .category img {
+        width: 100%;
+        height: 300px;
+    }
+
+    .category .content {
+        width: 100%;
+        height: 150px;
+    }    
 }

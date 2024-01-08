@@ -7,12 +7,12 @@
     <meta property="og:url" content="https://jihunkimcode.github.io/poke_counter/move.html">
     <meta property="og:title" content="Pokémon Move Searcher">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/focus-sash.png">
-    <meta property="og:description" content="Search Pokémon move information.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-scarf.png">
+    <meta property="og:description" content="Retrieve information on Pokémon moves.">
     <!-- Website Information -->
     <meta name="author" content="Jihun Kim">
-    <meta name="keywords" content="Pokémon, Pokemon, Pokemon Move">
-    <meta name="description" content="Search Pokémon move information">        
+    <meta name="keywords" content="Pokémon, Pokémon moves, Pokémon move types">
+    <meta name="description" content="Retrieve information on Pokémon moves.">        
     <!-- Website Settings -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,7 +20,7 @@
     <link 
         rel="icon" 
         type="image/x-icon" 
-        href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/focus-sash.png"
+        href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-scarf.png"
     >
     <link
         rel="stylesheet"
@@ -31,7 +31,6 @@
     <div class="topnav">
         <div>
             <h1>
-
             <a
             href="https://jihunkimcode.github.io/poke_counter/"
             class="btn btn-github"
@@ -41,11 +40,12 @@
             </a>
 
             <img id = "randomItem" 
-            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/focus-sash.png" 
-            alt="focus-sash" 
-            title="focus-sash">
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-scarf.png" 
+            alt="choice-scarf" 
+            title="choice-scarf">
+            
             <a
-                href="https://jihunkimcode.github.io/poke_counter/"
+                href="https://jihunkimcode.github.io/poke_counter/move.html"
                 rel="noopener noreferrer"
             >
             Pokémon Move Searcher
@@ -211,7 +211,7 @@
             <a href="https://github.com/CajunAvenger/cajunavenger.github.io" target="_blank" rel="noopener noreferrer">CajunAvenger</a>, 
             <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer">PokéAPI</a>,
             and <a href="https://msikma.github.io/pokesprite/index.html" target="_blank" rel="noopener noreferrer">PokéSprite</a>.
-            <br>© 2023 Pokémon. © 1995-2023 Nintendo/Creatures Inc./GAME FREAK inc.
+            <br>© <span id="year"></span> Pokémon. © 1995-<span id="year2"></span> Nintendo/Creatures Inc./GAME FREAK inc.
         </p>
         <button id="scrollTop">            
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dive-ball.png" 
