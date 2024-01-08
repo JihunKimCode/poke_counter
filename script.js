@@ -1817,22 +1817,15 @@ const movePP = document.getElementById("movePP");
 const moveInfo2 = document.getElementById("moveInfo2");
 const effect = document.getElementById("effect");
 const ailment = document.getElementById("ailment");
-const moveAilmentChance = document.getElementById("moveAilmentChance");
+const moveMoreInfo = document.getElementById("moveMoreInfo");
+const movePriority = document.getElementById("movePriority");
 const ailmentEffect = document.getElementById("left-half-effect");
+const moveAilmentChance = document.getElementById("moveAilmentChance");
 const moveGeneration = document.getElementById("moveGeneration");
 
 const moveTarget = document.getElementById("moveTarget");
 const moveTargetInfo = document.getElementById("moveTargetInfo");
 const moveStatChanges = document.getElementById("moveStatChanges");
-const moveMoreInfo = document.getElementById("moveMoreInfo");
-const hp = document.getElementById("HP");
-const atk = document.getElementById("ATK");
-const def = document.getElementById("DEF");
-const spa = document.getElementById("SPA");
-const spd = document.getElementById("SPD");
-const spe = document.getElementById("SPE");
-
-const movePriority = document.getElementById("movePriority");
 const learnedByPokemon = document.getElementById("learnedByPokemon");  
 
 // Add a keydown event listener to the input field
@@ -1897,12 +1890,60 @@ async function searchMove() {
             `;
         }
         
-        moveTargetInfo.textContent = moveData.target.name || "N/A";
-        // moveStatChanges.textContent = JSON.stringify(moveData.stat_changes) || "N/A";
+        const target = moveData.target.name;
+        moveTargetInfo.textContent = capitalizeFirstLetter(target.replace(/-/g, ' ').replace(" me first", "")) || "N/A";
+        
+        const targetMappings = {
+            "specific-move": { box1: "#00d6fa", box2: "#00d6fa", box3: "#00d6fa", box4: "#ff0800", box5: "#00d6fa", box6: "#00d6fa"},
+            "selected-pokemon-me-first": { box1: "#ff0800", box2: "#ff0800", box3: "#00d6fa", box4: "#00d6fa", box5: "#00d6fa", box6: "#00d6fa"},
+            "ally": { box1: "#00d6fa", box2: "#00d6fa", box3: "#00d6fa", box4: "#00d6fa", box5: "#ff0800", box6: "#00d6fa"},
+            "users-field": { box1: "#00d6fa", box2: "#00d6fa", box3: "#00d6fa", box4: "#ff0800", box5: "#ff0800", box6: "#ff0800"},
+            "user-or-ally": { box1: "#00d6fa", box2: "#00d6fa", box3: "#00d6fa", box4: "#b5338a", box5: "#b5338a", box6: "#00d6fa"},
+            "opponents-field": { box1: "#ff0800", box2: "#ff0800", box3: "#ff0800", box4: "#00d6fa", box5: "#00d6fa", box6: "#00d6fa"},
+            "user": { box1: "#00d6fa", box2: "#00d6fa", box3: "#00d6fa", box4: "#ff0800", box5: "#00d6fa", box6: "#00d6fa"},
+            "random-opponent": { box1: "#b5338a", box2: "#b5338a", box3: "#00d6fa", box4: "#ff0800", box5: "#00d6fa", box6: "#00d6fa"},
+            "all-other-pokemon": { box1: "#ff0800", box2: "#ff0800", box3: "#00d6fa", box4: "#00d6fa", box5: "#ff0800", box6: "#00d6fa"},
+            "selected-pokemon": { box1: "#ff0800", box2: "#ff0800", box3: "#00d6fa", box4: "#00d6fa", box5: "#ff0800", box6: "#00d6fa"},
+            "all-opponents": { box1: "#ff0800", box2: "#ff0800", box3: "#00d6fa", box4: "#00d6fa", box5: "#00d6fa", box6: "#00d6fa"},
+            "entire-field": { box1: "#ff0800", box2: "#ff0800", box3: "#ff0800", box4: "#ff0800", box5: "#ff0800", box6: "#ff0800"},
+            "user-and-allies": { box1: "#00d6fa", box2: "#00d6fa", box3: "#00d6fa", box4: "#ff0800", box5: "#ff0800", box6: "#ff0800"},
+            "all-pokemon": { box1: "#ff0800", box2: "#ff0800", box3: "#ff0800", box4: "#ff0800", box5: "#ff0800", box6: "#ff0800"},
+            "all-allies": { box1: "#00d6fa", box2: "#00d6fa", box3: "#00d6fa", box4: "#ff0800", box5: "#ff0800", box6: "#ff0800"},
+            "fainting-pokemon": { box1: "#00d6fa", box2: "#00d6fa", box3: "#00d6fa", box4: "#00d6fa", box5: "#00d6fa", box6: "#00d6fa"}
+        };
+    
+        for (const boxId in targetMappings[target]) {
+            // Get the corresponding color from the targetMappings
+            const color = targetMappings[target][boxId];
+            
+            // Update the box color using JavaScript
+            document.getElementById(boxId).style.backgroundColor = color;
+        }    
 
-        // for(var i = 0; i<moveData.stat_changes.length; i++){
-        //     if(moveData.stat_changes[0].stat.name===""
-        // }
+        // Define an object to map stat names to corresponding elements
+        const statElements = {
+            "hp": document.getElementById("hp"),
+            "attack": document.getElementById("atk"),
+            "defense": document.getElementById("def"),
+            "special-attack": document.getElementById("spa"),
+            "special-defense": document.getElementById("spd"),
+            "speed": document.getElementById("spe"),
+            "accuracy": document.getElementById("acc"),
+            "evasion": document.getElementById("eva"),
+        };
+
+        // Initialize all stat elements to 0
+        Object.values(statElements).forEach(element => element.textContent = 0);
+
+        // Loop through stat_changes and update corresponding elements
+        for (const statChange of moveData.stat_changes) {
+            const statName = statChange.stat.name;
+            const statElement = statElements[statName];
+
+            if (statElement) {
+                statElement.textContent = statChange.change;
+            }
+        }
         
         if(moveData.meta){
             ailment.textContent = moveData.meta.ailment.name==="none" ? "Effect" : capitalizeFirstLetter(moveData.meta.ailment.name);
@@ -1926,8 +1967,7 @@ async function searchMove() {
             ailmentEffect.style.backgroundColor="black";
         }
 
-
-        movePriority.textContent = moveData.priority || moveData.priority === 0 ? 0 : "N/A";
+        movePriority.textContent = (moveData.priority !== undefined && moveData.priority !== null) ? moveData.priority : "N/A";
         moveGeneration.textContent = (moveData.generation.name).split('-')[1].toUpperCase() || "N/A";
         
         const flavorTextEntries = moveData.flavor_text_entries.filter(entry => entry.language.name === "en");

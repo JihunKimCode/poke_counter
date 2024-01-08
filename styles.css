@@ -862,28 +862,8 @@ audio::-webkit-media-controls-panel {
     font-weight: bold;
 }
 
-#box1 {
-    background-color: #ffcc00;
-}
-
-#box2 {
-    background-color: #66cc66;
-}
-
-#box3 {
-    background-color: #3399ff;
-}
-
-#box4 {
-    background-color: #ff6666;
-}
-
-#box5 {
-    background-color: #cc99ff;
-}
-
-#box6 {
-    background-color: #ff9966;
+#box1, #box2, #box3, #box4, #box5, #box6 {
+    background-color: #00d6fa;
 }
 
 #moveDetails h2{
