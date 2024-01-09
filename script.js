@@ -1860,6 +1860,17 @@ async function searchMove() {
         moveTarget.style.display = "grid";
         effect.style.display = "table-cell";
 
+        if(moveData.damage_class.name==="physical"){
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-band.png';
+            randomItem.title = 'choice-band';
+        } else if(moveData.damage_class.name==="special"){
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-specs.png';
+            randomItem.title = 'choice-specs';
+        } else {
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/focus-sash.png';
+            randomItem.title = 'focus-sash';
+        }
+
         moveNameDisplay.textContent = moveData.name.toUpperCase();
         moveType.innerHTML =  `
             <div class="tooltip-moves">
@@ -1877,16 +1888,6 @@ async function searchMove() {
                 <span class="tooltiptext">${moveData.damage_class.name}</span>
             </div>
             `
-        if(moveData.damage_class.name==="physical"){
-            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-band.png';
-            randomItem.title = 'choice-band';
-        } else if(moveData.damage_class.name==="special"){
-            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-specs.png';
-            randomItem.title = 'choice-specs';
-        } else {
-            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/focus-sash.png';
-            randomItem.title = 'focus-sash';
-        }
 
         movePower.textContent = moveData.power || "N/A";
         moveAccuracy.textContent = moveData.accuracy || "N/A";
