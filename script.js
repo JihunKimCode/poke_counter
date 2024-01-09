@@ -1837,13 +1837,15 @@ const moveTargetInfo = document.getElementById("moveTargetInfo");
 const moveStatChanges = document.getElementById("moveStatChanges");
 const learnedByPokemon = document.getElementById("learnedByPokemon");  
 
-// Add a keydown event listener to the input field
-moveName.addEventListener('keydown', (event) => {
-    // Check if the key pressed is the Enter key (key code 13)
-    if (event.keyCode === 13) {
-        searchMove();
-    }
-});
+if(moveName){
+    // Add a keydown event listener to the input field
+    moveName.addEventListener('keydown', (event) => {
+        // Check if the key pressed is the Enter key (key code 13)
+        if (event.keyCode === 13) {
+            searchMove();
+        }
+    });
+}
 
 async function searchMove() {
     const moveNameInput = document.getElementById("moveName").value.toLowerCase().replace(/\s+/g, '-');
@@ -2024,5 +2026,106 @@ async function searchMove() {
     } catch (error) {
         console.error(error);
         alert("Move not found. Please try again.");
+    }
+}
+
+/***************
+ *  Item.html  *
+ ***************/
+const itemName = document.getElementById('itemName');
+if(itemName){
+    // Add a keydown event listener to the input field
+    itemName.addEventListener('keydown', (event) => {
+        // Check if the key pressed is the Enter key (key code 13)
+        if (event.keyCode === 13) {
+            searchItem();
+        }
+    });
+}
+
+const itemSprite = document.getElementById('itemSprite');
+const item = document.getElementById('item');
+const itemEffect = document.getElementById('itemEffect');
+const itemPokemon = document.getElementById('itemPokemon');
+
+async function searchItem() {
+    const itemNameInput = document.getElementById("itemName").value.toLowerCase().replace(/\s+/g, '-');
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/item/${itemNameInput}/`);
+        const itemData = await response.json();
+
+        scrollTopButton.style.display = 'inline-block';
+
+        itemSprite.innerHTML = `
+                <h3>${itemData.name.toUpperCase()}</h3>
+                <img src="${itemData.sprites.default}" alt="${itemNameInput}" width="130" class="pokemon-image">
+            `
+        
+        const attributes = itemData.attributes.map(attribute => attribute.name);
+        if(attributes.length === 0) attributes.push("N/A");
+        const flingEffectName = (itemData.fling_effect) != null ? itemData.fling_effect.name : "Effect";
+        var flingEffect = "N/A", flingPower = itemData.fling_power||"N/A";
+        if(flingEffectName != "Effect"){
+            const response = await fetch(itemData.fling_effect.url);
+            const flingEffectData = await response.json(); 
+            flingEffect = flingEffectData.effect_entries[0].effect||"N/A";
+        } 
+
+        item.innerHTML = `
+            <h3>Cost</h3>
+            <p>${itemData.cost}</p>
+            <h3>Category</h3>
+            <p>${itemData.category.name}</p>
+            <h3>Attribute</h3>
+            <p>${attributes.join(",")}</p>
+            <h3>Fling</h3>
+            <p>${capitalizeFirstLetter(flingEffectName)}: ${flingEffect}</p>
+            <p>Power: ${flingPower}</p>
+        `
+        if(itemData.effect_entries.length>0){
+            itemEffect.innerHTML = `
+                <h3>Short Description</h3>
+                <p>${itemData.effect_entries[0].short_effect || ""}</p>
+                <h3>Long Description</h3>
+                <p>${itemData.effect_entries[0].effect || ""}</p>
+            `;
+        }
+
+        const flavorTextEntries = itemData.flavor_text_entries.filter(entry => entry.language.name === "en");
+        if (flavorTextEntries.length > 0) {
+            const randomIndex = Math.floor(Math.random() * flavorTextEntries.length);
+            const randomFlavorTextEntry = flavorTextEntries[randomIndex];
+            itemEffect.innerHTML += `<h3>In-Game Description</h3>`;
+            itemEffect.innerHTML += randomFlavorTextEntry.text;
+        } else {
+            itemEffect.textContent = "N/A";
+        }
+
+        itemPokemon.textContent = `<h3> Held By Pokemon</h3>`;
+        if (itemData.held_by_pokemon) {
+            const pokemonList = itemData.held_by_pokemon;
+            const sprites = await Promise.all(pokemonList.map(async pokemon => {
+                const pokemonData = await fetch(pokemon.pokemon.url);
+                const pokemonDetails = await pokemonData.json();
+                return pokemonDetails.sprites.front_default;
+            }));
+
+            itemPokemon.innerHTML = '';
+            for (let i = 0; i < pokemonList.length; i++) {
+                const sprite = sprites[i];
+                const pokemonName = pokemonList[i].name;
+                const img = document.createElement('img');
+                img.src = sprite || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+                img.alt = pokemonName;
+                img.title = pokemonName;
+                img.style.width = "80px"
+                itemPokemon.appendChild(img);
+            }
+        } else {
+            itemPokemon.textContent = "N/A";
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Item not found. Please try again.");
     }
 }

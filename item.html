@@ -1,0 +1,89 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Website Thumbnail -->
+    <title>Pokémon Item Searcher</title>
+    <meta property="og:url" content="https://jihunkimcode.github.io/poke_counter/item.html">
+    <meta property="og:title" content="Pokémon Item Searcher">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sitrus-berry.png">
+    <meta property="og:description" content="Retrieve details about various items featured in the Pokémon series.">
+    <!-- Website Information -->
+    <meta name="author" content="Jihun Kim">
+    <meta name="keywords" content="Pokémon, Pokémon items">
+    <meta name="description" content="Retrieve details about various items featured in the Pokémon series.">        
+    <!-- Website Settings -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <link 
+        rel="icon" 
+        type="image/x-icon" 
+        href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sitrus-berry.png"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />    
+</head>
+<body>
+    <div class="topnav">
+        <div>
+            <h1>
+            <a
+            href="index.html"
+            class="btn btn-github"
+            rel="noopener noreferrer"
+            >
+                <i class="fa-solid fa-house"></i>
+            </a>
+
+            <img id = "randomItem" 
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sitrus-berry.png" 
+            alt="sitrus-berry" 
+            title="sitrus-berry">
+            
+            <a
+                href="item.html"
+                rel="noopener noreferrer"
+            >
+            Pokémon Item Searcher
+            </a>
+            </h1>
+        </div>
+        <!-- Top nav and search bar-->
+        <div class="search-container">
+            <input type="text" id="itemName" placeholder="Enter item name" autocomplete="off">
+            <button id="itemSearchButton" onclick="searchItem()"><i class="fa fa-search"></i></button>
+            <div id="clearButton" ><i class="fa-solid fa-xmark"></i></div>
+            <div id="pokemonDropdown"></div>
+        </div>
+    </div>
+    <div class="itemInfo">
+        <div id="itemSprite"></div>
+        <div class="itemText">
+            <div id="itemEffect"></div>
+            <div id="item"></div>
+            <div id="itemPokemon">
+                <div id="heldPokemon"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<footer>
+    <div class="footerContent">
+        <p>
+            Images and data are sourced from
+            <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer">PokéAPI</a>.
+            <br>© <span id="year"></span> Pokémon. © 1995-<span id="year2"></span> Nintendo/Creatures Inc./GAME FREAK inc.
+        </p>
+        <button id="scrollTop">            
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dive-ball.png" 
+            alt="scrollTop" 
+            width="50px">
+        </button>
+    </div>
+</footer>    
+<script src="script.js"></script>
+</html>

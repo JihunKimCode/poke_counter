@@ -237,7 +237,7 @@ footer a:hover{
     display: table;
     margin: 20px;
     margin-top: 0px;
-    width: 98%;
+    width: 95%;
 }
 
 /*Webpage Layout*/
@@ -938,6 +938,56 @@ audio::-webkit-media-controls-panel {
     transform: scale(1);    
 }   
 
+/***************
+ *  Item.html  *
+ ***************/
+.itemInfo {
+    display: table;
+    padding: 10px;
+    margin-top: 0px;
+    width: 95%;
+    line-height: 1.5;
+}
+
+#itemSprite{
+    padding: 10px;
+}
+
+#item {
+    display: table-cell;
+    width: 30%;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+#itemText {
+    display: table-cell;
+    width: 100%;
+    margin-top: 20px;
+}
+
+#itemEffect {
+    display: table-cell;
+    width: 40%;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+#itemPokemon {
+    display: table-cell;
+    width: 30%;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+#heldPokemon{
+    height: 100%;
+    overflow: auto;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+
 /*Layout for Tablet and split screen*/
 @media (min-width: 768px) and (max-width: 1024px) {
     .set{
@@ -980,6 +1030,28 @@ audio::-webkit-media-controls-panel {
     #moveTargetInfo{
         margin-left: 0px;
         margin-bottom: 10px;
+    }
+
+    .itemInfo {
+        display: table;
+    }
+    
+    #item {
+        display: table-cell;
+        width: 40%;
+    }
+
+    #itemEffect {
+        width: 60%;
+    }
+    
+    #itemText {
+        display: table-row;
+        width: 100%;
+    }
+    
+    #itemPokemon {
+        display: table-row;
     }
 }
 
@@ -1068,5 +1140,21 @@ audio::-webkit-media-controls-panel {
     
     .category img {
         height: 150px;
+    }
+
+    .itemInfo {
+        display: table;
+    }
+    
+    #item, #itemEffect {
+        display: table-row;
+    }
+    
+    #itemText {
+        display: table-row;
+    }
+    
+    #itemPokemon {
+        display: table-row;
     }
 }
