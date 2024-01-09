@@ -1899,6 +1899,8 @@ async function searchMove() {
                 <h3>Long Description</h3>
                 <p>${moveData.effect_entries[0].effect || ""}</p>
             `;
+        } else {
+            effect.innerHTML = ``;
         }
         
         const target = moveData.target.name;
@@ -2089,6 +2091,8 @@ async function searchItem() {
                 <h3>Long Description</h3>
                 <p>${itemData.effect_entries[0].effect || ""}</p>
             `;
+        } else {
+            itemEffect.innerHTML = ``;
         }
 
         const flavorTextEntries = itemData.flavor_text_entries.filter(entry => entry.language.name === "en");

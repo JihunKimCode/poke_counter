@@ -955,7 +955,7 @@ audio::-webkit-media-controls-panel {
 
 #item {
     display: table-cell;
-    width: 30%;
+    width: 20%;
     margin-bottom: 10px;
     padding: 10px;
 }
@@ -968,14 +968,14 @@ audio::-webkit-media-controls-panel {
 
 #itemEffect {
     display: table-cell;
-    width: 40%;
+    width: 55%;
     margin-bottom: 10px;
     padding: 10px;
 }
 
 #itemPokemon {
     display: table-cell;
-    width: 30%;
+    width: 25%;
     margin-bottom: 10px;
     padding: 10px;
 }
