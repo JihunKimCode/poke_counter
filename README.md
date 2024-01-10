@@ -1,11 +1,14 @@
 # [jihunkimcode.github.io/poke_counter/](https://jihunkimcode.github.io/poke_counter/)
-Main page of the website
+The main page of the website
 
 ## [jihunkimcode.github.io/poke_counter/info.html](https://jihunkimcode.github.io/poke_counter/info.html)
 Explore information on Pokémon and discover effective counters for them.
 
 ## [jihunkimcode.github.io/poke_counter/move.html](https://jihunkimcode.github.io/poke_counter/move.html)
 Retrieve information on Pokémon moves.
+
+## [jihunkimcode.github.io/poke_counter/item.html](https://jihunkimcode.github.io/poke_counter/item.html)
+Retrieve details about various items featured in the Pokémon series.
 
 # Goals
 - [x] **Sprite**
