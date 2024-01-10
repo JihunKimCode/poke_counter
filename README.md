@@ -64,3 +64,4 @@ Retrieve details about various items featured in the Pokémon series.
 - [x] Related Pokemon lists on serach bar
     - [x] Add pokemonNames.txt to fetch the pokemonName list
 - [x] Move Searcher
+- [x] Item Searcher
