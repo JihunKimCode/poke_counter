@@ -22,13 +22,6 @@ scrollTopButton.addEventListener("click", () => {
     });
 });  
 
-// Clear context in search input
-function clearInput() {
-    element.value = '';
-    pokemonDropdown.style.display = 'none';
-    clearButton.style.display = 'none';
-}
-
 // Trace whether TTS is on or off
 let currentUtterance = null;
 
@@ -189,6 +182,13 @@ window.addEventListener('click', (event) => {
         pokemonDropdown.style.display = 'none';
     }
 });
+
+// Clear context in search input
+function clearInput() {
+    element.value = '';
+    pokemonDropdown.style.display = 'none';
+    clearButton.style.display = 'none';
+}
 
 // Function to calculate Levenshtein distance between two strings
 function levenshteinDistance(str1, str2) {
