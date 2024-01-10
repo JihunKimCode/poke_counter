@@ -1161,6 +1161,11 @@ audio::-webkit-media-controls-panel {
         display: table;
     }
     
+    #itemSprite{
+        padding: 0px;
+        padding-top: 10px;
+    }
+
     #item, #itemEffect {
         display: table-row;
     }
