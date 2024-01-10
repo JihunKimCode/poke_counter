@@ -56,17 +56,17 @@
         <div class="search-container">
             <input type="text" id="itemName" placeholder="Enter item name" autocomplete="off">
             <button id="itemSearchButton" onclick="searchItem()"><i class="fa fa-search"></i></button>
-            <div id="clearButton" ><i class="fa-solid fa-xmark"></i></div>
+            <div id="clearButton" onclick="clearInput()"><i class="fa-solid fa-xmark"></i></div>
             <div id="pokemonDropdown"></div>
         </div>
     </div>
     <div class="itemInfo">
         <div id="itemSprite"></div>
         <div class="itemText">
-            <div id="itemEffect"></div>
             <div id="item"></div>
-            <div id="itemPokemon">
-                <div id="heldPokemon"></div>
+            <div id="itemEffect"></div>
+            <div id="heldPokemon">
+                <div id="itemPokemon"></div>
             </div>
         </div>
     </div>
