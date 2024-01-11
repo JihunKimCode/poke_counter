@@ -410,7 +410,8 @@ audio::-webkit-media-controls-panel {
 .tooltip-types,
 .tooltip-moves,
 .tooltip-items,
-.tooltip-pokemon {
+.tooltip-pokemon,
+.tooltip-ability {
     position: relative;
     display: inline-block;
 }
@@ -418,7 +419,8 @@ audio::-webkit-media-controls-panel {
 .tooltip-types .tooltiptext,
 .tooltip-moves .tooltiptext,
 .tooltip-items .tooltiptext,
-.tooltip-pokemon .tooltiptext {
+.tooltip-pokemon .tooltiptext,
+.tooltip-ability .tooltiptext {
     visibility: hidden;
     background-color: rgba(0,0,0,0.7);
     color: #fff;
@@ -450,6 +452,14 @@ audio::-webkit-media-controls-panel {
     left: 110%;
 }
 
+.tooltip-ability .tooltiptext {
+    top: 110%;
+    left: 0%;
+    width: 255px; 
+    white-space: pre-line; 
+    line-height: 1.4;
+}
+
 .tooltip-types .tooltiptext::after,
 .tooltip-items .tooltiptext::after {
     content: " ";
@@ -474,9 +484,9 @@ audio::-webkit-media-controls-panel {
     border-width: 5px;
     border-style: solid;
     border-color: transparent rgba(0,0,0,0.7) transparent transparent;
-  }
+}
 
-  .tooltip-moves .tooltiptext::after {
+.tooltip-moves .tooltiptext::after {
     content: " ";
     position: absolute;
     top: 100%;
@@ -485,12 +495,23 @@ audio::-webkit-media-controls-panel {
     border-width: 5px;
     border-style: solid;
     border-color: rgba(0,0,0,0.7) transparent transparent transparent;
-    }
+}
+
+.tooltip-ability .tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 5%;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent rgba(0,0,0,0.7) transparent;
+}
 
 .tooltip-types:hover .tooltiptext,
 .tooltip-moves:hover .tooltiptext,
 .tooltip-items:hover .tooltiptext,
-.tooltip-pokemon:hover .tooltiptext {
+.tooltip-pokemon:hover .tooltiptext,
+.tooltip-ability:hover .tooltiptext {
     visibility: visible;
 }
 

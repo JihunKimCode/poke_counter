@@ -448,21 +448,7 @@ function performSearch() {
                 value: stat.base_stat,
                 effort: stat.effort
             }));
-            
-            // Check ability, write '(hidden)' if the ability is hidden
-            let abilities = data.abilities.map((ability) => {
-                const abilityName = ability.ability.name;
-                
-                return ability.is_hidden ? `<br>${abilityName} (hidden)` : abilityName;
-                }).join(', ');                  
-                
-            if(data.past_abilities.length>0){
-                abilities += `
-                    , <br>
-                    <s>${data.past_abilities[0].abilities[0].ability.name}</s>
-                    (by ${data.past_abilities[0].generation.name})`
-            }
-                
+                            
             const speciesUrl = data.species.url;
             const response = await fetch(speciesUrl);
             const speciesData = await response.json();
@@ -479,7 +465,7 @@ function performSearch() {
             findColors(data.name, data.id);
             // Main Body
             getPokemonInfo(data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, shape);
-            getTypeAbility(types, abilities);
+            getTypeAbility(types, data.abilities, data.past_abilities);
             getEvolution(speciesData.evolution_chain.url);
             displayStatsHistogram(statsData);
             showForms(speciesUrl);
@@ -631,7 +617,7 @@ function getAudio(name){
     modifiedName = modifiedName.replace(/castform-.*/i, "castform");
     modifiedName = modifiedName.replace(/deoxys-.*/i, "deoxys");
     modifiedName = modifiedName.replace(/darmanitan-.*/i, "darmanitan");
-    modifiedName = modifiedName.replace(/pikachu-.*/i, "pikachu");
+    if(modifiedName!="pikachu-starter") modifiedName = modifiedName.replace(/pikachu-.*/i, "pikachu");
     modifiedName = modifiedName.replace(/rotom-.*/i, "rotom");
     if(modifiedName!="gourgeist-super") modifiedName = modifiedName.replace(/gourgeist-.*/i, "gourgeist");
     if(modifiedName!="pumpkaboo-super") modifiedName = modifiedName.replace(/pumpkaboo-.*/i, "pumpkaboo");
@@ -682,35 +668,81 @@ function getAudio(name){
 }
 
 // Get type and ability info of the pokemon
-function getTypeAbility(types, abilities){
+async function getTypeAbility(types, abilities, pastAbility) {
     // Get weaknesses, resistances, and invalid
     const weaknesses = getWeaknesses(types);
     const resistances = getResistances(types);
     const invalid = getInvalid(types);
-    
+
     // Display the weaknesses, resistances, and invalid
     const weaknessesHtml = weaknesses.length > 0 ? `<h3>Weaknesses</h3><p>${weaknesses.join('&nbsp')}</p>` : '';
     const resistancesHtml = resistances.length > 0 ? `<h3>Resistances</h3><p>${resistances.join('&nbsp')}</p>` : '';
     const invalidHtml = invalid.length > 0 ? `<h3>Invalids</h3><p>${invalid.join('&nbsp')}</p>` : '';
 
-    const typeImages = types.map(type => 
+    const typeImages = types.map(type =>
         `<div class="tooltip-types">
             <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" 
-                    alt="${type}" 
-                    class="type-image" 
-                    width="40px">
+                alt="${type}" 
+                class="type-image" 
+                width="40px">
             <span class="tooltiptext">${type}</span>
         </div>`
-        );
+    );
 
+    let abilitiesHtml = '';
+
+    // Function to handle fetch and return JSON or null on failure
+    const fetchData = async (url) => {
+        try {
+            const response = await fetch(url);
+            return await response.json();
+        } catch (error) {
+            console.error(`Error fetching data from ${url}: ${error.message}`);
+            return null;
+        }
+    };
+    
+    // Check abilities
+    for (const ability of abilities) {
+        const url = `https://pokeapi.co/api/v2/ability/${ability.ability.name}`;
+        const data = await fetchData(url);
+    
+        const effectEntry = data ? data.effect_entries.find(entry => entry.language.name === "en") : null;
+        const tooltipText = effectEntry ? effectEntry.short_effect : '';
+    
+        abilitiesHtml += `
+            <div class="tooltip-ability">
+                ${ability.ability.name} ${ability.is_hidden ? '(hidden)' : ''}
+                <span class="tooltiptext">${tooltipText}</span>
+            </div><br>`;
+    }
+    
+    // Check past ability
+    if (pastAbility.length > 0) {
+        for (const ability of pastAbility) {
+            const url = `https://pokeapi.co/api/v2/ability/${ability.abilities[0].ability.name}`;
+            const data = await fetchData(url);
+    
+            const effectEntry = data ? data.effect_entries.find(entry => entry.language.name === "en") : null;
+            const tooltipText = effectEntry ? effectEntry.short_effect : '';
+    
+            abilitiesHtml += `
+                <div class="tooltip-ability">
+                    <s>${ability.abilities[0].ability.name}</s>
+                    (by ${pastAbility[0].generation.name})
+                    <span class="tooltiptext" style="width: 255px;">${tooltipText}</span>
+                </div>`;
+        }
+    }
+    
     typeAbility.innerHTML = `
         <h3>Types</h3>
             ${typeImages.join('&nbsp&nbsp')}
             ${weaknessesHtml}
             ${resistancesHtml}
             ${invalidHtml}
-            <h3>Abilities</h3>
-            <p>${abilities}</p>
+        <h3>Abilities</h3>
+            <p>${abilitiesHtml}</p>
         `;
 }
 
@@ -2094,7 +2126,6 @@ async function searchItem() {
     try {
         const response = await fetch(`https://pokeapi.co/api/v2/item/${itemNameInput}/`);
         const itemData = await response.json();
-        console.log(itemData);
         scrollTopButton.style.display = 'inline-block';
         
         newItem();
