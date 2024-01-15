@@ -10,7 +10,10 @@ Explore information on Pokémon and discover effective counters for them.
 - **Search Dropdown**
     - Fetch to csv file of PokeAPI
     - Related Pokemon list on serach bar
+    - Levenshtein Distance + Regex
 - **Voice Search**
+    - Fetch to csv file of PokeAPI
+    - Levenshtein Distance
 - **Sprite**
     - Shiny/Female Sprite
     - Front/Back Sprite
@@ -60,6 +63,8 @@ Retrieve information on Pokémon moves.
     - Fetch to csv file of PokeAPI
     - Related move list on serach bar
 - **Voice Search**
+    - Fetch to csv file of PokeAPI
+    - Levenshtein Distance
 - **Move Information**
     - Type with icons
     - Attack Category with icons
@@ -83,6 +88,8 @@ Retrieve details about various items featured in the Pokémon series.
     - Fetch to csv file of PokeAPI
     - Related item list on serach bar
 - **Voice Search**
+    - Fetch to csv file of PokeAPI
+    - Levenshtein Distance
 - **Sprite** 
 - **Item Information**
     - Category

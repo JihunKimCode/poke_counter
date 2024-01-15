@@ -26,48 +26,97 @@ scrollTopButton.addEventListener("click", () => {
 const pokemon = document.getElementById('searchInput');
 const moveName = document.getElementById('moveName');
 const itemName = document.getElementById('itemName');
+const clearButton = document.getElementById('clearButton');
 const element = pokemon || moveName || itemName;
+
+let url;
+if (element === pokemon) url = 'https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon.csv';
+else if(element === moveName) url = 'https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/moves.csv';
+else if(element === itemName) url = 'https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/items.csv';
+else url = '';
+
+// Fetch Pokémon data from the CSV file
+let pokemonNames = [];
+
+fetch(url)
+.then(response => response.text())
+.then(data => {
+    const pokemonData = data.split('\n').slice(1); // Exclude header row
+    pokemonNames = pokemonData.map(row => {
+        const columns = row.split(',');
+        // Extract and trim the second column (identifier) as a string, handle undefined
+        const name = columns[1] ? columns[1].toString().trim() : '';
+        return name !== '' ? name : null; // Exclude empty names
+    }).filter(name => name !== null); // Remove null values
+})
+.catch(error => console.error('Error fetching Pokémon data:', error));
 
 // Function to handle voice recognition using microphone
 function voiceRecognition() {
     const microphone = document.getElementById("microphone");
-    
+
     // Check if the browser supports the Web Speech API
     if ('webkitSpeechRecognition' in window) {
         const recognition = new webkitSpeechRecognition();
-        
+
         // Set properties for the recognition
         recognition.lang = 'en-US';
         recognition.continuous = false;
         recognition.interimResults = false;
-        
+
         // Start recognition
         recognition.start();
         microphone.style.background = 'var(--lightpokemoncolor, #00d6fa)';
-        
+
         // Voice recognition is successful
         recognition.onresult = function(event) {
-            const result = event.results[0][0].transcript;
-            element.value = result;
+            const result = event.results[0][0].transcript.toLowerCase().replace(/\s+/g, '-');
+
+            const mostRelatedWord = findMostRelatedWord(result, pokemonNames);
+            element.value = mostRelatedWord;
+            clearButton.style.display = 'block';
+            // if(result!=mostRelatedWord) alert(`${result} was changed to ${mostRelatedWord}`);
             microphone.style.background = 'var(--pokemoncolor, #1288f8)';
         };
-        
+
         // Voice recognition is ended
         recognition.onend = function() {
             microphone.style.background = 'var(--pokemoncolor, #1288f8)';
         };
-        
+
         // Voice recognition errors
         recognition.onerror = function(event) {
             console.error('Speech recognition error:', event.error);
             microphone.style.background = 'var(--pokemoncolor, #1288f8)';
-            
+
             alert('Speech recognition failed. Please try again.');
         };
     } else {
         alert('Web Speech API is not supported in this browser. Please use a different browser.');
         microphone.style.background = 'var(--pokemoncolor, #1288f8)';
     }
+}
+
+// Find the most related word from the voice recognition using LevenshteinDistance
+function findMostRelatedWord(voiceInput, pokemonNames) {
+    // Filter Pokémon names based on the user's input and flexible matching
+    const suggestions = pokemonNames.filter(name =>
+        name.toLowerCase()
+    );
+        
+    // Sort suggestions by Levenshtein distance and then alphabetically
+    const sortedSuggestions = suggestions.sort((a, b) => {
+        const distanceA = levenshteinDistance(a, voiceInput);
+        const distanceB = levenshteinDistance(b, voiceInput);
+        
+        if (distanceA !== distanceB) {
+            return distanceA - distanceB;
+        } else {
+            return a.localeCompare(b);
+        }
+    });
+        
+    return sortedSuggestions[0];
 }
 
 // Trace whether TTS is on or off
@@ -164,62 +213,37 @@ async function newItem(){
     }
 }
 
-const clearButton = document.getElementById('clearButton');
-const pokemonDropdown = document.getElementById('pokemonDropdown');
 
 // Search Dropdown Highlight
 let currentFocus = -1;
 
-let url;
-if (element === pokemon) {
-    url = 'https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon.csv';
-} else if(element === moveName) {
-    url = 'https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/moves.csv';
-} else if(element === itemName) {
-    url = 'https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/items.csv';
-} else {
-    url = '';
-}
-
-// Fetch Pokémon data from the CSV file
-fetch(url)
-    .then(response => response.text())
-    .then(data => {
-        const pokemonData = data.split('\n').slice(1); // Exclude header row
-        const pokemonNames = pokemonData.map(row => {
-            const columns = row.split(',');
-            // Extract and trim the second column (identifier) as a string, handle undefined
-            const name = columns[1] ? columns[1].toString().trim() : ''; 
-            return name !== '' ? name : null; // Exclude empty names
-        }).filter(name => name !== null); // Remove null values
-
-        if(element){
-            element.addEventListener('input', () => {
-                if (element.value.length >= 1) {
-                    suggestPokemon(pokemonNames);
-                    clearButton.style.display = 'block';
-                } else {
-                    // Hide dropdown if input is empty
-                    pokemonDropdown.style.display = 'none';
-                    clearButton.style.display = 'none';
-                }
-            });
-
-            element.addEventListener('keydown', handleKeydown);
-            element.addEventListener('click', () => {
-                if (element.value.length >= 1) {
-                    suggestPokemon(pokemonNames);
-                    clearButton.style.display = 'block';
-                } else {
-                    // Hide dropdown if input is empty
-                    pokemonDropdown.style.display = 'none';
-                    clearButton.style.display = 'none';
-                }
-                scrollIntoView();
-            });
+// Pokemon Dropdown Suggestion
+const pokemonDropdown = document.getElementById('pokemonDropdown');
+if(element){
+    element.addEventListener('input', () => {
+        if (element.value.length >= 1) {
+            suggestPokemon(pokemonNames);
+            clearButton.style.display = 'block';
+        } else {
+            // Hide dropdown if input is empty
+            pokemonDropdown.style.display = 'none';
+            clearButton.style.display = 'none';
         }
-    })
-    .catch(error => console.error('Error fetching Pokémon data:', error));
+    });
+
+    element.addEventListener('keydown', handleKeydown);
+    element.addEventListener('click', () => {
+        if (element.value.length >= 1) {
+            suggestPokemon(pokemonNames);
+            clearButton.style.display = 'block';
+        } else {
+            // Hide dropdown if input is empty
+            pokemonDropdown.style.display = 'none';
+            clearButton.style.display = 'none';
+        }
+        scrollIntoView();
+    });
+}
 
 if(pokemonDropdown){
     // Hide the dropdown when clicking outside of it
