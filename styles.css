@@ -113,7 +113,7 @@ footer p{
 .topnav .search-container button {
     float: right;
     padding: 6px 10px;
-    margin-right: 16px;
+    margin-right: 13px;
     background: var(--pokemoncolor, #1288f8);
     font-size: 17px;
     border: none;
@@ -152,7 +152,7 @@ footer p{
 #clearButton {
     position: absolute;
     top: 50%;
-    right: 18%;
+    right: 28%;
     transform: translateY(-50%);
     cursor: pointer;
     display: none;
@@ -237,7 +237,7 @@ footer a:hover{
     display: table;
     margin: 20px;
     margin-top: 0px;
-    width: 95%;
+    width: 98%;
 }
 
 /*Webpage Layout*/
@@ -255,7 +255,7 @@ footer a:hover{
 }
 
 .container1{
-    width: 25%;
+    width: 30%;
 }
 
 .container2{

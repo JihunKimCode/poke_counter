@@ -22,6 +22,50 @@ scrollTopButton.addEventListener("click", () => {
     });
 });  
 
+// Function to handle microphone
+function startVoiceRecognition() {
+    const pokemon = document.getElementById('searchInput');
+    const moveName = document.getElementById('moveName');
+    const itemName = document.getElementById('itemName');
+    const element = pokemon || moveName || itemName;
+    const microphone = document.getElementById("microphone");
+    
+    // Check if the browser supports the Web Speech API
+    if ('webkitSpeechRecognition' in window) {
+        const recognition = new webkitSpeechRecognition();
+        
+        // Set properties for the recognition
+        recognition.lang = 'en-US';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        
+        // Start recognition
+        recognition.start();
+        microphone.style.background = 'var(--lightpokemoncolor, #00d6fa)';
+        
+        // Event handler for when recognition is successful
+        recognition.onresult = function(event) {
+        const result = event.results[0][0].transcript;
+        element.value = result;
+        microphone.style.background = 'var(--pokemoncolor, #1288f8)';
+        };
+        
+        // Event handler for when recognition is ended
+        recognition.onend = function() {
+            microphone.style.background = 'var(--pokemoncolor, #1288f8)';
+        };
+        
+        // Event handler for recognition errors
+        recognition.onerror = function(event) {
+        console.error('Speech recognition error:', event.error);
+        microphone.style.background = 'var(--pokemoncolor, #1288f8)';
+        };
+    } else {
+      alert('Web Speech API is not supported in this browser. Please use a different browser.');
+      microphone.style.background = 'var(--pokemoncolor, #1288f8)';
+    }
+  }
+
 // Trace whether TTS is on or off
 let currentUtterance = null;
 
@@ -432,7 +476,7 @@ if(searchInput){
 
 // Search Pokemon Information
 function performSearch() {
-    const searchTerm = searchInput.value.toLowerCase().trim();
+    const searchTerm = searchInput.value.toLowerCase().replace(/\s+/g, '-');
     if (searchTerm === '') {
         alert('Please enter a Pokémon name or ID.');
         return;
