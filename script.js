@@ -22,12 +22,14 @@ scrollTopButton.addEventListener("click", () => {
     });
 });  
 
-// Function to handle microphone
-function startVoiceRecognition() {
-    const pokemon = document.getElementById('searchInput');
-    const moveName = document.getElementById('moveName');
-    const itemName = document.getElementById('itemName');
-    const element = pokemon || moveName || itemName;
+// Choose element
+const pokemon = document.getElementById('searchInput');
+const moveName = document.getElementById('moveName');
+const itemName = document.getElementById('itemName');
+const element = pokemon || moveName || itemName;
+
+// Function to handle voice recognition using microphone
+function voiceRecognition() {
     const microphone = document.getElementById("microphone");
     
     // Check if the browser supports the Web Speech API
@@ -43,28 +45,30 @@ function startVoiceRecognition() {
         recognition.start();
         microphone.style.background = 'var(--lightpokemoncolor, #00d6fa)';
         
-        // Event handler for when recognition is successful
+        // Voice recognition is successful
         recognition.onresult = function(event) {
-        const result = event.results[0][0].transcript;
-        element.value = result;
-        microphone.style.background = 'var(--pokemoncolor, #1288f8)';
+            const result = event.results[0][0].transcript;
+            element.value = result;
+            microphone.style.background = 'var(--pokemoncolor, #1288f8)';
         };
         
-        // Event handler for when recognition is ended
+        // Voice recognition is ended
         recognition.onend = function() {
             microphone.style.background = 'var(--pokemoncolor, #1288f8)';
         };
         
-        // Event handler for recognition errors
+        // Voice recognition errors
         recognition.onerror = function(event) {
-        console.error('Speech recognition error:', event.error);
-        microphone.style.background = 'var(--pokemoncolor, #1288f8)';
+            console.error('Speech recognition error:', event.error);
+            microphone.style.background = 'var(--pokemoncolor, #1288f8)';
+            
+            alert('Speech recognition failed. Please try again.');
         };
     } else {
-      alert('Web Speech API is not supported in this browser. Please use a different browser.');
-      microphone.style.background = 'var(--pokemoncolor, #1288f8)';
+        alert('Web Speech API is not supported in this browser. Please use a different browser.');
+        microphone.style.background = 'var(--pokemoncolor, #1288f8)';
     }
-  }
+}
 
 // Trace whether TTS is on or off
 let currentUtterance = null;
@@ -82,7 +86,7 @@ window.addEventListener('beforeunload', function () {
 function speakText(textToSpeak) {
     // Check if there is an ongoing speech
     if (currentUtterance) {
-        // If ongoing, stop the current speech
+        // Stop the current speech
         window.speechSynthesis.cancel();
         currentUtterance = null;
         return;
@@ -163,11 +167,6 @@ async function newItem(){
 const clearButton = document.getElementById('clearButton');
 const pokemonDropdown = document.getElementById('pokemonDropdown');
 
-const pokemon = document.getElementById('searchInput');
-const moveName = document.getElementById('moveName');
-const itemName = document.getElementById('itemName');
-const element = pokemon || moveName || itemName;
-
 // Search Dropdown Highlight
 let currentFocus = -1;
 
@@ -194,38 +193,42 @@ fetch(url)
             return name !== '' ? name : null; // Exclude empty names
         }).filter(name => name !== null); // Remove null values
 
-        element.addEventListener('input', () => {
-            if (element.value.length >= 1) {
-                suggestPokemon(pokemonNames);
-                clearButton.style.display = 'block';
-            } else {
-                // Hide dropdown if input is empty
-                pokemonDropdown.style.display = 'none';
-                clearButton.style.display = 'none';
-            }
-        });
+        if(element){
+            element.addEventListener('input', () => {
+                if (element.value.length >= 1) {
+                    suggestPokemon(pokemonNames);
+                    clearButton.style.display = 'block';
+                } else {
+                    // Hide dropdown if input is empty
+                    pokemonDropdown.style.display = 'none';
+                    clearButton.style.display = 'none';
+                }
+            });
 
-        element.addEventListener('keydown', handleKeydown);
-        element.addEventListener('click', () => {
-            if (element.value.length >= 1) {
-                suggestPokemon(pokemonNames);
-                clearButton.style.display = 'block';
-            } else {
-                // Hide dropdown if input is empty
-                pokemonDropdown.style.display = 'none';
-                clearButton.style.display = 'none';
-            }
-            scrollIntoView();
-        });
+            element.addEventListener('keydown', handleKeydown);
+            element.addEventListener('click', () => {
+                if (element.value.length >= 1) {
+                    suggestPokemon(pokemonNames);
+                    clearButton.style.display = 'block';
+                } else {
+                    // Hide dropdown if input is empty
+                    pokemonDropdown.style.display = 'none';
+                    clearButton.style.display = 'none';
+                }
+                scrollIntoView();
+            });
+        }
     })
     .catch(error => console.error('Error fetching Pokémon data:', error));
 
-// Hide the dropdown when clicking outside of it
-window.addEventListener('click', (event) => {
-    if (!event.target.matches(`#${element.id}`)) {
-        pokemonDropdown.style.display = 'none';
-    }
-});
+if(pokemonDropdown){
+    // Hide the dropdown when clicking outside of it
+    window.addEventListener('click', (event) => {
+        if (!event.target.matches(`#${element.id}`)) {
+            pokemonDropdown.style.display = 'none';
+        }
+    });
+}
 
 // Clear context in search input
 function clearInput() {
@@ -2004,7 +2007,7 @@ async function searchMove() {
             `
 
         movePower.textContent = moveData.power || "N/A";
-        moveAccuracy.textContent = moveData.accuracy || "N/A";
+        moveAccuracy.textContent = `${moveData.accuracy}%` || "N/A";
         movePP.textContent = moveData.pp || "N/A";
         
         if(moveData.effect_entries.length>0){
