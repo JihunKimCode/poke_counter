@@ -1106,6 +1106,7 @@ audio::-webkit-media-controls-panel {
         flex-direction: column;
         margin: 0px;
         padding: 10px;
+        width: 95%;
     }
 
     .container1,
