@@ -2058,7 +2058,7 @@ async function searchMove() {
             "user": { box1: "#00d6fa", box2: "#00d6fa", box3: "#00d6fa", box4: "#ff0800", box5: "#00d6fa", box6: "#00d6fa"},
             "random-opponent": { box1: "#b5338a", box2: "#b5338a", box3: "#00d6fa", box4: "#ff0800", box5: "#00d6fa", box6: "#00d6fa"},
             "all-other-pokemon": { box1: "#ff0800", box2: "#ff0800", box3: "#00d6fa", box4: "#00d6fa", box5: "#ff0800", box6: "#00d6fa"},
-            "selected-pokemon": { box1: "#ff0800", box2: "#ff0800", box3: "#00d6fa", box4: "#00d6fa", box5: "#ff0800", box6: "#00d6fa"},
+            "selected-pokemon": { box1: "#b5338a", box2: "#b5338a", box3: "#00d6fa", box4: "#00d6fa", box5: "#b5338a", box6: "#00d6fa"},
             "all-opponents": { box1: "#ff0800", box2: "#ff0800", box3: "#00d6fa", box4: "#00d6fa", box5: "#00d6fa", box6: "#00d6fa"},
             "entire-field": { box1: "#ff0800", box2: "#ff0800", box3: "#ff0800", box4: "#ff0800", box5: "#ff0800", box6: "#ff0800"},
             "user-and-allies": { box1: "#00d6fa", box2: "#00d6fa", box3: "#00d6fa", box4: "#ff0800", box5: "#ff0800", box6: "#ff0800"},
