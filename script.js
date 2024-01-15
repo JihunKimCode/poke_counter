@@ -2027,12 +2027,11 @@ async function searchMove() {
                     class="type-image" 
                     width="60px">
                 <span class="tooltiptext">${moveData.damage_class.name}</span>
-            </div>
-            `
+            </div>`;
 
-        movePower.textContent = moveData.power || "N/A";
-        moveAccuracy.textContent = `${moveData.accuracy}%` || "N/A";
-        movePP.textContent = moveData.pp || "N/A";
+        movePower.textContent = moveData.power || "-";
+        moveAccuracy.textContent = `${(moveData.accuracy === null || moveData.accuracy === 0) ? "-" : moveData.accuracy}` || "-";
+        movePP.textContent = moveData.pp || "-";
         
         if(moveData.effect_entries.length>0){
             effect.innerHTML = `
@@ -2108,28 +2107,30 @@ async function searchMove() {
         
         // Define color map for ailments
         const ailmentColors = {
-            freeze: "#00d6fa",
-            burn: "#ff0800",
-            paralysis: "#ffd300",
-            poison: "purple",
-            none: "black",
+            Freeze: "#00d6fa",
+            Burn: "#ff0800",
+            Paralysis: "#ffd300",
+            Poison: "purple",
+            Effect: "black",
         };
 
         if (moveData.meta) {
-            ailment.textContent = moveData.meta.ailment.name === "none" ? "Effect" : capitalizeFirstLetter(moveData.meta.ailment.name);
-            moveAilmentChance.textContent = moveData.meta.ailment_chance === 0 ? moveData.effect_chance || "N/A" : moveData.meta.ailment_chance || "N/A";
-            ailmentEffect.style.backgroundColor = ailmentColors[moveData.meta.ailment.name] || "gray";
+            if(moveData.meta.ailment.name === "none"){
+                if(moveData.meta.flinch_chance > 0) ailment.textContent = "Flinch"
+                else ailment.textContent = "Effect"
+            } else {
+                ailment.textContent = capitalizeFirstLetter(moveData.meta.ailment.name);
+            }
+            moveAilmentChance.textContent = moveData.meta.ailment_chance === 0 ? moveData.effect_chance || "-" : moveData.meta.ailment_chance || "-";
+            ailmentEffect.style.backgroundColor = ailmentColors[ailment.textContent] || "gray";
         } else {
             // Set default values when moveData.meta is not available
             ailment.textContent = "Effect";
-            moveAilmentChance.textContent = "N/A";
+            moveAilmentChance.textContent = "-";
             ailmentEffect.style.backgroundColor = "black";
         }
-
-        moveAilmentChance.textContent += "%"
-
-        movePriority.textContent = (moveData.priority !== undefined && moveData.priority !== null) ? moveData.priority : "N/A";
-        moveGeneration.textContent = (moveData.generation.name).split('-')[1].toUpperCase() || "N/A";
+        movePriority.textContent = (moveData.priority !== undefined && moveData.priority !== null) ? moveData.priority : "-";
+        moveGeneration.textContent = (moveData.generation.name).split('-')[1].toUpperCase() || "-";
         
         const flavorTextEntries = moveData.flavor_text_entries.filter(entry => entry.language.name === "en");
 
