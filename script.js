@@ -71,12 +71,15 @@ function voiceRecognition() {
         // Voice recognition is successful
         recognition.onresult = function(event) {
             const result = event.results[0][0].transcript.toLowerCase().replace(/\s+/g, '-');
-
             const mostRelatedWord = findMostRelatedWord(result, pokemonNames);
-            element.value = mostRelatedWord;
-            clearButton.style.display = 'block';
-            // if(result!=mostRelatedWord) alert(`${result} was changed to ${mostRelatedWord}`);
             microphone.style.background = 'var(--pokemoncolor, #1288f8)';
+
+            element.value = mostRelatedWord;
+            if(element===pokemon) performSearch();
+            else if(element===moveName) searchMove();
+            else searchItem();
+
+            clearButton.style.display = 'block';
         };
 
         // Voice recognition is ended
@@ -473,14 +476,7 @@ let global_types, global_statsData, global_sprites, global_speciesUrl;
 // Search button click event
 if(searchButton){
     searchButton.addEventListener('click', () => {
-        newItem();
         performSearch();
-
-        // If ongoing speech, stop it when the search button is clicked
-        if (currentUtterance) {
-            window.speechSynthesis.cancel();
-            currentUtterance = null;
-        }    
     });
 }
 
@@ -489,15 +485,8 @@ if(searchInput){
     searchInput.addEventListener('keydown', (event) => {
         // Check if the key pressed is the Enter key (key code 13)
         if (event.keyCode === 13) {
-            newItem();
             performSearch();
         }
-
-        // If ongoing speech, stop it when the search box is activated
-        if (currentUtterance) {
-            window.speechSynthesis.cancel();
-            currentUtterance = null;
-        }    
     });
 }
 
@@ -512,6 +501,14 @@ function performSearch() {
     fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`)
         .then((response) => response.json())
         .then(async (data) => {
+            newItem();
+
+            // If ongoing speech, stop it when the search box is activated
+            if (currentUtterance) {
+                window.speechSynthesis.cancel();
+                currentUtterance = null;
+            }    
+            
             const sprites = data.sprites;
             const types = data.types.map((type) => type.type.name);
             const statsData = data.stats.map((stat) => ({ 
