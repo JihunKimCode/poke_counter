@@ -110,6 +110,10 @@ footer p{
     width: 255px;
 }
 
+#searchButton, #moveSearchButton, #itemSearchButton{
+    margin-right: 5px;
+}
+
 .topnav .search-container button {
     float: right;
     padding: 6px 10px;
@@ -152,7 +156,7 @@ footer p{
 #clearButton {
     position: absolute;
     top: 50%;
-    right: 28%;
+    right: 26%;
     transform: translateY(-50%);
     cursor: pointer;
     display: none;
@@ -1128,6 +1132,18 @@ audio::-webkit-media-controls-panel {
     #counterpokemon{
         display: table-row;
         width: fit-content;
+    }
+    
+    #searchInput, #moveName, #itemName {
+        width: 200px;
+    }
+
+    #pokemonDropdown{
+        width: 212px;
+    }
+
+    #clearButton {
+        right: 31%;
     }
 
     footer{
