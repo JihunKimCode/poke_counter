@@ -124,8 +124,6 @@ function findMostRelatedWord(voiceInput, pokemonNames) {
 
 // Trace whether TTS is on or off
 let currentUtterance = null;
-
-// Event listener for page refresh
 window.addEventListener('beforeunload', function () {
     if (currentUtterance) {
         // If ongoing speech, stop it before leaving the page
@@ -1791,8 +1789,14 @@ function makeTable(pokemonArray){
     counterPokemon.appendChild(tableContainer);
 }
 
+// Store the latest call's timestamp
+let latestCallTimestamp = 0; 
+
 // Find counter pokemon of the pokemon
 async function findCounterPokemon(types, SP_stats) {
+    const currentCallTimestamp = Date.now();
+    latestCallTimestamp = currentCallTimestamp;
+
     // Check that the checkbox is checked
     const filterSpe_bst600 = filterCheckbox_bst600.checked;      
     const filterSpe_mega = filterCheckbox_mega.checked;          
@@ -1840,6 +1844,9 @@ async function findCounterPokemon(types, SP_stats) {
     
     // Get total number of pokemon for loading bar
     for (const type of weaknesses) {
+        // Check if a newer call has been made, and cancel if true
+        if (currentCallTimestamp !== latestCallTimestamp) return;
+
         const typeUrl = `${base_url}type/${type.toLowerCase()}`;
         const typeResponse = await fetch(typeUrl);
         const typeData = await typeResponse.json();            
@@ -1855,6 +1862,9 @@ async function findCounterPokemon(types, SP_stats) {
 
         // Iterate through each pokemon for the current weakness type
         for (const entry of typeData.pokemon) {
+            // Check if a newer call has been made, and cancel if true
+            if (currentCallTimestamp !== latestCallTimestamp) return;
+            
             // Update Loading Bar
             progressContainer.innerHTML = '';
             progress += 1;
@@ -1939,7 +1949,7 @@ async function findCounterPokemon(types, SP_stats) {
     // Sort the array by score in descending order
     pokemonArray.sort((a, b) => { return b.score - a.score; });
 
-    // Clear contents to prevent Race Condition
+    // Clear Loading
     progressContainer.style.width = `0%`;
     progressContainer.innerHTML = '';
 
