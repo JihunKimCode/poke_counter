@@ -2001,6 +2001,7 @@ async function searchMove() {
         moveTarget.style.display = "grid";
         effect.style.display = "table-cell";
 
+        // Damage Class
         if(moveData.damage_class.name==="physical"){
             randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-band.png';
             randomItem.title = 'choice-band';
@@ -2012,6 +2013,7 @@ async function searchMove() {
             randomItem.title = 'focus-sash';
         }
 
+        // Move Name, Type, and Damage Class
         moveNameDisplay.textContent = moveData.name.toUpperCase();
         moveType.innerHTML =  `
             <div class="tooltip-moves">
@@ -2029,10 +2031,12 @@ async function searchMove() {
                 <span class="tooltiptext">${moveData.damage_class.name}</span>
             </div>`;
 
+        //Power, Accuracy, and PP
         movePower.textContent = moveData.power || "-";
         moveAccuracy.textContent = `${(moveData.accuracy === null || moveData.accuracy === 0) ? "-" : moveData.accuracy}` || "-";
         movePP.textContent = moveData.pp || "-";
         
+        // Move Effect
         if(moveData.effect_entries.length>0){
             effect.innerHTML = `
                 <h3>Short Description</h3>
@@ -2044,6 +2048,7 @@ async function searchMove() {
             effect.innerHTML = ``;
         }
         
+        // Move Target
         const target = moveData.target.name;
         moveTargetInfo.textContent = capitalizeFirstLetter(target.replace(/-/g, ' ').replace(" me first", "")) || "N/A";
         
@@ -2070,7 +2075,7 @@ async function searchMove() {
             // Get the corresponding color from the targetMappings
             const color = targetMappings[target][boxId];
             
-            // Update the box color using JavaScript
+            // Update the box color
             document.getElementById(boxId).style.backgroundColor = color;
         }    
 
@@ -2132,17 +2137,19 @@ async function searchMove() {
         movePriority.textContent = (moveData.priority !== undefined && moveData.priority !== null) ? moveData.priority : "-";
         moveGeneration.textContent = (moveData.generation.name).split('-')[1].toUpperCase() || "-";
         
+        // Flavor Text from In-Game
         const flavorTextEntries = moveData.flavor_text_entries.filter(entry => entry.language.name === "en");
 
         if (flavorTextEntries.length > 0) {
             const randomIndex = Math.floor(Math.random() * flavorTextEntries.length);
             const randomFlavorTextEntry = flavorTextEntries[randomIndex];
-            effect.innerHTML += `<h3>PokéDex Description</h3>`;
+            effect.innerHTML += `<h3>In-Game Description</h3>`;
             effect.innerHTML += randomFlavorTextEntry.flavor_text;
         } else {
             effect.textContent = "N/A";
         }
 
+        // All pokemon sprites who learn the move
         if (moveData.learned_by_pokemon) {
             const pokemonList = moveData.learned_by_pokemon;
             const sprites = await Promise.all(pokemonList.map(async pokemon => {
@@ -2201,11 +2208,13 @@ async function searchItem() {
         scrollTopButton.style.display = 'inline-block';
         
         newItem();
+        // Item Name and Sprite
         itemSprite.innerHTML = `
                 <h3>${itemData.name.toUpperCase()}</h3>
                 <img src="${itemData.sprites.default}" alt="${itemNameInput}" width="130" class="pokemon-image">
             `
         
+        // Category, Attribute, Fling (effect and power)
         const attributes = itemData.attributes.map(attribute => attribute.name);
         if(attributes.length === 0) attributes.push("N/A");
         const flingEffectName = (itemData.fling_effect) != null ? itemData.fling_effect.name : "Effect";
@@ -2214,8 +2223,7 @@ async function searchItem() {
             const response = await fetch(itemData.fling_effect.url);
             const flingEffectData = await response.json(); 
             flingEffect = flingEffectData.effect_entries[0].effect||"N/A";
-        } 
-
+        }
         item.innerHTML = `
             <h3>Category</h3>
             <p>${itemData.category.name}</p>
@@ -2225,6 +2233,8 @@ async function searchItem() {
             <p>${capitalizeFirstLetter(flingEffectName)}: ${flingEffect}</p>
             <p>Power: ${flingPower}</p>
         `
+
+        // Item Description
         if(itemData.effect_entries.length>0){
             itemEffect.innerHTML = `
                 <h3>Short Description</h3>
@@ -2236,6 +2246,7 @@ async function searchItem() {
             itemEffect.innerHTML = ``;
         }
 
+        // Item In-Game Description
         const flavorTextEntries = itemData.flavor_text_entries.filter(entry => entry.language.name === "en");
         if (flavorTextEntries.length > 0) {
             const randomIndex = Math.floor(Math.random() * flavorTextEntries.length);
@@ -2246,6 +2257,7 @@ async function searchItem() {
             itemEffect.textContent = "N/A";
         }
 
+        // All pokemon sprites who held the item
         if (itemData.held_by_pokemon) {
             const pokemonList = itemData.held_by_pokemon;
             const sprites = await Promise.all(pokemonList.map(async pokemon => {
