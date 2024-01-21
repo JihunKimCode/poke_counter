@@ -1564,90 +1564,93 @@ function calculate(CP_data, SP_stats){
     * 0: hp; 1: attack; 2: defense; 3: special-attack; 4: special-defense; 5: speed 
     */
     
-    // HP = baseStat+IV/2+EV/8+10+50
-    // others = (baseStat+IV/2+EV/8+5)*Nature
-    // Assume every stats are in best condition
-    const SP_real_hp = SP_stats[0].value+31/2+252/8+10+50;
-    const SP_real_atk = (SP_stats[1].value+31/2+252/8+5)*1.1;
-    const SP_real_def = (SP_stats[2].value+31/2+252/8+5)*1.1;
-    const SP_real_spa = (SP_stats[3].value+31/2+252/8+5)*1.1;
-    const SP_real_spd = (SP_stats[4].value+31/2+252/8+5)*1.1;
-    const SP_real_spe = (SP_stats[5].value+31/2+252/8+5)*1.1;
+   // Assume every stats are in best condition
+   const IV = 31;
+   const EV = 252;
+   const NATURE = 1.1;
+   
+   // HP = baseStat + IV/2 + EV/8 + 50 + 10
+   // others = (baseStat + IV/2 + EV/8 + 5) * Nature
+    const SP_real_hp = SP_stats[0].value + IV/2 + EV/8 + 50 + 10;
+    const SP_real_atk = (SP_stats[1].value + IV/2 + EV/8 + 5) * NATURE;
+    const SP_real_def = (SP_stats[2].value + IV/2 + EV/8 + 5) * NATURE;
+    const SP_real_spa = (SP_stats[3].value + IV/2 + EV/8 + 5) * NATURE;
+    const SP_real_spd = (SP_stats[4].value + IV/2 + EV/8 + 5) * NATURE;
+    const SP_real_spe = (SP_stats[5].value + IV/2 + EV/8 + 5) * NATURE;
 
-    const CP_real_hp = CP_data.stats.hp+31/2+252/8+10+50;
-    const CP_real_atk = (CP_data.stats.atk+31/2+252/8+5)*1.1;
-    const CP_real_def = (CP_data.stats.def+31/2+252/8+5)*1.1;
-    const CP_real_spa = (CP_data.stats.spa+31/2+252/8+5)*1.1;
-    const CP_real_spd = (CP_data.stats.spd+31/2+252/8+5)*1.1;
-    const CP_real_spe = (CP_data.stats.spe+31/2+252/8+5)*1.1;
+    const CP_real_hp = CP_data.stats.hp + IV/2 + EV/8 + 50 + 10;
+    const CP_real_atk = (CP_data.stats.atk + IV/2 + EV/8 + 5) * NATURE;
+    const CP_real_def = (CP_data.stats.def + IV/2 + EV/8 + 5) * NATURE;
+    const CP_real_spa = (CP_data.stats.spa + IV/2 + EV/8 + 5) * NATURE;
+    const CP_real_spd = (CP_data.stats.spd + IV/2 + EV/8 + 5) * NATURE;
+    const CP_real_spe = (CP_data.stats.spe + IV/2 + EV/8 + 5) * NATURE;
 
     // real_damage = (real_atk or real_spa) * ability * power * STAB * rank
     // real_defense = real_hp * (real_def or real_spd) / (0.44 or 0.411 or 0.374 (correction))
     var SP_real_damage = 0, SP_real_defense = 0, CP_real_damage = 0, CP_real_defense = 0;
 
-    // Assume power = 80; No ability; STAB(x1.5); No rank-up;
-    // Check if the pokeomon's defense or special-defense is lower
+    // Assume No ability; power = 80; STAB(x1.5); No rank-up;
+    const ABILITY = 1;
+    const POWER = 80;
+    const STAB = 1.5;
+    const RANK = 1;
+    const DEFENSE_CHECK = { twoHit: 0.44, randomOneHit: 0.411, oneHit: 0.374 };
+    const MULTIPLIER = 1 * ABILITY * POWER * STAB * RANK;
+
+    // Check whether search pokeomon's defense or special-defense is lower
     if (SP_real_def < SP_real_spd) {
-        // Attack with attack
-        CP_real_damage = Math.floor(CP_real_atk * 1 * 80 * 1.5 * 1);
+        CP_real_damage = Math.floor(CP_real_atk * MULTIPLIER);
         SP_real_defense = Math.floor(SP_real_hp * SP_real_def);
     } else if (SP_real_def > SP_real_spd) {
-        CP_real_damage = Math.floor(CP_real_spa * 1 * 80 * 1.5 * 1);
+        CP_real_damage = Math.floor(CP_real_spa * MULTIPLIER);
         SP_real_defense = Math.floor(SP_real_hp * SP_real_spd);
     } else if (CP_real_atk > CP_real_spa){
-        CP_real_damage = Math.floor(CP_real_atk * 1 * 80 * 1.5 * 1);
+        CP_real_damage = Math.floor(CP_real_atk * MULTIPLIER);
         SP_real_defense = Math.floor(SP_real_hp * SP_real_def);
     } else{
-        CP_real_damage = Math.floor(CP_real_spa * 1 * 80 * 1.5 * 1);
+        CP_real_damage = Math.floor(CP_real_spa * MULTIPLIER);
         SP_real_defense = Math.floor(SP_real_hp * SP_real_spd);
     }
 
     CP_data.score += Math.floor((CP_real_damage)*0.005);
     
+    // Score adjustments based on hit types
+    let twoHitThreshold = Math.floor(SP_real_defense/DEFENSE_CHECK.twoHit);
+    let oneHitThreshold = Math.floor(SP_real_defense/DEFENSE_CHECK.oneHit);
+
     // 100% two-hit or more
-    if(CP_real_damage < Math.floor(SP_real_defense/0.44)) {
-        CP_data.score -= 10;
-    }
+    if (CP_real_damage < twoHitThreshold) CP_data.score -= 10;
     // Random one-hit
-    if(CP_real_damage > Math.floor(SP_real_defense/0.44) 
-        && CP_real_damage < Math.floor(SP_real_defense/0.374)) {
-        CP_data.score += 15;
-    }
+    else if (CP_real_damage < oneHitThreshold) CP_data.score += 15;
     // 100% one-hit
-    if(CP_real_damage > Math.floor(SP_real_defense/0.374)){
-        CP_data.score += 30;
-    }
+    else if(CP_real_damage > oneHitThreshold) CP_data.score += 30;
     
-    // Def vs SpD based on Atk vs SpA
+    // Check whether search pokeomon's attack or special-attack is greater
     if (SP_real_atk > SP_real_spa) {
-        SP_real_damage = Math.floor(SP_real_atk * 1 * 80 * 1.5 * 1);
+        SP_real_damage = Math.floor(SP_real_atk * MULTIPLIER);
         CP_real_defense = Math.floor(CP_real_hp * CP_real_def);
     } else if (SP_real_atk < SP_real_spa) {
-        SP_real_damage = Math.floor(SP_real_spa * 1 * 80 * 1.5 * 1);
+        SP_real_damage = Math.floor(SP_real_spa * MULTIPLIER);
         CP_real_defense = Math.floor(CP_real_hp * CP_real_spd);
     } else if (CP_real_def > CP_real_spd){
-        SP_real_damage = Math.floor(SP_real_spa * 1 * 80 * 1.5 * 1);
+        SP_real_damage = Math.floor(SP_real_spa * MULTIPLIER);
         CP_real_defense = Math.floor(CP_real_hp * CP_real_spd);
     } else {
-        SP_real_damage = Math.floor(SP_real_atk * 1 * 80 * 1.5 * 1);
+        SP_real_damage = Math.floor(SP_real_atk * MULTIPLIER);
         CP_real_defense = Math.floor(CP_real_hp * CP_real_def);
     }
 
     CP_data.score += Math.floor((CP_real_defense)*0.001);
 
+    twoHitThreshold = Math.floor(CP_real_defense/DEFENSE_CHECK.twoHit);
+    oneHitThreshold = Math.floor(CP_real_defense/DEFENSE_CHECK.oneHit);
+
     // 100% two-hit or more
-    if(SP_real_damage < Math.floor(CP_real_defense/0.44)) {
-        CP_data.score += 20;
-    }
+    if(SP_real_damage < twoHitThreshold) CP_data.score += 20;
     // Random one-hit
-    if(SP_real_damage > Math.floor(CP_real_defense/0.44) 
-        && SP_real_damage < Math.floor(CP_real_defense/0.374)) {
-        CP_data.score += 10;
-    }
+    else if(SP_real_damage < oneHitThreshold) CP_data.score += 10;
     // 100% one-hit
-    if(SP_real_damage > Math.floor(CP_real_defense/0.374)){
-        CP_data.score -= 10;
-    }
+    else if(SP_real_damage > oneHitThreshold) CP_data.score -= 10;
 
     // Give more score to the counter Pokemon whose speed is faster
     if (CP_real_spe > SP_real_spe) CP_data.score += Math.min(Math.floor(CP_real_spe - SP_real_spe), 15);
