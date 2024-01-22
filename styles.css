@@ -344,6 +344,50 @@ audio::-webkit-media-controls-panel {
     font-family: 'NanumS', sans-serif;
     font-size: 12px;
 }  
+
+#levelContainer{
+    display: none;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#numberContainer {
+    display: inline-block;
+    font-size: 16px;
+    width: 53px;
+}
+
+#scrollBarContainer {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+input[type='range'] {
+    appearance: none;
+    width: 190px;
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: #fff;
+}
+  
+input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    background: var(--pokemoncolor, #1288f8);
+    box-shadow: -195px 0 0 185px var(--pokemoncolor, #1288f8);
+}
+
+/* FireFox */
+input[type="range"]::-moz-range-progress {
+    background-color: var(--pokemoncolor, #1288f8); 
+}
+
+input[type="range"]::-moz-range-track {  
+    background-color: #fff;
+}
   
 /* Histogram Design */
 #statsHistogram{
@@ -536,7 +580,7 @@ audio::-webkit-media-controls-panel {
     line-height: 1.5;
 }
 
-#cpHead{
+#psHead, #cpHead{
     display: none;
 }
 

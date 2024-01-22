@@ -434,6 +434,10 @@ const filterCheckbox_shiny = document.getElementById('filterCheckbox_shiny');
 const filterCheckbox_female = document.getElementById('filterCheckbox_female');
 
 // Container 2
+const psHead = document.getElementById('psHead');
+const levelContainer = document.getElementById('levelContainer');
+const numberContainer = document.getElementById('numberContainer');
+const numberSlider = document.getElementById('numberSlider');
 const statsHistogram = document.getElementById('statsHistogram');
 const progressContainer = document.getElementById('progress-bar');
 const dfHead = document.getElementById('dfHead');
@@ -441,6 +445,7 @@ const forms = document.getElementById('forms');
 const heldItems = document.getElementById('heldItems');
 const others = document.getElementById('others');
 
+const cbx_form = document.getElementById('cbx_form');
 const filter_shinyform = document.getElementById('filter_shinyform');
 const filter_back = document.getElementById('filter_back');
 const filterCheckbox_shinyform = document.getElementById('filterCheckbox_shinyform');
@@ -988,6 +993,12 @@ async function updateColors(color) {
     `;
 }
 
+numberSlider.addEventListener('input', () => {
+  let newValue = numberSlider.value;
+  numberContainer.innerText = `LV ${newValue}`;
+  displayStatsHistogram(global_statsData);
+});
+
 // Function to display the Pokemon's stats histogram
 function displayStatsHistogram(statsData) {
     // Max value for Each Stats
@@ -995,7 +1006,11 @@ function displayStatsHistogram(statsData) {
     let stats = 0;
     let name, minRealStat = 0, maxRealStat = 0;
 
-    statsHistogram.innerHTML = `<h3>Pokémon Stats</h3>`
+    // Show Header
+    psHead.style.display = 'block';
+    levelContainer.style.display = 'flex';
+    const LV = parseInt((numberContainer.innerText).match(/\d+/), 10);
+
     // Create HTML for the histogram
     const histogramHTML = statsData.map((stat) => {
         const barWidth = (stat.value / maxValue) * 100;
@@ -1004,28 +1019,34 @@ function displayStatsHistogram(statsData) {
         // Calculate Real Stat at LV.50
         if(stat.name === "hp") {
             name = "HP";
-            minRealStat = Math.floor(stat.value+0/2+0/8+10+50);
-            maxRealStat = Math.floor(stat.value+31/2+252/8+10+50);
+            if(stat.value == 1){
+                // Shedinja
+                minRealStat = 1;
+                maxRealStat = 1;    
+            } else {
+                minRealStat = Math.floor((2*stat.value+0+0/4)*LV/100)+LV+10;
+                maxRealStat = Math.floor((2*stat.value+31+252/4)*LV/100)+LV+10;
+            }
         } else if (stat.name === "attack"){
             name = "ATK";
-            minRealStat = Math.floor((stat.value+0/2+0/8+5)*0.9);
-            maxRealStat = Math.floor((stat.value+31/2+252/8+5)*1.1);
+            minRealStat = Math.floor((Math.floor((2*stat.value+0+0/4)*LV/100)+5)*0.9);
+            maxRealStat = Math.floor((Math.floor((2*stat.value+31+252/4)*LV/100)+5)*1.1);
         } else if (stat.name === "defense"){
             name = "DEF";
-            minRealStat = Math.floor((stat.value+0/2+0/8+5)*0.9);
-            maxRealStat = Math.floor((stat.value+31/2+252/8+5)*1.1);
+            minRealStat = Math.floor((Math.floor((2*stat.value+0+0/4)*LV/100)+5)*0.9);
+            maxRealStat = Math.floor((Math.floor((2*stat.value+31+252/4)*LV/100)+5)*1.1);
         } else if (stat.name === "special-attack"){
             name = "SPA";
-            minRealStat = Math.floor((stat.value+0/2+0/8+5)*0.9);
-            maxRealStat = Math.floor((stat.value+31/2+252/8+5)*1.1);
+            minRealStat = Math.floor((Math.floor((2*stat.value+0+0/4)*LV/100)+5)*0.9);
+            maxRealStat = Math.floor((Math.floor((2*stat.value+31+252/4)*LV/100)+5)*1.1);
         } else if (stat.name === "special-defense"){
             name = "SPD";
-            minRealStat = Math.floor((stat.value+0/2+0/8+5)*0.9);
-            maxRealStat = Math.floor((stat.value+31/2+252/8+5)*1.1);
+            minRealStat = Math.floor((Math.floor((2*stat.value+0+0/4)*LV/100)+5)*0.9);
+            maxRealStat = Math.floor((Math.floor((2*stat.value+31+252/4)*LV/100)+5)*1.1);
         } else if (stat.name === "speed"){
             name = "SPE";
-            minRealStat = Math.floor((stat.value+0/2+0/8+5)*0.9);
-            maxRealStat = Math.floor((stat.value+31/2+252/8+5)*1.1);
+            minRealStat = Math.floor((Math.floor((2*stat.value+0+0/4)*LV/100)+5)*0.9);
+            maxRealStat = Math.floor((Math.floor((2*stat.value+31+252/4)*LV/100)+5)*1.1);
         }
 
         return `
@@ -1044,7 +1065,7 @@ function displayStatsHistogram(statsData) {
     }).join('');
 
     // Set the HTML content of the histogram container
-    statsHistogram.innerHTML += histogramHTML;
+    statsHistogram.innerHTML = histogramHTML;
     statsHistogram.innerHTML += `<p>Total Base Stats: ${stats}</p>`;
 }
 
@@ -1668,7 +1689,7 @@ function updateTableSize(){
     const table = document.querySelector('.table');
     if (tableContainer) {
         const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + typeAbility.clientHeight + evolution.clientHeight;
-        const container2 = statsHistogram.clientHeight + dfHead.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
+        const container2 = psHead.clientHeight + levelContainer.clientHeight + statsHistogram.clientHeight + dfHead.clientHeight + cbx_form.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
         const clientHeight = container1 > container2 ? container1 : container2;
         const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
         const screenHeight = (window.innerHeight > 0) ? window.innerHeight : screen.height;
@@ -1704,7 +1725,7 @@ function makeTable(pokemonArray){
     const tableContainer = document.createElement('div');
     tableContainer.className = 'tableContainer';
     const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + typeAbility.clientHeight + evolution.clientHeight;
-    const container2 = statsHistogram.clientHeight + dfHead.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
+    const container2 = psHead.clientHeight + levelContainer.clientHeight + statsHistogram.clientHeight + dfHead.clientHeight + cbx_form.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
     const clientHeight = container1 > container2 ? container1 : container2;
     const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
     const screenHeight = (window.innerHeight > 0) ? window.innerHeight : screen.height;
