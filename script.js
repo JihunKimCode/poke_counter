@@ -1000,7 +1000,7 @@ if(numberContainer){
         // Validate the input
         if (newNumber !== null && !isNaN(newNumber) && newNumber >= 1 && newNumber <= 100) {
             // Update the numberContainer
-            numberContainer.textContent = `LV ${newNumber}`; // Add a space before the new number
+            numberContainer.textContent = `LV ${newNumber}`;
             numberSlider.value = newNumber;
             displayStatsHistogram(global_statsData);
         } else {
