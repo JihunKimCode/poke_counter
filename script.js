@@ -993,11 +993,29 @@ async function updateColors(color) {
     `;
 }
 
-numberSlider.addEventListener('input', () => {
-  let newValue = numberSlider.value;
-  numberContainer.innerText = `LV ${newValue}`;
-  displayStatsHistogram(global_statsData);
-});
+if(numberContainer){
+    numberContainer.addEventListener('click', function () {
+        var newNumber = prompt('Enter a number between 1 and 100:', '50');
+
+        // Validate the input
+        if (newNumber !== null && !isNaN(newNumber) && newNumber >= 1 && newNumber <= 100) {
+            // Update the numberContainer
+            numberContainer.textContent = `LV ${newNumber}`; // Add a space before the new number
+            numberSlider.value = newNumber;
+            displayStatsHistogram(global_statsData);
+        } else {
+            alert('Please enter a valid number between 1 and 100.');
+        }
+    });
+}
+
+if(numberSlider){
+    numberSlider.addEventListener('input', () => {
+        let newValue = numberSlider.value;
+        numberContainer.innerText = `LV ${newValue}`;
+        displayStatsHistogram(global_statsData);
+    });  
+}
 
 // Function to display the Pokemon's stats histogram
 function displayStatsHistogram(statsData) {
