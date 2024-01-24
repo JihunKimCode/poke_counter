@@ -1129,11 +1129,25 @@ async function showForms(species){
             const masterball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
             
             if(filterSpe_shinyform){
-                if(filterSpe_back) sprite = formData.sprites.back_shiny||masterball;
-                else sprite = formData.sprites.front_shiny||masterball;
+                if(filterSpe_back) sprite = formData.sprites.back_shiny;
+                else sprite = formData.sprites.front_shiny;
             } else{
-                if(filterSpe_back) sprite = formData.sprites.back_default||pokeball;
-                else sprite = formData.sprites.front_default||pokeball;
+                if(filterSpe_back) sprite = formData.sprites.back_default;
+                else sprite = formData.sprites.front_default;
+            }
+
+            if(!sprite){
+                const url = formData.pokemon.url;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if(filterSpe_shinyform){
+                    if(filterSpe_back) sprite = data.sprites.back_shiny||masterball;
+                    else sprite = data.sprites.front_shiny||masterball;
+                } else{
+                    if(filterSpe_back) sprite = data.sprites.back_default||pokeball;
+                    else sprite = data.sprites.front_default||pokeball;
+                }
             }
             
             forms.innerHTML += `
