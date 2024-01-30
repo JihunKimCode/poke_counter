@@ -888,7 +888,7 @@ function getSprite(name, sprites){
         // Normal Only
         "Early Artwork - JP":{ category: baseUrl+`artwork/original/${name}-gen1-jp.jpg`, defaultBall: pokeball, shinyBall: masterball },
         "Early Artwork - US":{ category: baseUrl+`artwork/original/${name}-gen1.jpg`, defaultBall: pokeball, shinyBall: masterball },
-        "Pokémon Global Link":{ category: baseUrl+`artwork/vector/large/${name}.png`, defaultBall: pokeball3D, shinyBall: masterball3D },
+        "Pokémon Global Link":{ category: baseUrl+`artwork/vector/${name}.png`, defaultBall: pokeball3D, shinyBall: masterball3D },
         "Icon - LGPE":{ category: baseUrl+`sprites/lets-go-pikachu-eevee/normal/${name}.png`, defaultBall: pokeball, shinyBall: masterball },
         "Icon - BDSP":{ category: baseUrl+`sprites/brilliant-diamond-shining-pearl/normal/${name}.png`, defaultBall: pokeball3D, shinyBall: masterball3D },
         "Icon - Gen IX":{ category: baseUrl+`sprites/scarlet-violet/normal/${name}.png`, defaultBall: pokeball3D, shinyBall: masterball3D },
