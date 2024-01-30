@@ -474,7 +474,7 @@ const filterCheckbox_abilities = document.getElementById('filterCheckbox_abiliti
 const filterCheckbox_baseStat = document.getElementById('filterCheckbox_baseStat');
 
 // Global variables for updating table
-let global_types, global_statsData, global_sprites, global_speciesUrl;
+let global_types, global_statsData, global_name, global_sprites, global_speciesUrl;
 
 // Search button click event
 if(searchButton){
@@ -525,6 +525,7 @@ function performSearch() {
             const speciesData = await response.json();
 
             // Global variables for click events
+            global_name = data.name;
             global_sprites = sprites;
             global_types = types;
             global_statsData = statsData;
@@ -553,7 +554,7 @@ function performSearch() {
 // Get the bioInfo of the pokemon
 function getPokemonInfo(name, id, sprites, height, weight, gender_rate, shape){
     // Trace Pokemon's information
-    const image = getSprite(sprites);
+    const image = getSprite(name, sprites);
     const bioInfo = getBioInfo(height, weight, gender_rate, shape);        
     const audio = getAudio(name);
 
@@ -821,7 +822,7 @@ async function getTypeAbility(types, abilities, pastAbility) {
 if(selectSprite){
     selectSprite.addEventListener('change', () => {
         // get updated Sprite
-        const updatedImage = getSprite(global_sprites);
+        const updatedImage = getSprite(global_name, global_sprites);
         
         // Update the sprite in the HTML
         const sprite_front = document.querySelector('.pokemon-image');
@@ -836,7 +837,7 @@ if(filterCheckbox_shiny||filterCheckbox_shiny){
     function handleGetSprite(filterCheckbox) {
         filterCheckbox.addEventListener('click', () => {
             // get updated Sprite
-            const updatedImage = getSprite(global_sprites);
+            const updatedImage = getSprite(global_name, global_sprites);
             
             // Update the sprite in the HTML
             const sprite_front = document.querySelector('.pokemon-image');
@@ -851,7 +852,7 @@ if(filterCheckbox_shiny||filterCheckbox_shiny){
 }
 
 // Get Sprites of the Pokemon (front, back, default, shiny, female)
-function getSprite(sprites){
+function getSprite(name, sprites){
     chooseSprite.style.display = 'inline-block';
     filter_shiny.style.display = 'inline-block';
     filter_female.style.display = 'inline-block';
@@ -869,6 +870,39 @@ function getSprite(sprites){
     const masterball3D = 'https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/PokeBalls/MasterBall.png'
 
     let category, defaultBall, shinyBall;
+
+    const baseUrl = `https://img.pokemondb.net/sprites/`;
+    const newCategoryMappings = {
+        "Pokémon Bank": { category: baseUrl+'bank/', defaultBall: pokeball3D, shinyBall: masterball3D },
+        "Pokémon GO": { category: baseUrl+'go/', defaultBall: pokeball3D, shinyBall: masterball3D },
+        "Gen VIII - PLA":{ category: baseUrl+'legends-arceus/', defaultBall: pokeball3D, shinyBall: masterball3D },
+        "Icon - LGPE":{ category: baseUrl+'lets-go-pikachu-eevee/', defaultBall: pokeball, shinyBall: masterball },
+        "Icon - BDSP":{ category: baseUrl+'brilliant-diamond-shining-pearl/', defaultBall: pokeball, shinyBall: masterball },
+        "Icon - Gen IX":{ category: baseUrl+'scarlet-violet/', defaultBall: pokeball, shinyBall: masterball },
+    };
+    // Choose Category to take image
+    if (labelText in newCategoryMappings) {
+        ({ category, defaultBall, shinyBall } = newCategoryMappings[labelText]);
+
+        if (filterSpe_shiny) {
+            if(filterSpe_female){
+                image.push(category+`shiny/${name}-f.png` || shinyBall);
+                image.push(category+`back-shiny/${name}-f.png` || shinyBall);
+            } else {
+                image.push(category+`shiny/${name}.png` || shinyBall);
+                image.push(category+`back-shiny/${name}.png` || shinyBall);
+            }
+        } else {
+            if(filterSpe_female){
+                image.push(category+`normal/${name}-f.png` || defaultBall);
+                image.push(category+`back-normal/${name}-f.png` || defaultBall);
+            } else {
+                image.push(category+`normal/${name}.png` || defaultBall);
+                image.push(category+`back-normal/${name}.png` || defaultBall);
+            }
+        }
+    }
+
     const categoryMappings = {
         "Official Artwork": { category: sprites.other["official-artwork"], defaultBall: pokeball3D, shinyBall: masterball3D },
         "Pokémon Home": { category: sprites.other["home"], defaultBall: pokeball3D, shinyBall: masterball3D },
@@ -2274,7 +2308,8 @@ async function searchItem() {
         // Item Name and Sprite
         itemSprite.innerHTML = `
                 <h3>${itemData.name.toUpperCase()}</h3>
-                <img src="${itemData.sprites.default}" alt="${itemNameInput}" width="130" class="pokemon-image">
+                <img src="${itemData.sprites.default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mega-glove.png'}" 
+                 alt="${itemNameInput}" width="130" class="pokemon-image">
             `
         
         // Category, Attribute, Fling (effect and power)
@@ -2306,7 +2341,12 @@ async function searchItem() {
                 <p>${itemData.effect_entries[0].effect || ""}</p>
             `;
         } else {
-            itemEffect.innerHTML = ``;
+            itemEffect.innerHTML = `
+            <h3>Short Description</h3>
+            <p>none</p>
+            <h3>Long Description</h3>
+            <p>none</p>
+        `;
         }
 
         // Item In-Game Description
@@ -2317,7 +2357,8 @@ async function searchItem() {
             itemEffect.innerHTML += `<h3>In-Game Description</h3>`;
             itemEffect.innerHTML += randomFlavorTextEntry.text;
         } else {
-            itemEffect.textContent = "N/A";
+            itemEffect.innerHTML += `<h3>In-Game Description</h3>`;
+            itemEffect.innerHTML += `N/A`;
         }
 
         // All pokemon sprites who held the item

@@ -54,6 +54,7 @@ Explore information on Pokémon and discover effective counters for them.
     - e.g. lycanroc, urshifu, pawmot, maushold, brambleghast, rabsca, palafin, annihilape, kingambit, and gholdengo
 - [ ] x1 Types?
 - [ ] Better calculation to find counter pokemon
+- [ ] Image Path Check
 
 ## [Pokémon Move Searcher](https://jihunkimcode.github.io/poke_counter/move.html)
 Retrieve information on Pokémon moves.
