@@ -870,35 +870,69 @@ function getSprite(name, sprites){
     const masterball3D = 'https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/PokeBalls/MasterBall.png'
 
     let category, defaultBall, shinyBall;
+    if (name.includes("galar")) {
+        name = name.replace("galar", "galarian");
+    } else if (name.includes("alola")) {
+        name = name.replace("alola", "alolan");
+    }
 
-    const baseUrl = `https://img.pokemondb.net/sprites/`;
-    const newCategoryMappings = {
-        "Pokémon Bank": { category: baseUrl+'bank/', defaultBall: pokeball3D, shinyBall: masterball3D },
-        "Pokémon GO": { category: baseUrl+'go/', defaultBall: pokeball3D, shinyBall: masterball3D },
-        "Gen VIII - PLA":{ category: baseUrl+'legends-arceus/', defaultBall: pokeball3D, shinyBall: masterball3D },
-        "Icon - LGPE":{ category: baseUrl+'lets-go-pikachu-eevee/', defaultBall: pokeball, shinyBall: masterball },
-        "Icon - BDSP":{ category: baseUrl+'brilliant-diamond-shining-pearl/', defaultBall: pokeball, shinyBall: masterball },
-        "Icon - Gen IX":{ category: baseUrl+'scarlet-violet/', defaultBall: pokeball, shinyBall: masterball },
+    const baseUrl = `https://img.pokemondb.net/`;
+    const DBCategoryMappingsA = {
+        // Contain Gender and Shiny
+        "Pokémon Bank": { category: baseUrl+'sprites/bank/', defaultBall: pokeball3D, shinyBall: masterball3D },
+        "Pokémon GO": { category: baseUrl+'sprites/go/', defaultBall: pokeball3D, shinyBall: masterball3D },
+        "Gen VIII - PLA":{ category: baseUrl+'sprites/legends-arceus/', defaultBall: pokeball3D, shinyBall: masterball3D },
     };
+
+    const DBCategoryMappingsB = {
+        // Normal Only
+        "Early Artwork US":{ category: baseUrl+`artwork/original/${name}-gen1.jpg`, defaultBall: pokeball3D, shinyBall: masterball3D },
+        "Early Artwor JP":{ category: baseUrl+`artwork/original/${name}-gen1-jp.jpg`, defaultBall: pokeball3D, shinyBall: masterball3D },
+        "Global Link":{ category: baseUrl+`artwork/vector/large/${name}.png`, defaultBall: pokeball3D, shinyBall: masterball3D },
+        "Icon - LGPE":{ category: baseUrl+`sprites/lets-go-pikachu-eevee/normal/${name}.png`, defaultBall: pokeball3D, shinyBall: masterball3D },
+        "Icon - BDSP":{ category: baseUrl+`sprites/brilliant-diamond-shining-pearl/normal/${name}.png`, defaultBall: pokeball3D, shinyBall: masterball3D },
+        "Icon - Gen IX":{ category: baseUrl+`sprites/scarlet-violet/normal/${name}.png`, defaultBall: pokeball3D, shinyBall: masterball3D },
+    };
+
     // Choose Category to take image
-    if (labelText in newCategoryMappings) {
-        ({ category, defaultBall, shinyBall } = newCategoryMappings[labelText]);
+    if (labelText in DBCategoryMappingsA) {
+        ({ category, defaultBall, shinyBall } = DBCategoryMappingsA[labelText]);
 
         if (filterSpe_shiny) {
             if(filterSpe_female){
                 image.push(category+`shiny/${name}-f.png` || shinyBall);
-                image.push(category+`back-shiny/${name}-f.png` || shinyBall);
+                image.push(shinyBall);
             } else {
                 image.push(category+`shiny/${name}.png` || shinyBall);
-                image.push(category+`back-shiny/${name}.png` || shinyBall);
+                image.push(shinyBall);
             }
         } else {
             if(filterSpe_female){
                 image.push(category+`normal/${name}-f.png` || defaultBall);
-                image.push(category+`back-normal/${name}-f.png` || defaultBall);
+                image.push(defaultBall);
             } else {
                 image.push(category+`normal/${name}.png` || defaultBall);
-                image.push(category+`back-normal/${name}.png` || defaultBall);
+                image.push(defaultBall);
+            }
+        }
+    } else if(labelText in DBCategoryMappingsB){
+        ({ category, defaultBall, shinyBall } = DBCategoryMappingsB[labelText]);
+
+        if (filterSpe_shiny) {
+            if(filterSpe_female){
+                image.push(shinyBall);
+                image.push(shinyBall);
+            } else {
+                image.push(shinyBall);
+                image.push(shinyBall);
+            }
+        } else {
+            if(filterSpe_female){
+                image.push(defaultBall);
+                image.push(defaultBall);
+            } else {
+                image.push(category || defaultBall);
+                image.push(defaultBall);
             }
         }
     }
