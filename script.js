@@ -1290,7 +1290,7 @@ function trivia(speciesData){
 
 // Change Pokemon name in evolution chain into an image
 function evolutionWithImages(evolutionDetails) {
-    const matches = evolutionDetails.match(/(?:<br>-> |<br>or |^)([a-zA-Z-]+)/g);
+    const matches = evolutionDetails.match(/(?:<br>-> |<br>or |^)([a-zA-Z0-9-]+)/g);
     
     if (!matches) {
         // No matches found, return the original string
