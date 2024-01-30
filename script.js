@@ -886,10 +886,10 @@ function getSprite(name, sprites){
 
     const DBCategoryMappingsB = {
         // Normal Only
-        "Early Artwork US":{ category: baseUrl+`artwork/original/${name}-gen1.jpg`, defaultBall: pokeball3D, shinyBall: masterball3D },
-        "Early Artwor JP":{ category: baseUrl+`artwork/original/${name}-gen1-jp.jpg`, defaultBall: pokeball3D, shinyBall: masterball3D },
+        "Early Artwork US":{ category: baseUrl+`artwork/original/${name}-gen1.jpg`, defaultBall: pokeball, shinyBall: masterball },
+        "Early Artwor JP":{ category: baseUrl+`artwork/original/${name}-gen1-jp.jpg`, defaultBall: pokeball, shinyBall: masterball },
         "Global Link":{ category: baseUrl+`artwork/vector/large/${name}.png`, defaultBall: pokeball3D, shinyBall: masterball3D },
-        "Icon - LGPE":{ category: baseUrl+`sprites/lets-go-pikachu-eevee/normal/${name}.png`, defaultBall: pokeball3D, shinyBall: masterball3D },
+        "Icon - LGPE":{ category: baseUrl+`sprites/lets-go-pikachu-eevee/normal/${name}.png`, defaultBall: pokeball, shinyBall: masterball },
         "Icon - BDSP":{ category: baseUrl+`sprites/brilliant-diamond-shining-pearl/normal/${name}.png`, defaultBall: pokeball3D, shinyBall: masterball3D },
         "Icon - Gen IX":{ category: baseUrl+`sprites/scarlet-violet/normal/${name}.png`, defaultBall: pokeball3D, shinyBall: masterball3D },
     };
