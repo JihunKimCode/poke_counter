@@ -225,6 +225,7 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
+// Random Search with Shuffle Button
 const shuffle = document.getElementById('shuffle');
 if(shuffle){
     shuffle.addEventListener('click', () => {
