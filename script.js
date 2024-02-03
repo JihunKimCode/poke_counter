@@ -744,7 +744,7 @@ function getAudio(name){
     // Names to remove hyphen
     let nohyphen = 
         ["brute-bonnet", "chi-yu","chien-pao","flutter-mane", "gouging-fire", "great-tusk", "hakamo-o", "ho-oh", "jangmo-o", "kommo-o",
-            "mime-jr", "mr-mime", "mr-rime", "nidoran-f","nidoran-m", "porygon-z", "raging-bolt", "roaring-mmon", "sandy-shocks", 
+            "mime-jr", "mr-mime", "mr-rime", "nidoran-f","nidoran-m", "porygon-z", "raging-bolt", "roaring-moon", "sandy-shocks", 
             "scream-tail", "tapu-bulu","tapu-fini","tapu-koko","tapu-lele", "ting-lu", "type-null", "walking-wake", "wo-chien"]
 
     if(nohyphen.includes(modifiedName)) modifiedName = modifiedName.replace("-","");
