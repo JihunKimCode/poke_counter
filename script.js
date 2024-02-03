@@ -214,9 +214,19 @@ async function newItem(){
     }
 }
 
-
 // Search Dropdown Highlight
 let currentFocus = -1;
+
+// Random Search with accent key
+document.addEventListener("keydown", (event) => {
+    if (event.key.toLowerCase() === '`') {
+        var randomNumber = Math.floor(Math.random() * pokemonNames.length) + 1;
+        element.value = pokemonNames[randomNumber];
+        if(element === pokemon) performSearch();
+        else if(element === moveName) searchMove();
+        else searchItem();
+    }
+});
 
 // Pokemon Dropdown Suggestion
 const pokemonDropdown = document.getElementById('pokemonDropdown');
@@ -1167,8 +1177,14 @@ if(filterCheckbox_shinyform || filterCheckbox_back){
     handleShowForm(filterCheckbox_back);
 }
 
+// Store the latest call's timestamp
+let latestFormCall = 0;
+
 // Take all forms of the Pokemon
 async function showForms(species){
+    const currentFormCall = Date.now();
+    latestFormCall = currentFormCall;
+
     const speciesresponse = await fetch(species);
     const speciesData = await speciesresponse.json();
     dfHead.style.display = 'block';
@@ -1180,11 +1196,17 @@ async function showForms(species){
     forms.innerHTML = '';
     
     for(var i = 0; i<speciesData.varieties.length; i++){
+        // Check if a newer call has been made, and cancel if true
+        if(currentFormCall !== latestFormCall) return;
+
         const url = speciesData.varieties[i].pokemon.url;
         const response = await fetch(url);
         const data = await response.json();
 
         for(var j  = 0; j<data.forms.length; j++){
+            // Check if a newer call has been made, and cancel if true
+            if(currentFormCall !== latestFormCall) return;
+
             const pokemonName = data.forms[j].name;
             
             const formUrl = data.forms[j].url;
@@ -1217,6 +1239,9 @@ async function showForms(species){
                     else sprite = data.sprites.front_default||pokeball;
                 }
             }
+
+            // Check if a newer call has been made, and cancel if true
+            if(currentFormCall !== latestFormCall) return;
             
             forms.innerHTML += `
                 <div class="tooltip-items">
