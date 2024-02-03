@@ -529,7 +529,6 @@ function performSearch() {
                 value: stat.base_stat,
                 effort: stat.effort
             }));
-                            
             const speciesUrl = data.species.url;
             const response = await fetch(speciesUrl);
             const speciesData = await response.json();
@@ -546,7 +545,7 @@ function performSearch() {
             // Update theme colors
             findColors(data.name, data.id);
             // Main Body
-            getPokemonInfo(data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, shape);
+            getPokemonInfo(data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, shape, speciesData.names);
             getTypeAbility(types, data.abilities, data.past_abilities);
             getEvolution(speciesData.evolution_chain.url);
             displayStatsHistogram(statsData);
@@ -562,9 +561,10 @@ function performSearch() {
 }
     
 // Get the bioInfo of the pokemon
-function getPokemonInfo(name, id, sprites, height, weight, gender_rate, shape){
+function getPokemonInfo(name, id, sprites, height, weight, gender_rate, shape, foreignNames){
     // Trace Pokemon's information
     const image = getSprite(name, sprites);
+    const foreignName = getForeignName(foreignNames);
     const bioInfo = getBioInfo(height, weight, gender_rate, shape);        
     const audio = getAudio(name);
 
@@ -574,13 +574,24 @@ function getPokemonInfo(name, id, sprites, height, weight, gender_rate, shape){
             <img src="${image[0]}" alt="${name}" width="130" class="pokemon-image">
             <img src="${image[1]}" alt="${name}" width="130" class="pokemon-image2">
         </div>
-        <p>Pokédex #${id}</p>
+        <p>Pokédex #${id} | ${foreignName}</p>
         <div class="bioInfo">${bioInfo}</div>
         <audio controls>
             <source src="${audio}" type="audio/mp3">
             Your browser does not support the audio element.
         </audio>
     `;
+}
+
+// Get specific foreign name
+function getForeignName(foreignNames){
+    let result = ['NULL','NULL'];
+
+    for (let i = 0; i < foreignNames.length; i++) {
+        if (foreignNames[i].language.name === "ko") result[0] = foreignNames[i].name;
+        else if (foreignNames[i].language.name === "ja") result[1] = foreignNames[i].name;
+    }
+    return result.join(", ");
 }
 
 // Take weight, height, and gender rate of the pokemon
@@ -2111,6 +2122,7 @@ const moveDetailsDiv = document.getElementById("moveDetails");
 const learnGroupDiv = document.getElementById("learnGroup");
 
 const moveNameDisplay = document.getElementById("moveNameDisplay");
+const foreignMoveName = document.getElementById("foreignMoveName");
 const moveType = document.getElementById("moveType");
 const moveDamageClass = document.getElementById("moveDamageClass");
 
@@ -2171,6 +2183,7 @@ async function searchMove() {
 
         // Move Name, Type, and Damage Class
         moveNameDisplay.textContent = moveData.name.toUpperCase();
+        foreignMoveName.textContent = getForeignName(moveData.names);
         moveType.innerHTML =  `
             <div class="tooltip-moves">
                 <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(moveData.type.name)}.png" 
@@ -2366,7 +2379,8 @@ async function searchItem() {
         newItem();
         // Item Name and Sprite
         itemSprite.innerHTML = `
-                <h3>${itemData.name.toUpperCase()}</h3>
+                <h2>${itemData.name.toUpperCase()}</h2>
+                <p>${getForeignName(itemData.names)}</p>
                 <img src="${itemData.sprites.default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mega-glove.png'}" 
                  alt="${itemNameInput}" width="130" class="pokemon-image">
             `

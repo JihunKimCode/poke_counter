@@ -828,6 +828,10 @@ input[type="range"]::-moz-range-track {
     padding: 10px;
 }
 
+#foreignMoveName{
+    margin-bottom: 15px;
+}
+
 #moveInfo, #moveInfo2, #moveMoreInfo, #moveTarget{
   display: none;
   margin-bottom: 20px;
@@ -1033,6 +1037,10 @@ input[type="range"]::-moz-range-track {
 
 #itemSprite{
     padding: 10px;
+}
+
+#itemSprite h2{
+    margin-top: 0px;
 }
 
 #itemText {
