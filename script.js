@@ -214,9 +214,6 @@ async function newItem(){
     }
 }
 
-// Search Dropdown Highlight
-let currentFocus = -1;
-
 // Random Search with accent key
 document.addEventListener("keydown", (event) => {
     if (event.key.toLowerCase() === '`') {
@@ -227,6 +224,21 @@ document.addEventListener("keydown", (event) => {
         else searchItem();
     }
 });
+
+const shuffle = document.getElementById('shuffle');
+if(shuffle){
+    shuffle.addEventListener('click', () => {
+        var randomNumber = Math.floor(Math.random() * pokemonNames.length) + 1;
+        element.value = pokemonNames[randomNumber];
+        if(element === pokemon) performSearch();
+        else if(element === moveName) searchMove();
+        else searchItem();
+        clearButton.style.display = 'block';
+    });
+}
+
+// Search Dropdown Highlight
+let currentFocus = -1;
 
 // Pokemon Dropdown Suggestion
 const pokemonDropdown = document.getElementById('pokemonDropdown');
