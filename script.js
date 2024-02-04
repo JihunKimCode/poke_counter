@@ -740,14 +740,6 @@ function getAudio(name){
     modifiedName = modifiedName.replace(/tauros-.*/i, "tauros");
     modifiedName = modifiedName.replace(/terapagos-.*/i, "terapagos");
     modifiedName = modifiedName.replace(/wormadam-.*/i, "wormadam");
-    
-    // Names to remove hyphen
-    let nohyphen = 
-        ["brute-bonnet", "chi-yu","chien-pao","flutter-mane", "gouging-fire", "great-tusk", "hakamo-o", "ho-oh", "jangmo-o", "kommo-o",
-            "mime-jr", "mr-mime", "mr-rime", "nidoran-f","nidoran-m", "porygon-z", "raging-bolt", "roaring-moon", "sandy-shocks", 
-            "scream-tail", "tapu-bulu","tapu-fini","tapu-koko","tapu-lele", "ting-lu", "type-null", "walking-wake", "wo-chien"]
-
-    if(nohyphen.includes(modifiedName)) modifiedName = modifiedName.replace("-","");
 
     // Names to remove gimmick using simple replace
     modifiedName = modifiedName.replace("-gmax", "");
@@ -762,6 +754,15 @@ function getAudio(name){
     modifiedName = modifiedName.replace("-mega-x", "-megax");
     modifiedName = modifiedName.replace("-mega-y", "-megay");
     modifiedName = modifiedName.replace("iron-", "iron");
+    
+    // Names to remove hyphen
+    let nohyphen = 
+    ["brute-bonnet", "chi-yu","chien-pao","flutter-mane", "gouging-fire", "great-tusk", "hakamo-o", "ho-oh", "jangmo-o", "kommo-o",
+        "mime-jr", "mr-mime", "mr-rime", "nidoran-f","nidoran-m", "porygon-z", "raging-bolt", "roaring-moon", "sandy-shocks", 
+        "scream-tail", "tapu-bulu","tapu-fini","tapu-koko","tapu-lele", "ting-lu", "type-null", "walking-wake", "wo-chien"]
+
+    if(nohyphen.includes(modifiedName)) modifiedName = modifiedName.replace("-","");
+
 
     if (modifiedName in specialMapping) {
         ({ orig_name } = specialMapping[modifiedName]);
