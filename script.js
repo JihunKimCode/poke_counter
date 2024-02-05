@@ -2369,8 +2369,11 @@ async function searchMove() {
 ***************/
 const itemSprite = document.getElementById('itemSprite');
 const item = document.getElementById('item');
+const chooseItemSprite = document.getElementById('chooseItemSprite');
+const selectItemSprite = document.getElementById('itemSpriteType');
 const itemEffect = document.getElementById('itemEffect');
 const itemPokemon = document.getElementById('itemPokemon');
+let global_itemName, global_itemImage;
 
 if(itemName){
     // Add a keydown event listener to the input field
@@ -2382,6 +2385,41 @@ if(itemName){
     });
 }
 
+// Add event listener to the dropdown menu
+if(selectItemSprite){
+    selectItemSprite.addEventListener('change', () => {
+        
+        // Update the sprite in the HTML
+        const itemSprite = document.querySelector('.pokemon-image');
+        if (itemSprite) itemSprite.src = getItemSprite(global_itemName, global_itemImage);
+    });
+}
+
+// Get Sprites of the item
+function getItemSprite(itemName, itemImage){
+    chooseItemSprite.style.display = 'inline-block';
+
+    var labelText = selectItemSprite.options[selectItemSprite.selectedIndex].text;
+
+    const defaultImage = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mega-glove.png';
+
+    let sprite;
+    const imageMappings = {
+        "Pixel Art": { sprite: itemImage },
+        "Pokémon Dream World": { sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dream-world/${itemName}.png` },
+        "Underground": { sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/underground/${itemName}.png` },
+    };
+    // Choose Category to take image
+    if (labelText in imageMappings) {
+        ({ sprite } = imageMappings[labelText]);
+    } else {
+        // Default Image
+        sprite = defaultImage;
+    }
+
+    return sprite||defaultImage;
+}
+
 // Search Item Information
 async function searchItem() {
     const itemNameInput = document.getElementById("itemName").value.toLowerCase().replace(/\s+/g, '-');
@@ -2389,15 +2427,17 @@ async function searchItem() {
         const response = await fetch(`https://pokeapi.co/api/v2/item/${itemNameInput}/`);
         const itemData = await response.json();
         scrollTopButton.style.display = 'inline-block';
-        
         newItem();
         // Item Name and Sprite
-        itemSprite.innerHTML = `
+        itemSprite.innerHTML = 
+            `
                 <h2>${itemData.name.toUpperCase()}</h2>
                 <p>${getForeignName(itemData.names)}</p>
-                <img src="${itemData.sprites.default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mega-glove.png'}" 
-                 alt="${itemNameInput}" width="130" class="pokemon-image">
-            `
+                <img src="${getItemSprite(itemData.name, itemData.sprites.default)}" 
+                alt="${itemNameInput}" width="130" class="pokemon-image">
+            `;
+        global_itemName = itemData.name;
+        global_itemImage = itemData.sprites.default;
         
         // Category, Attribute, Fling (effect and power)
         const attributes = itemData.attributes.map(attribute => attribute.name);

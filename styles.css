@@ -314,13 +314,15 @@ audio::-webkit-media-controls-panel {
     display: inline-block;
 }
 
-#chooseSprite {
+#chooseSprite,
+#chooseItemSprite {
     display: none;
     margin-right: 12px;
 }
 
 /*Dropdown Box*/
-#spriteType {
+#spriteType,
+#itemSpriteType {
     padding: 4px;    
     background: #fff;
     color: #000;
@@ -341,7 +343,8 @@ audio::-webkit-media-controls-panel {
 }
 
 /* Dropdown Menu Design */
-#spriteType option {
+#spriteType option,
+#itemSpriteType option {
     font-family: 'NanumS', sans-serif;
     font-size: 12px;
 }  
