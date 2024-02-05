@@ -320,6 +320,10 @@ audio::-webkit-media-controls-panel {
     margin-right: 12px;
 }
 
+#chooseItemSprite{
+    padding-left: 10px;
+}
+
 /*Dropdown Box*/
 #spriteType,
 #itemSpriteType {
@@ -1259,6 +1263,10 @@ input[type="range"]::-moz-range-track {
     .itemInfo {
         display: table;
     }
+
+    #chooseItemSprite{
+        padding-left: 0px;
+    }   
     
     #itemSprite{
         padding: 0px;
