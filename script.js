@@ -516,62 +516,90 @@ if(searchInput){
     });
 }
 
+// translate search term
+function translate(csv, searchTerm) {
+    const isEnglish = /^[a-zA-Z]+$/.test(searchTerm);
+    if (!isEnglish) {
+        return fetch(csv)
+            .then((response) => response.text())
+            .then((csvData) => {
+                const lines = csvData.split('\n').slice(1);
+                for (let i = 1; i < lines.length; i++) {
+                    const currentLine = lines[i].split(',');
+                    if (searchTerm === currentLine[2]) {
+                        return currentLine[0];
+                    }
+                }
+            });
+    } else {
+        // If it's in English, return the original searchTerm
+        return Promise.resolve(searchTerm);
+    }
+}
+
 // Search Pokemon Information
 function performSearch() {
-    const searchTerm = searchInput.value.toLowerCase().replace(/\s+/g, '-');
+    let searchTerm = searchInput.value.toLowerCase().replace(/\s+/g, '-');
     if (searchTerm === '') {
         alert('Please enter a Pokémon name or ID.');
         return;
     }
 
-    fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`)
-        .then((response) => response.json())
-        .then(async (data) => {
-            newItem();
+    const csv = 'https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_species_names.csv';
+    translate(csv, searchTerm)
+        .then((translatedTerm) => {
+            searchTerm = translatedTerm;
 
-            // If ongoing speech, stop it when the search box is activated
-            if (currentUtterance) {
-                window.speechSynthesis.cancel();
-                currentUtterance = null;
-            }    
-            
-            const sprites = data.sprites;
-            const types = data.types.map((type) => type.type.name);
-            const statsData = data.stats.map((stat) => ({ 
-                name: stat.stat.name, 
-                value: stat.base_stat,
-                effort: stat.effort
-            }));
-            const speciesUrl = data.species.url;
-            const response = await fetch(speciesUrl);
-            const speciesData = await response.json();
+            fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`)
+                .then((response) => response.json())
+                .then(async (data) => {
+                    newItem();
 
-            // Global variables for click events
-            global_name = data.name;
-            global_sprites = sprites;
-            global_types = types;
-            global_statsData = statsData;
-            global_speciesUrl = speciesUrl;
-            
-            const shape = speciesData.shape != null ? speciesData.shape.name : "null";
-
-            // Update theme colors
-            findColors(data.name, data.id);
-            // Main Body
-            getPokemonInfo(data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, shape, speciesData.names);
-            getTypeAbility(types, data.abilities, data.past_abilities);
-            getEvolution(speciesData.evolution_chain.url);
-            displayStatsHistogram(statsData);
-            showForms(speciesUrl);
-            showHeldItems(data.held_items);
-            trivia(speciesData);
-            findCounterPokemon(types, statsData);
-        })
-        .catch((error) => {
-            alert('Pokémon not found. Please try another name or ID.');
-            console.error(error);
+                    // If ongoing speech, stop it when the search box is activated
+                    if (currentUtterance) {
+                        window.speechSynthesis.cancel();
+                        currentUtterance = null;
+                    }    
+                    
+                    const sprites = data.sprites;
+                    const types = data.types.map((type) => type.type.name);
+                    const statsData = data.stats.map((stat) => ({ 
+                        name: stat.stat.name, 
+                        value: stat.base_stat,
+                        effort: stat.effort
+                    }));
+                    const speciesUrl = data.species.url;
+                    const response = await fetch(speciesUrl);
+                    const speciesData = await response.json();
+        
+                    // Global variables for click events
+                    global_name = data.name;
+                    global_sprites = sprites;
+                    global_types = types;
+                    global_statsData = statsData;
+                    global_speciesUrl = speciesUrl;
+                    
+                    const shape = speciesData.shape != null ? speciesData.shape.name : "null";
+        
+                    // Update theme colors
+                    findColors(data.name, data.id);
+                    // Main Body
+                    getPokemonInfo(data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, shape, speciesData.names);
+                    getTypeAbility(types, data.abilities, data.past_abilities);
+                    getEvolution(speciesData.evolution_chain.url);
+                    displayStatsHistogram(statsData);
+                    showForms(speciesUrl);
+                    showHeldItems(data.held_items);
+                    trivia(speciesData);
+                    findCounterPokemon(types, statsData);
+                })
+                .catch((error) => {
+                    alert('Pokémon not found. Please try another name or ID.');
+                    console.error(error);
+                });
         });
 }
+
     
 // Get the bioInfo of the pokemon
 function getPokemonInfo(name, id, sprites, height, weight, gender_rate, shape, foreignNames){
@@ -2172,8 +2200,9 @@ if(moveName){
 // Search Move Information
 async function searchMove() {
     const moveNameInput = document.getElementById("moveName").value.toLowerCase().replace(/\s+/g, '-');
+    const translatedterm = await translate('https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_names.csv', moveNameInput);
     try {
-        const response = await fetch(`https://pokeapi.co/api/v2/move/${moveNameInput}/`);
+        const response = await fetch(`https://pokeapi.co/api/v2/move/${translatedterm || moveNameInput}/`);
         const moveData = await response.json();
 
         scrollTopButton.style.display = 'inline-block';
@@ -2423,8 +2452,9 @@ function getItemSprite(itemName, itemImage){
 // Search Item Information
 async function searchItem() {
     const itemNameInput = document.getElementById("itemName").value.toLowerCase().replace(/\s+/g, '-');
+    const translatedterm = await translate('https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/item_names.csv', itemNameInput);
     try {
-        const response = await fetch(`https://pokeapi.co/api/v2/item/${itemNameInput}/`);
+        const response = await fetch(`https://pokeapi.co/api/v2/item/${translatedterm || itemNameInput}/`);
         const itemData = await response.json();
         scrollTopButton.style.display = 'inline-block';
         newItem();
