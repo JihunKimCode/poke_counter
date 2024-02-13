@@ -271,6 +271,12 @@ footer a:hover{
     width: 50%;
 }
 
+#pokemonHead{
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 .bioInfo{
     display: inline-flex;
     align-items: center;
@@ -468,6 +474,7 @@ input[type="range"]::-moz-range-track {
 }
 
 /*Tooltip for types*/
+.tooltip-types-origin,
 .tooltip-types,
 .tooltip-moves,
 .tooltip-items,
@@ -477,6 +484,12 @@ input[type="range"]::-moz-range-track {
     display: inline-block;
 }
 
+.tooltip-types-origin,
+.tooltip-types{
+    margin-right: 6px;
+}
+
+.tooltip-types-origin .tooltiptext,
 .tooltip-types .tooltiptext,
 .tooltip-moves .tooltiptext,
 .tooltip-items .tooltiptext,
@@ -497,7 +510,11 @@ input[type="range"]::-moz-range-track {
     left: 0%;
 }
 
-.tooltip-moves .tooltiptext{
+.tooltip-types-origin .tooltiptext {
+    font-size: 16px;
+}
+
+.tooltip-moves .tooltiptext {
     bottom: 120%;
     top: auto;
     left: 0%;
@@ -519,6 +536,16 @@ input[type="range"]::-moz-range-track {
     width: 255px; 
     white-space: pre-line; 
     line-height: 1.4;
+}
+
+.tooltip-types-origin .tooltiptext::after{
+    content: " ";
+    position: absolute;
+    bottom: 100%;
+    left: 20%;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent rgba(0,0,0,0.8) transparent;
 }
 
 .tooltip-types .tooltiptext::after,
@@ -568,6 +595,7 @@ input[type="range"]::-moz-range-track {
     border-color: transparent transparent rgba(0,0,0,0.8) transparent;
 }
 
+.tooltip-types-origin:hover .tooltiptext,
 .tooltip-types:hover .tooltiptext,
 .tooltip-moves:hover .tooltiptext,
 .tooltip-items:hover .tooltiptext,

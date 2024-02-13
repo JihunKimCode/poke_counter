@@ -518,8 +518,9 @@ if(searchInput){
 
 // translate search term
 function translate(csv, searchTerm) {
-    const isEnglish = /^[a-zA-Z]+$/.test(searchTerm);
-    if (!isEnglish) {
+    const isEnglish = /^[a-zA-Z]+$/u.test(searchTerm.replace(/[\d-]/g, ''));
+    if (!isEnglish || searchTerm === "폴리곤z") {
+        if(searchTerm === "폴리곤z") searchTerm = "폴리곤Z";
         return fetch(csv)
             .then((response) => response.text())
             .then((csvData) => {
@@ -584,7 +585,7 @@ function performSearch() {
                     // Update theme colors
                     findColors(data.name, data.id);
                     // Main Body
-                    getPokemonInfo(data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, shape, speciesData.names);
+                    getPokemonInfo(types, data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, shape, speciesData.names);
                     getTypeAbility(types, data.abilities, data.past_abilities);
                     getEvolution(speciesData.evolution_chain.url);
                     displayStatsHistogram(statsData);
@@ -602,14 +603,24 @@ function performSearch() {
 
     
 // Get the bioInfo of the pokemon
-function getPokemonInfo(name, id, sprites, height, weight, gender_rate, shape, foreignNames){
+function getPokemonInfo(types, name, id, sprites, height, weight, gender_rate, shape, foreignNames){
     // Trace Pokemon's information
     const image = getSprite(name, sprites);
     const foreignName = getForeignName(foreignNames);
     const bioInfo = getBioInfo(height, weight, gender_rate, shape);        
     const audio = getAudio(name);
 
-    pokeHead.innerHTML = `${name.toUpperCase()}`;
+    const typeImages = types.map(type =>
+        `<div class="tooltip-types-origin">
+            <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" 
+                alt="${type}" 
+                class="type-image" 
+                width="30px">
+            <span class="tooltiptext">${type}</span>
+        </div>`
+    );
+
+    pokeHead.innerHTML = `${typeImages.join('')}${name.toUpperCase()}`;
     pokemonInfo.innerHTML = `
         <div>
             <img src="${image[0]}" alt="${name}" width="130" class="pokemon-image">
@@ -810,19 +821,9 @@ async function getTypeAbility(types, abilities, pastAbility) {
     const invalid = getInvalid(types);
 
     // Display the weaknesses, resistances, and invalid
-    const weaknessesHtml = weaknesses.length > 0 ? `<h3>Weaknesses</h3><p>${weaknesses.join('&nbsp')}</p>` : '';
-    const resistancesHtml = resistances.length > 0 ? `<h3>Resistances</h3><p>${resistances.join('&nbsp')}</p>` : '';
-    const invalidHtml = invalid.length > 0 ? `<h3>Invalids</h3><p>${invalid.join('&nbsp')}</p>` : '';
-
-    const typeImages = types.map(type =>
-        `<div class="tooltip-types">
-            <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" 
-                alt="${type}" 
-                class="type-image" 
-                width="40px">
-            <span class="tooltiptext">${type}</span>
-        </div>`
-    );
+    const weaknessesHtml = weaknesses.length > 0 ? `<h3>Weaknesses</h3><p>${weaknesses.join('')}</p>` : '';
+    const resistancesHtml = resistances.length > 0 ? `<h3>Resistances</h3><p>${resistances.join('')}</p>` : '';
+    const invalidHtml = invalid.length > 0 ? `<h3>Invalids</h3><p>${invalid.join('')}</p>` : '';
 
     let abilitiesHtml = '';
 
@@ -871,8 +872,6 @@ async function getTypeAbility(types, abilities, pastAbility) {
     }
     
     typeAbility.innerHTML = `
-        <h3>Types</h3>
-            ${typeImages.join('&nbsp&nbsp')}
             ${weaknessesHtml}
             ${resistancesHtml}
             ${invalidHtml}
