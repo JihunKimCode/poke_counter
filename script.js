@@ -448,6 +448,7 @@ const pokeHead = document.getElementById('pokemonHead');
 const chooseSprite = document.getElementById('chooseSprite');
 const selectSprite = document.getElementById('spriteType');
 const pokemonInfo = document.getElementById('pokemonInfo');
+const generations = document.getElementById('generations');
 const typeAbility = document.getElementById('typeAbility');
 const evolution = document.getElementById('evolution');
 
@@ -518,8 +519,8 @@ if(searchInput){
 
 // translate search term
 function translate(csv, searchTerm) {
-    const isEnglish = /^[a-zA-Z]+$/u.test(searchTerm.replace(/[\d-]/g, ''));
-    if (!isEnglish || searchTerm === "폴리곤z") {
+    const isAlphanumeric = /^[a-zA-Z0-9]+$/u.test(searchTerm.replace(/[\W_]/g, ''));
+    if (!isAlphanumeric || searchTerm === "폴리곤2" || searchTerm === "폴리곤z") {
         if(searchTerm === "폴리곤z") searchTerm = "폴리곤Z";
         return fetch(csv)
             .then((response) => response.text())
@@ -586,6 +587,7 @@ function performSearch() {
                     findColors(data.name, data.id);
                     // Main Body
                     getPokemonInfo(types, data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, shape, speciesData.names);
+                    getGen(data.id);
                     getTypeAbility(types, data.abilities, data.past_abilities);
                     getEvolution(speciesData.evolution_chain.url);
                     displayStatsHistogram(statsData);
@@ -601,7 +603,6 @@ function performSearch() {
         });
 }
 
-    
 // Get the bioInfo of the pokemon
 function getPokemonInfo(types, name, id, sprites, height, weight, gender_rate, shape, foreignNames){
     // Trace Pokemon's information
@@ -811,6 +812,54 @@ function getAudio(name){
     
     let audio = `https://play.pokemonshowdown.com/audio/cries/${orig_name}.mp3`;
     return audio;
+}
+
+function getGen(speciesId){
+    generations.style.display = 'block';
+
+  // Fetch the CSV file
+  fetch('https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_dex_numbers.csv')
+    .then(response => response.text())
+    .then(csvData => {
+      // Parse CSV data
+      const rows = csvData.split('\n').map(row => row.split(','));
+
+      // Filter rows based on species_id
+      const filteredRows = rows.filter(row => row[0] === speciesId.toString());
+      // Extract pokedex_ids
+      const pokedexIds = filteredRows.map(row => parseInt(row[1]));
+
+      // Mapping of pokedex_ids to corresponding generation IDs
+      const mapping = {
+        2: 1, 26: 1,
+        3: 2, 7: 2, 15: 3,
+        4: 3,
+        5: 4, 6: 4,
+        8: 5, 9: 5,
+        12: 6, 13: 6, 14: 6,
+        16: 7, 17: 7, 18: 7, 19: 7, 20: 7, 21: 7, 22: 7, 23: 7, 24: 7, 25: 7,
+        27: 8, 28: 8, 29: 8, 30: 8,
+        31: 9, 32: 9, 33: 9
+      };
+
+      // Update HTML elements based on the mapping
+      const generationsDiv = document.getElementById('generations');
+      const circles = generationsDiv.getElementsByClassName('circle');
+      
+      const generationId = [];
+      pokedexIds.forEach(element => {
+          generationId.push(mapping[element]);
+      });
+
+      for (let i = 0; i < circles.length; i++) {
+            circles[i].classList.remove('color-class-appear');
+        if(generationId.includes(parseInt(circles[i].id))){
+            circles[i].classList.remove('color-class-appear', 'color-class-none');
+            circles[i].classList.add('color-class-appear');
+        }
+      }
+    })
+    .catch(error => console.error('Error fetching CSV:', error));
 }
 
 // Get type and ability info of the pokemon
@@ -1865,7 +1914,7 @@ function updateTableSize(){
     const tableContainer = document.querySelector('.tableContainer');
     const table = document.querySelector('.table');
     if (tableContainer) {
-        const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + typeAbility.clientHeight + evolution.clientHeight;
+        const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + generations.clientHeight + typeAbility.clientHeight + evolution.clientHeight;
         const container2 = psHead.clientHeight + levelContainer.clientHeight + statsHistogram.clientHeight + dfHead.clientHeight + cbx_form.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
         const clientHeight = container1 > container2 ? container1 : container2;
         const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
@@ -1901,7 +1950,7 @@ function makeTable(pokemonArray){
     // Create a container for the scrollable table
     const tableContainer = document.createElement('div');
     tableContainer.className = 'tableContainer';
-    const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + typeAbility.clientHeight + evolution.clientHeight;
+    const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + generations.clientHeight + typeAbility.clientHeight + evolution.clientHeight;
     const container2 = psHead.clientHeight + levelContainer.clientHeight + statsHistogram.clientHeight + dfHead.clientHeight + cbx_form.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
     const clientHeight = container1 > container2 ? container1 : container2;
     const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;

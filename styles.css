@@ -307,6 +307,36 @@ audio::-webkit-media-controls-panel {
     background-color: #e2e2e2;
 }
 
+#generations{
+    display: none;
+    margin-bottom: 10px;
+}
+
+.circle {
+    font-family: 'NanumB', sans-serif;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-color: black;
+    display: inline-flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin: 2px;
+    cursor: default;
+}
+
+.color-class-none {
+    background-color: white;
+    color: black;
+}
+
+.color-class-appear {
+    background-color: var(--pokemoncolor, #1288f8);
+    color: white;
+}
+
 #typeAbility, #evolution{
     line-height: 1.5;
     padding-right: 10px;
