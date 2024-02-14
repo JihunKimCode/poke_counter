@@ -586,8 +586,8 @@ function performSearch() {
                     // Update theme colors
                     findColors(data.name, data.id);
                     // Main Body
-                    getPokemonInfo(types, data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, shape, speciesData.names);
-                    getGen(data.id);
+                    getPokemonInfo(types, data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, shape, speciesData.names, data.cries.latest);
+                    getGen(data.name, speciesData.id);
                     getTypeAbility(types, data.abilities, data.past_abilities);
                     getEvolution(speciesData.evolution_chain.url);
                     displayStatsHistogram(statsData);
@@ -604,12 +604,12 @@ function performSearch() {
 }
 
 // Get the bioInfo of the pokemon
-function getPokemonInfo(types, name, id, sprites, height, weight, gender_rate, shape, foreignNames){
+function getPokemonInfo(types, name, id, sprites, height, weight, gender_rate, shape, foreignNames, cry){
     // Trace Pokemon's information
     const image = getSprite(name, sprites);
     const foreignName = getForeignName(foreignNames);
     const bioInfo = getBioInfo(height, weight, gender_rate, shape);        
-    const audio = getAudio(name);
+    // const audio = getAudio(name);
 
     const typeImages = types.map(type =>
         `<div class="tooltip-types-origin">
@@ -630,7 +630,7 @@ function getPokemonInfo(types, name, id, sprites, height, weight, gender_rate, s
         <p>Pokédex #${id} | ${foreignName}</p>
         <div class="bioInfo">${bioInfo}</div>
         <audio controls>
-            <source src="${audio}" type="audio/mp3">
+            <source src="${cry}" type="audio/ogg">
             Your browser does not support the audio element.
         </audio>
     `;
@@ -721,6 +721,7 @@ function getBioInfo(height, weight, gender_rate, shape){
 }  
 
 // Change pokemonName to get correct audio file
+/***** This code is no longer used. Save for information purpose *****/
 function getAudio(name){
     let orig_name;
 
@@ -814,7 +815,8 @@ function getAudio(name){
     return audio;
 }
 
-function getGen(speciesId){
+// Get generation of local pokedex info
+function getGen(speciesName, speciesId){
     generations.style.display = 'block';
 
   // Fetch the CSV file
@@ -846,10 +848,21 @@ function getGen(speciesId){
       const generationsDiv = document.getElementById('generations');
       const circles = generationsDiv.getElementsByClassName('circle');
       
-      const generationId = [];
+      let generationId = [];
       pokedexIds.forEach(element => {
           generationId.push(mapping[element]);
       });
+
+      // Some Exceptions
+      if(speciesName.includes("-alola")) generationId = [7];
+      if(speciesName.includes("-galar")) generationId = [8];
+      if(speciesName.includes("-hisui")) generationId = [8];
+      if(speciesName.includes("dialga-origin")) generationId = [8];
+      if(speciesName.includes("palkia-origin")) generationId = [8];
+      if(speciesName.includes("-paldea")) generationId = [9];
+      if(speciesName.includes("-mega")) generationId = [];
+      if(speciesName.includes("-gmax")) generationId = [];
+      if(speciesName.includes("-totem")) generationId = [];
 
       for (let i = 0; i < circles.length; i++) {
             circles[i].classList.remove('color-class-appear');
