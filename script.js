@@ -825,65 +825,141 @@ function getAudio(name){
 }
 
 // Get generation of local pokedex info
-function getGen(speciesName, speciesId){
+async function getGen(speciesName, speciesId) {
     generations.style.display = 'block';
 
-  // Fetch the CSV file
-  fetch('https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_dex_numbers.csv')
-    .then(response => response.text())
-    .then(csvData => {
-      // Parse CSV data
-      const rows = csvData.split('\n').map(row => row.split(','));
+    const fetchCSV = async (url) => {
+        const response = await fetch(url);
+        const csvData = await response.text();
+        return csvData.split('\n').map(row => row.split(','));
+    };
 
-      // Filter rows based on species_id
-      const filteredRows = rows.filter(row => row[0] === speciesId.toString());
-      // Extract pokedex_ids
-      const pokedexIds = filteredRows.map(row => parseInt(row[1]));
+    try {
+        const csvData = await fetchCSV('https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_dex_numbers.csv');
+        const rows = csvData.map(row => row.map(entry => parseInt(entry)));
+        const filteredRows = rows.filter(row => row[0] === speciesId);
+        const pokedexInfo = filteredRows.map(row => ({ id: row[1], number: row[2] }));
 
-      // Mapping of pokedex_ids to corresponding generation IDs
-      const mapping = {
-        2: 1, 26: 1,
-        3: 2, 7: 2, 15: 3,
-        4: 3,
-        5: 4, 6: 4,
-        8: 5, 9: 5,
-        12: 6, 13: 6, 14: 6,
-        16: 7, 17: 7, 18: 7, 19: 7, 20: 7, 21: 7, 22: 7, 23: 7, 24: 7, 25: 7,
-        27: 8, 28: 8, 29: 8, 30: 8,
-        31: 9, 32: 9, 33: 9
-      };
+        const pokedexMapping = {};
+        const pokedexCsvData = await fetchCSV('https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokedexes.csv');
+        const pokedexRows = pokedexCsvData.map(row => row.map(entry => entry));
 
-      // Update HTML elements based on the mapping
-      const generationsDiv = document.getElementById('generations');
-      const circles = generationsDiv.getElementsByClassName('circle');
-      
-      let generationId = [];
-      pokedexIds.forEach(element => {
-          generationId.push(mapping[element]);
-      });
+        pokedexRows.forEach(row => {
+            const [id, regionId, identifier] = row;
+            pokedexMapping[id] = { regionId, identifier };
+        });
+        
+        // Mapping pokedexId into regionID
+        const mapping = {
+            2: 1, 26: 1,
+            3: 2, 7: 2, 15: 3,
+            4: 3,
+            5: 4, 6: 4,
+            8: 5, 9: 5,
+            12: 6, 13: 6, 14: 6,
+            16: 7, 17: 7, 18: 7, 19: 7, 20: 7, 21: 7, 22: 7, 23: 7, 24: 7, 25: 7,
+            27: 8, 28: 8, 29: 8, 30: 8,
+            31: 9, 32: 9, 33: 9
+        };
 
-      // Some Exceptions
-      if(speciesName.includes("-alola")) generationId = [7];
-      if(speciesName.includes("-galar")) generationId = [8];
-      if(speciesName.includes("-hisui")) generationId = [8];
-      if(speciesName.includes("dialga-origin")) generationId = [8];
-      if(speciesName.includes("palkia-origin")) generationId = [8];
-      if(speciesName.includes("-paldea")) generationId = [9];
-      if(speciesName.includes("-mega")) generationId = [];
-      if(speciesName.includes("-gmax")) generationId = [];
-      if(speciesName.includes("-totem")) generationId = [];
+        // Update regionId based on the mapping
+        for (const id in mapping) {
+            if (pokedexMapping[id]) {
+                pokedexMapping[id].regionId = mapping[id];
+            }
+        }  
 
-      for (let i = 0; i < circles.length; i++) {
-            circles[i].classList.remove('color-class-appear');
-        if(generationId.includes(parseInt(circles[i].id))){
-            circles[i].classList.remove('color-class-appear', 'color-class-none');
-            circles[i].classList.add('color-class-appear');
+        // Change identifier name
+        const identifierMapping = {
+            "kanto": "kanto (rgby)",
+            "original-johto": "johto (gsc)",
+            "hoenn": "hoenn (rse)",
+            "original-sinnoh": "sinnoh (dp)",
+            "extended-sinnoh": "sinnot (pt)",
+            "updated-johto": "johto (hgss)",
+            "original-unova": "unova (bw)",
+            "updated-unova": "unova (bw2)",
+            "kalos-central": "kalos-central (xy)",
+            "kalos-coastal": "kalos-coastal (xy)",
+            "kalos-mountain": "kalos-mountain (xy)",
+            "updated-hoenn": "hoenn (oras)",
+            "original-alola": "alola (sm)",
+            "original-melemele": "melemele (sm)",
+            "original-akala": "akala (sm)",
+            "original-ulaula": "ulaula (sm)",
+            "original-poni": "ponit (sm)",
+            "updated-alola": "alola (usum)",
+            "updated-melemele": "melemele (usum)",
+            "updated-akala": "akala (usum)",
+            "updated-ulaula": "ulaula (usum)",
+            "updated-poni": "poni (usum)",
+            "letsgo-kanto": "kanto (lgpe)",
+            "galar": "galar (swsh)",
+            "isle-of-armor": "isle-of-armor (swsh)",
+            "crown-tundra": "crown-tundra (swsh)",
+            "hisui": "hisui (pla)",
+            "paldea": "paldea (sv)",
+            "kitakami": "kitakami (sv)",
+            "blueberry": "blueberry (sv)"
+        };
+        // Update identifiers based on mapping
+        for (const id in pokedexMapping) {
+            const oldIdentifier = pokedexMapping[id].identifier;
+            if (identifierMapping[oldIdentifier]) {
+                pokedexMapping[id].identifier = identifierMapping[oldIdentifier];
+            }
         }
-      }
-    })
-    .catch(error => console.error('Error fetching CSV:', error));
-}
 
+        const generationsDiv = document.getElementById('generations');
+        const circles = generationsDiv.getElementsByClassName('circle');
+
+        let generationId = pokedexInfo.map(entry => mapping[entry.id]);
+
+        // Some Exceptions
+        if (speciesName.includes("-alola")) generationId = [7];
+        
+        if (speciesName.includes("-galar") || 
+            speciesName.includes("-hisui") || 
+            speciesName.includes("dialga-origin") || 
+            speciesName.includes("palkia-origin")) {
+            generationId = [8];
+        }
+        
+        if (speciesName.includes("-paldea")) generationId = [9];
+
+        if (speciesName.includes("-mega") || 
+            speciesName.includes("-gmax") || 
+            speciesName.includes("-totem")) {
+            generationId = [];
+        }
+
+        // Apply to generation circles
+        for (let i = 0; i < circles.length; i++) {
+            circles[i].classList.remove('color-class-appear');
+            // Check generation is included
+            if (generationId.includes(parseInt(circles[i].id))) {
+                circles[i].classList.remove('color-class-appear', 'color-class-none');
+                circles[i].classList.add('color-class-appear');
+                
+                const pokedex = pokedexInfo
+                    .filter(entry => entry.id !== 1)
+                    .filter(entry => pokedexMapping[entry.id].regionId === parseInt(circles[i].id))
+                    .map((entry, filteredIndex) => {
+                        const identifier = pokedexMapping[entry.id].identifier;
+                        const pokedexNumber = entry.number;
+                        return `${identifier} : ${pokedexNumber}`;
+                    }).join('\n');
+    
+                circles[i].getElementsByClassName('tooltiptext')[0].textContent = pokedex;
+            } else {
+                circles[i].getElementsByClassName('tooltiptext')[0].textContent = "Not Appear";
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching CSV:', error);
+    }
+}
+  
 // Get type and ability info of the pokemon
 async function getTypeAbility(types, abilities, pastAbility) {
     // Get weaknesses, resistances, and invalid

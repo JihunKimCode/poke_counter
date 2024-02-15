@@ -310,6 +310,7 @@ audio::-webkit-media-controls-panel {
 #generations{
     display: none;
     margin-bottom: 10px;
+    cursor: default;
 }
 
 .circle {
@@ -324,7 +325,6 @@ audio::-webkit-media-controls-panel {
     align-items: flex-end;
     justify-content: center;
     margin: 2px;
-    cursor: default;
 }
 
 .color-class-none {
@@ -505,6 +505,7 @@ input[type="range"]::-moz-range-track {
 
 /*Tooltip for types*/
 .tooltip-types-origin,
+.tooltip-pokedex,
 .tooltip-types,
 .tooltip-moves,
 .tooltip-items,
@@ -519,6 +520,7 @@ input[type="range"]::-moz-range-track {
     margin-right: 6px;
 }
 
+.tooltip-pokedex .tooltiptext,
 .tooltip-types-origin .tooltiptext,
 .tooltip-types .tooltiptext,
 .tooltip-moves .tooltiptext,
@@ -538,6 +540,15 @@ input[type="range"]::-moz-range-track {
     z-index: 1;
     top: 110%;
     left: 0%;
+}
+
+.tooltip-pokedex .tooltiptext{
+    top: 120%;
+    left: 0%;
+    width: 200px; 
+    white-space: pre-line; 
+    line-height: 1.4;
+    cursor: text;
 }
 
 .tooltip-types-origin .tooltiptext {
@@ -573,6 +584,16 @@ input[type="range"]::-moz-range-track {
     position: absolute;
     bottom: 100%;
     left: 20%;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent rgba(0,0,0,0.8) transparent;
+}
+
+.tooltip-pokedex .tooltiptext::after{
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 5%;
     border-width: 5px;
     border-style: solid;
     border-color: transparent transparent rgba(0,0,0,0.8) transparent;
@@ -625,6 +646,7 @@ input[type="range"]::-moz-range-track {
     border-color: transparent transparent rgba(0,0,0,0.8) transparent;
 }
 
+.tooltip-pokedex:hover .tooltiptext,
 .tooltip-types-origin:hover .tooltiptext,
 .tooltip-types:hover .tooltiptext,
 .tooltip-moves:hover .tooltiptext,
