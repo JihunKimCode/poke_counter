@@ -29,6 +29,14 @@ const itemName = document.getElementById('itemName');
 const clearButton = document.getElementById('clearButton');
 const element = pokemon || moveName || itemName;
 
+// Move to search bar when input "/"
+document.addEventListener('keydown', function (event) {
+    if (event.key === '/') {
+      event.preventDefault();
+      element.focus();
+    }
+});
+
 let url;
 if (element === pokemon) url = 'https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon.csv';
 else if(element === moveName) url = 'https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/moves.csv';
@@ -217,6 +225,7 @@ async function newItem(){
 // Random Search with accent key
 document.addEventListener("keydown", (event) => {
     if (event.key.toLowerCase() === '`') {
+        event.preventDefault();
         var randomNumber = Math.floor(Math.random() * pokemonNames.length) + 1;
         element.value = pokemonNames[randomNumber];
         if(element === pokemon) performSearch();
