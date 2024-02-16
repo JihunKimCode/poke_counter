@@ -313,6 +313,10 @@ audio::-webkit-media-controls-panel {
     cursor: default;
 }
 
+.row {
+    display: inline-block;
+}
+
 .circle {
     font-family: 'NanumB', sans-serif;
     font-weight: bold;
@@ -527,6 +531,7 @@ input[type="range"]::-moz-range-track {
 .tooltip-items .tooltiptext,
 .tooltip-pokemon .tooltiptext,
 .tooltip-ability .tooltiptext {
+    font-family: 'NanumS', sans-serif;
     visibility: hidden;
     background-color: rgba(0,0,0,0.8);
     color: #fff;
@@ -534,6 +539,7 @@ input[type="range"]::-moz-range-track {
     border-radius: 6px;
     padding: 5px 7px 5px 7px;
     white-space: nowrap;
+    font-weight: bold;
     
     /* Position the tooltip */
     position: absolute;
@@ -545,10 +551,12 @@ input[type="range"]::-moz-range-track {
 .tooltip-pokedex .tooltiptext{
     top: 120%;
     left: 0%;
-    width: 200px; 
+    width: max-content;
+    padding: 5px 10px; 
     white-space: pre-line; 
     line-height: 1.4;
     cursor: text;
+    font-size: 16px;
 }
 
 .tooltip-types-origin .tooltiptext {
@@ -1266,6 +1274,15 @@ input[type="range"]::-moz-range-track {
         width: fit-content;
     }
 
+    .row {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .tooltip-pokedex {
+        margin-right: 5px;
+    }
+    
     #typeAbility, #evolution {
         margin-bottom: 10px;
     }
