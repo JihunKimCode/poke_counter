@@ -7,6 +7,8 @@ This page links to **Source code, Counter Pokémon Searcher, Pokémon Move Searc
 Explore information on Pokémon and discover effective counters for them.
 
 ### Features
+- **Search ID or Name**
+    - English, Japanese, Chinese, French, German, Spanish, Italian, and Czech
 - **Search Dropdown**
     - Fetch to csv file of PokeAPI
     - Related Pokemon list on serach bar
@@ -19,7 +21,10 @@ Explore information on Pokémon and discover effective counters for them.
     - Front/Back Sprite
     - All platforms
 - **PokeDex ID**
+    - National PokeDex ID
+    - Regional PokeDex IDs
 - **Pokemon Information**
+    - Show Foreign Names (Korean, Japanese)
     - Height, weight, gender rate, shape
     - Pokemon cry
     - Types (with logo)
@@ -60,6 +65,8 @@ Explore information on Pokémon and discover effective counters for them.
 Retrieve information on Pokémon moves.
 
 ### Features
+- **Search ID or Name**
+    - English, Japanese, Chinese, French, German, Spanish, Italian, and Czech
 - **Search Dropdown**
     - Fetch to csv file of PokeAPI
     - Related move list on serach bar
@@ -85,6 +92,8 @@ Retrieve information on Pokémon moves.
 Retrieve details about various items featured in the Pokémon series.
 
 ### Features
+- **Search ID or Name**
+    - English, Japanese, Chinese, French, German, Spanish, Italian, and Czech
 - **Search Dropdown**
     - Fetch to csv file of PokeAPI
     - Related item list on serach bar
