@@ -8,7 +8,7 @@ Explore information on Pokémon and discover effective counters for them.
 
 ### Features
 - **Search ID or Name**
-    - English, Japanese, Chinese, French, German, Spanish, Italian, and Czech
+    - English, Korean, Japanese, Chinese, French, German, Spanish, Italian, and Czech
 - **Search Dropdown**
     - Fetch to csv file of PokeAPI
     - Related Pokemon list on serach bar
@@ -66,7 +66,7 @@ Retrieve information on Pokémon moves.
 
 ### Features
 - **Search ID or Name**
-    - English, Japanese, Chinese, French, German, Spanish, Italian, and Czech
+    - English, Korean, Japanese, Chinese, French, German, Spanish, Italian, and Czech
 - **Search Dropdown**
     - Fetch to csv file of PokeAPI
     - Related move list on serach bar
@@ -93,7 +93,7 @@ Retrieve details about various items featured in the Pokémon series.
 
 ### Features
 - **Search ID or Name**
-    - English, Japanese, Chinese, French, German, Spanish, Italian, and Czech
+    - English, Korean, Japanese, Chinese, French, German, Spanish, Italian, and Czech
 - **Search Dropdown**
     - Fetch to csv file of PokeAPI
     - Related item list on serach bar
