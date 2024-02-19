@@ -887,7 +887,7 @@ async function getGen(speciesName, speciesId) {
             "original-melemele": "melemele (sm)",
             "original-akala": "akala (sm)",
             "original-ulaula": "ulaula (sm)",
-            "original-poni": "ponit (sm)",
+            "original-poni": "poni (sm)",
             "updated-alola": "alola (usum)",
             "updated-melemele": "melemele (usum)",
             "updated-akala": "akala (usum)",
