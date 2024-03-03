@@ -1531,14 +1531,18 @@ function evolutionWithImages(evolutionDetails) {
             
             const data = await response.json();
             const img = data.sprites.front_default||'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
-
-            const imgTooltip = `
+            
+            let imgTooltip = ``;
+            if(match.includes("<br>-> ")) imgTooltip +="<br>-> "
+            else if(match.includes("<br>or ")) imgTooltip +="<br>or "
+            imgTooltip += `
             <div class="tooltip-pokemon">
                 <img src="${img}" alt="${pokemonName}" width="60px"/>
                 <span class="tooltiptext">${pokemonName}</span>
-            </div>`
-    
-            evolutionDetails = evolutionDetails.replace(pokemonName, imgTooltip);
+                </div>`
+                
+            console.log(imgTooltip)
+            evolutionDetails = evolutionDetails.replace(match, imgTooltip);
         } catch (error) {
             console.error(`Error fetching data for ${pokemonName}:`, error);
         }
@@ -1547,14 +1551,24 @@ function evolutionWithImages(evolutionDetails) {
     return Promise.all(fetchPromises).then(() => evolutionDetails);
 }
 
+// Store the latest call's timestamp
+let latestEvChainCall = 0;
+
 function getEvolution(evolutionChainUrl){
+    // Check if a newer call has been made, and cancel if true
+    const currentEvChainCall = Date.now();
+    latestEvChainCall = currentEvChainCall;
     // Get evolution chain details
     fetch(evolutionChainUrl)
         .then((response) => response.json())
         .then((evolutionData) => {
+            // Check if a newer call has been made, and cancel if true
+            if(currentEvChainCall !== latestEvChainCall) return;
             const evolutionDetails = parseEvolutionChain(evolutionData.chain);
             evolutionWithImages(evolutionDetails)
             .then((evolutionImages) => {
+                // Check if a newer call has been made, and cancel if true
+                if(currentEvChainCall !== latestEvChainCall) return;
                 evolution.innerHTML = `
                     <h3>Evolution Chain</h3>
                     ${evolutionImages}
