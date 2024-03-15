@@ -111,3 +111,20 @@ Retrieve details about various items featured in the Pokémon series.
     - Short, Long, PokeDex
 - **Held By Pokemon**
     - Sprite of the pokemon who holds the item
+
+## [Pokémon Berry Searcher](https://jihunkimcode.github.io/poke_counter/berry.html)
+Search about berries in the Pokémon series, filtering by in-game effects.
+
+### Features
+- **Search using Filters**
+    - Filter berries based on in-game usage
+    - Click image to see information 
+- **Sprite** 
+- **Berry Information**
+    - Foreign Name
+    - Firmness and Size
+    - Flavors
+    - Natural Gift Type and Power
+    - Fling Effect and Power
+- **Description**
+    - Short, Long, PokeDex
