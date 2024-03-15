@@ -366,7 +366,9 @@ audio::-webkit-media-controls-panel {
 
 /*Dropdown Box*/
 #spriteType,
-#itemSpriteType {
+#itemSpriteType,
+#typeFilter,
+#detailFilter {
     padding: 4px;    
     background: #fff;
     color: #000;
@@ -386,9 +388,15 @@ audio::-webkit-media-controls-panel {
     transition: height .4s ease;
 }
 
+#detailFilter{
+    width: 50%;
+}
+
 /* Dropdown Menu Design */
 #spriteType option,
-#itemSpriteType option {
+#itemSpriteType option,
+#typeFilter option,
+#detailFilter option {
     font-family: 'NanumS', sans-serif;
     font-size: 12px;
 }  
@@ -1172,6 +1180,53 @@ input[type="range"]::-moz-range-track {
     display: table-cell;
 }
 
+/***************
+ *  berry.html  *
+ ***************/
+ .filterContainer {
+    display: inline-block;
+    margin-left: 20px;
+    margin-top: 25px;
+    width: 50%;
+    overflow: hidden;
+  }
+  
+  .berryContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    width: 98%;
+    margin: 0 auto;
+    margin-top: 0px;
+    overflow: hidden;
+    line-height: 1.5;
+  }
+
+  .berries,
+  .berryInfo {
+    display: inline-block;
+    vertical-align: top; 
+    width: calc(50% - 5px);
+    border: 2px dotted transparent;
+    border-radius: 10px;
+    border-color: black;
+    padding: 10px;
+    box-sizing: border-box; 
+  }
+
+  .berryInfo {
+    margin-right: 10px;
+  }
+    
+  .berry {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    background-size: cover;
+    cursor: pointer;
+  }
+
 /*Layout for Tablet and split screen*/
 @media (min-width: 768px) and (max-width: 1024px) {
     .set{
@@ -1386,4 +1441,36 @@ input[type="range"]::-moz-range-track {
         display: inline-block;
         margin-top: 10px;  
     }
+
+    .berryContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: stretch;
+        width: 98%;
+        margin: 0 auto;
+        margin-top: 0px;
+        overflow: hidden;
+    }
+    
+    .berries,
+    .berryInfo {
+          display: inline-block;
+          vertical-align: top; 
+          width: 100%;
+          border: 2px dotted transparent;
+          border-radius: 10px;
+          border-color: black;
+          padding: 10px;
+          box-sizing: border-box; 
+    }
+
+    .berryInfo {
+        margin-right: 0px;
+        margin-bottom: 10px;
+    }    
+
+    #typeFilter, #detailFilter{
+        width: 100%;
+    }    
 }

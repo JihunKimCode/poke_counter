@@ -2708,3 +2708,370 @@ async function searchItem() {
         alert("Item not found. Please try again.");
     }
 }
+
+/***************
+ *  Berry.html  *
+ ***************/
+
+// Sample berry data
+const berries = [
+    { number: '126', name: '', sprite: '', type: 'Status Recover', detail: 'Cure paralysis'},
+    { number: '127', name: '', sprite: '', type: 'Status Recover', detail: 'Cure sleep'},
+    { number: '128', name: '', sprite: '', type: 'Status Recover', detail: 'Cure poison'},
+    { number: '129', name: '', sprite: '', type: 'Status Recover', detail: 'Cure burn'},
+    { number: '130', name: '', sprite: '', type: 'Status Recover', detail: 'Cure freeze'},
+    { number: '131', name: '', sprite: '', type: 'HP/PP Recover', detail: 'Restore 10 PP'},
+    { number: '132', name: '', sprite: '', type: 'HP/PP Recover', detail: 'Restore 10 HP when at 1/2 max HP or less'},
+    { number: '133', name: '', sprite: '', type: 'Status Recover', detail: 'Cure confusion'},
+    { number: '134', name: '', sprite: '', type: 'Status Recover', detail: 'Cure non-volatile status + confusion'},
+    { number: '135', name: '', sprite: '', type: 'HP/PP Recover', detail: 'Restore HP 1/4 max HP when at 1/2 max HP or less'},
+    { number: '136', name: '', sprite: '', type: 'HP/PP Recover', detail: 'Restore 1/3 max HP at 1/4 max HP or less; confuses if -Atk Nature'},
+    { number: '137', name: '', sprite: '', type: 'HP/PP Recover', detail: 'Restore 1/3 max HP at 1/4 max HP or less; confuses if -SpA Nature'},
+    { number: '138', name: '', sprite: '', type: 'HP/PP Recover', detail: 'Restore 1/3 max HP at 1/4 max HP or less; confuses if -Spe Nature'},
+    { number: '139', name: '', sprite: '', type: 'HP/PP Recover', detail: 'Restore 1/3 max HP at 1/4 max HP or less; confuses if -SpD Nature'},
+    { number: '140', name: '', sprite: '', type: 'HP/PP Recover', detail: 'Restore 1/3 max HP at 1/4 max HP or less; confuses if -Def Nature'},
+    { number: '141', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Dry★, Spicy★'},
+    { number: '142', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Sweet★, Dry★'},
+    { number: '143', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Bitter★, Sweet★'},
+    { number: '144', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Sour★, Bitter★'},
+    { number: '145', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Spicy★, Sour★'},
+    { number: '146', name: '', sprite: '', type: 'Friendship and EV', detail: 'Increases happiness by 10/5/2; Lowers HP EV by 10'},
+    { number: '147', name: '', sprite: '', type: 'Friendship and EV', detail: 'Increases happiness by 10/5/2; Lowers Atk EV by 10'},
+    { number: '148', name: '', sprite: '', type: 'Friendship and EV', detail: 'Increases happiness by 10/5/2; Lowers Def EV by 10'},
+    { number: '149', name: '', sprite: '', type: 'Friendship and EV', detail: 'Increases happiness by 10/5/2; Lowers SpA EV by 10'},
+    { number: '150', name: '', sprite: '', type: 'Friendship and EV', detail: 'Increases happiness by 10/5/2; Lowers SpD EV by 10'},
+    { number: '151', name: '', sprite: '', type: 'Friendship and EV', detail: 'Increases happiness by 10/5/2; Lowers Spe EV by 10'},
+    { number: '152', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Dry★★, Sweet★'},
+    { number: '153', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Sweet★★, Bitter★'},
+    { number: '154', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Bitter★★, Sour★'},
+    { number: '155', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Sour★★, Spicy★'},
+    { number: '156', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Spicy★★★, Dry★'},
+    { number: '157', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Dry★★★, Sweet★'},
+    { number: '158', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Sweet★★★, Bitter★'},
+    { number: '159', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Bitter★★★, Sour★'},
+    { number: '160', name: '', sprite: '', type: 'Pokéblock/Poffin', detail: 'Sour★★★, Spicy★'},
+    { number: '161', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Fire-type Attack'},
+    { number: '162', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Water-type Attack'},
+    { number: '163', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Electric-type Attack'},
+    { number: '164', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Grass-type Attack'},
+    { number: '165', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Ice-type Attack'},
+    { number: '166', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Fighting-type Attack'},
+    { number: '167', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Poison-type Attack'},
+    { number: '168', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Ground-type Attack'},
+    { number: '169', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Flying-type Attack'},
+    { number: '170', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Psychic-type Attack'},
+    { number: '171', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Bug-type Attack'},
+    { number: '172', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Rock-type Attack'},
+    { number: '173', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Ghost-type Attack'},
+    { number: '174', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Dragon-type Attack'},
+    { number: '175', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Dark-type Attack'},
+    { number: '176', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Steel-type Attack'},
+    { number: '177', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves Normal-type Attack'},
+    { number: '178', name: '', sprite: '', type: 'Low HP Effect', detail: 'Raises Atk by 1 stage when at 1/4 max HP or less'},
+    { number: '179', name: '', sprite: '', type: 'Low HP Effect', detail: 'Raises Def by 1 stage when at 1/4 max HP or less'},
+    { number: '180', name: '', sprite: '', type: 'Low HP Effect', detail: 'Raises Spe by 1 stage when at 1/4 max HP or less'},
+    { number: '181', name: '', sprite: '', type: 'Low HP Effect', detail: 'Raises SpA by 1 stage when at 1/4 max HP or less'},
+    { number: '182', name: '', sprite: '', type: 'Low HP Effect', detail: 'Raises SpD by 1 stage when at 1/4 max HP or less'},
+    { number: '183', name: '', sprite: '', type: 'Low HP Effect', detail: 'Raises Acc by 2 stages when at 1/4 max HP or less'},
+    { number: '184', name: '', sprite: '', type: 'Low HP Effect', detail: 'Raises Random Stat(not acc/eva) by 2 stages when at 1/4 max HP or less'},
+    { number: '185', name: '', sprite: '', type: 'Hit by Skills', detail: 'Restores 1/4 max HP after hit by supereffective move'},
+    { number: '186', name: '', sprite: '', type: 'Low HP Effect', detail: 'Next move has 1.2x acc when at 1/4 max HP or less'},
+    { number: '187', name: '', sprite: '', type: 'Low HP Effect', detail: 'Moves first when at 1/4 max HP or less'},
+    { number: '188', name: '', sprite: '', type: 'Hit by Skills', detail: 'Attacker loses 1/8 of its max HP with physical move'},
+    { number: '189', name: '', sprite: '', type: 'Hit by Skills', detail: 'Attacker loses 1/8 of its max HP with special move'},
+    { number: '723', name: '', sprite: '', type: 'Halve Type damage', detail: 'Halves supereffective Fairy-type Attack'},
+    { number: '724', name: '', sprite: '', type: 'Hit by Skills', detail: 'Raises Def by 1 stage after hit by physical attack'},
+    { number: '725', name: '', sprite: '', type: 'Hit by Skills', detail: 'Raises SpD by 1 stage after hit by special attack'},
+];
+
+// Get reference to the filter dropdowns
+const typeFilter = document.getElementById("typeFilter");
+const detailFilter = document.getElementById("detailFilter");
+
+// Function to populate the filter dropdowns
+function populateFilters() {
+    // Array to store unique types and details
+    let uniqueTypes = ["all"]; // Include "All Types" option
+    let uniqueDetails = [{ value: "all", type: "all", text: "-----" }]; // Include "Details" option
+
+    // Iterate over berries array
+    berries.forEach(berry => {
+        // Add type to uniqueTypes if not already present
+        if (!uniqueTypes.includes(berry.type.toLowerCase())) {
+            uniqueTypes.push(berry.type.toLowerCase());
+        }
+
+        // Add detail to uniqueDetails if not already present
+        if (!uniqueDetails.find(item => item.value === berry.detail.toLowerCase())) {
+            uniqueDetails.push({
+                value: berry.detail.toLowerCase(),
+                type: berry.type.toLowerCase(),
+                text: berry.detail
+            });
+        }
+    });
+
+    // Populate typeFilter dropdown
+    typeFilter.innerHTML = "";
+    uniqueTypes.forEach(type => {
+        const option = document.createElement("option");
+        option.value = type === "all" ? type : type.toLowerCase();
+        option.textContent = type === "all" ? "All Types" : type[0].toUpperCase() + type.slice(1);
+        typeFilter.appendChild(option);
+    });
+
+    // Populate detailFilter dropdown
+    detailFilter.innerHTML = "";
+    uniqueDetails.forEach(detail => {
+        const option = document.createElement("option");
+        option.value = detail.value;
+        option.dataset.type = detail.type === "all" ? "all" : detail.type.toLowerCase();
+        option.textContent = detail.text;
+        detailFilter.appendChild(option);
+    });
+}
+
+// Call the function to populate filters
+populateFilters();
+
+// Function to fetch data from PokeAPI
+async function fetchBerryData() {
+    for (let i = 0; i < berries.length; i++) {
+        const berry = berries[i];
+        const response = await fetch(`https://pokeapi.co/api/v2/item/${berry.number}`);
+        const data = await response.json();
+        
+        // Update name and sprite fields
+        berries[i].name = data.name;
+        berries[i].sprite = data.sprites.default;
+    }
+}
+
+// Function to filter berries based on type and size
+function filterBerries() {
+    const typeFilterValue = document.getElementById('typeFilter').value;
+    const detailFilterValue = document.getElementById('detailFilter').value;
+
+    const filteredBerries = berries.filter(berry => {
+        return (typeFilterValue === 'all' || berry.type.toLowerCase() === typeFilterValue.toLowerCase()) &&
+               (detailFilterValue === 'all' || berry.detail.toLowerCase() === detailFilterValue.toLowerCase());
+    });
+
+    displayBerries(filteredBerries);
+}
+
+// Function to update size options based on the selected type
+function updateSizeOptions() {
+const typeFilter = document.getElementById('typeFilter').value;
+const detailFilter = document.getElementById('detailFilter');
+
+// Hide all size options
+for (let i = 0; i < detailFilter.options.length; i++) {
+    detailFilter.options[i].style.display = 'none';
+}
+
+// Show size options corresponding to the selected type
+for (let i = 0; i < detailFilter.options.length; i++) {
+    const option = detailFilter.options[i];
+    const optionType = option.getAttribute('data-type');
+
+    if (typeFilter === 'all' || typeFilter === optionType) {
+        option.style.display = '';
+    }
+}
+}
+  
+// Function to display berries in the container
+function displayBerries(berries) {
+    const berryContainer = document.getElementById('berryContainer');
+    berryContainer.innerHTML = '';
+
+    fetchBerryData().then(() => {
+        berries.forEach(berry => {
+            const berryElement = document.createElement('div');
+            berryElement.classList.add('berry');
+
+            // Create an image element for the sprite
+            const spriteElement = document.createElement('img');
+            spriteElement.src = berry.sprite;
+            spriteElement.alt = berry.name;
+            spriteElement.style.width = '100%';
+
+            // Add click event listener to store the name of the clicked berry
+            spriteElement.addEventListener('click', function () {
+                // Store the name of the clicked berry into a variable
+                const clickedBerryName = berry.name;
+                getBerryData(berries, clickedBerryName); // Pass the berries array
+            });
+
+            // Append both elements to the berry container
+            berryElement.appendChild(spriteElement);
+
+            berryContainer.appendChild(berryElement);
+        });
+    })
+}
+
+async function getBerryData(berries, clickedBerryName){
+    const berryInfo = document.getElementById('berryInfo');
+
+    const response = await fetch(`https://pokeapi.co/api/v2/item/${clickedBerryName}`);
+    const data = await response.json();
+
+    if(clickedBerryName !== "roseli-berry" && clickedBerryName !== "kee-berry" && clickedBerryName !== "maranga-berry") {
+        var berryResponse = await fetch(`https://pokeapi.co/api/v2/berry/${clickedBerryName.split('-')[0]}`);
+        var berryData = await berryResponse.json();
+    } else if (clickedBerryName == "roseli-berry"){
+        var berryData = {
+              "firmness": {"name": "Hard"}, "size": 35,
+              "flavors": [
+                {"flavor": {"name": "Spicy"},"potency": 0},
+                {"flavor": {"name": "Dry"},"potency": 0},  
+                {"flavor": {"name": "Sweet"},"potency": 25},
+                {"flavor": {"name": "Bitter"},"potency": 10},
+                {"flavor": {"name": "Sour"},"potency": 0}  
+              ],
+              "smoothness": 35,
+              "natural_gift_type": {"name": "Fairy"},
+              "natural_gift_power": 60
+        }          
+    } else if (clickedBerryName == "kee-berry"){
+        var berryData = {
+            "firmness": {"name": "Unknown"}, "size": "???",
+            "flavors": [
+              {"flavor": {"name": "Spicy"},"potency": 30},
+              {"flavor": {"name": "Dry"},"potency": 30},  
+              {"flavor": {"name": "Sweet"},"potency": 10},
+              {"flavor": {"name": "Bitter"},"potency": 10},
+              {"flavor": {"name": "Sour"},"potency": 10}  
+            ],
+            "smoothness": "???",
+            "natural_gift_type": {"name": "Fairy"},
+            "natural_gift_power": 80
+      }          
+    } else if (clickedBerryName == "maranga-berry"){
+        var berryData = {
+            "firmness": {"name": "Unknown"}, "size": "???",
+            "flavors": [
+              {"flavor": {"name": "Spicy"},"potency": 10},
+              {"flavor": {"name": "Dry"},"potency": 10},  
+              {"flavor": {"name": "Sweet"},"potency": 30},
+              {"flavor": {"name": "Bitter"},"potency": 30},
+              {"flavor": {"name": "Sour"},"potency": 10}  
+            ],
+            "smoothness": "???",
+            "natural_gift_type": {"name": "Dark"},
+            "natural_gift_power": 80
+      }
+    }
+
+    berryInfo.innerHTML = `
+        <h2>${data.name.toUpperCase()}</h2>
+        <p>${getForeignName(data.names)}</p>
+        <img src="${data.sprites.default}" 
+        alt="${data.name}" width="100" class="pokemon-image">
+    `;
+
+    if(berryData){
+        // Info
+        berryInfo.innerHTML += 
+        `
+            <h3>Berry Info</h3>
+            <p>${berryData.firmness.name}, ${berryData.size}mm</p>
+        `;
+
+        // Flavors
+        berryInfo.innerHTML += `<h3>Flavors</h3>`;
+        const maxPotency = 50;
+        const barWidth = 150; // Adjust this value as needed
+        berryData.flavors.forEach(flavor => {
+            const barLength = (flavor.potency / maxPotency) * barWidth;
+            berryInfo.innerHTML += `
+                <div style="display: flex; align-items: flex-start;">
+                    <p style="margin-right: 10px; width: 100px;">${flavor.flavor.name}</p>
+                    <div style="width: ${barWidth}px; background-color: lightgray; height: 20px; position: relative;">
+                        <div style="position: absolute; width: ${barLength}px; background-color: blue; height: 20px;"></div>
+                    </div>
+                    <p style="margin-left: 10px;">${flavor.potency}</p>
+                </div>
+            `;
+        });
+        berryInfo.innerHTML += `<p>Smoothness: ${berryData.smoothness}</p>`
+
+        // Natural Gift Type & Power
+        const type = berryData.natural_gift_type.name;
+        const typeImage = 
+            `<div class="tooltip-types-origin">
+                <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" 
+                    alt="${type}" 
+                    class="type-image" 
+                    width="30px">
+                <span class="tooltiptext">${type}</span>
+            </div>`;
+
+        berryInfo.innerHTML += 
+        `
+            <h3>Natural Gift</h3>
+            <p>${typeImage} Power: ${berryData.natural_gift_power+20}</p>
+        `;
+    }
+
+    // Fling Effect and Power
+    // Category, Attribute, Fling (effect and power)
+    const flingEffectName = (data.fling_effect) != null ? data.fling_effect.name : "Effect";
+    var flingEffect = "N/A", flingPower = data.fling_power||"N/A";
+    if(flingEffectName != "Effect"){
+        const response = await fetch(data.fling_effect.url);
+        const flingEffectData = await response.json(); 
+        flingEffect = flingEffectData.effect_entries[0].effect||"N/A";
+    }
+    berryInfo.innerHTML += `
+        <h3>Fling</h3>
+        <p>${flingEffect}</p>
+        <p>Power: ${flingPower}</p>
+    `;    
+
+    // Item Description
+    if(data.effect_entries.length>0){
+        berryInfo.innerHTML += `
+            <h3>Short Description</h3>
+            <p>${data.effect_entries[0].short_effect || ""}</p>
+            <h3>Long Description</h3>
+            <p>${data.effect_entries[0].effect || ""}</p>
+        `;
+    } else {
+        berryInfo.innerHTML += `
+        <h3>Short Description</h3>
+        <p>none</p>
+        <h3>Long Description</h3>
+        <p>none</p>
+    `;
+    }
+
+    // Item In-Game Description
+    const flavorTextEntries = data.flavor_text_entries.filter(entry => entry.language.name === "en");
+    if (flavorTextEntries.length > 0) {
+        const randomIndex = Math.floor(Math.random() * flavorTextEntries.length);
+        const randomFlavorTextEntry = flavorTextEntries[randomIndex];
+        berryInfo.innerHTML += `<h3>In-Game Description</h3>`;
+        berryInfo.innerHTML += randomFlavorTextEntry.text;
+    } else {
+        berryInfo.innerHTML += `<h3>In-Game Description</h3>`;
+        berryInfo.innerHTML += `N/A`;
+    }    
+}
+  
+  // Event listener for type filter changes
+  document.getElementById('typeFilter').addEventListener('change', function () {
+    filterBerries();
+    updateSizeOptions();
+  });
+  
+  // Event listener for size filter changes
+  document.getElementById('detailFilter').addEventListener('change', filterBerries);
+  
+  // Initial update of size options
+  updateSizeOptions();
+  // Initial display of all berries
+  displayBerries(berries);
+  
