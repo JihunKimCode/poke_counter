@@ -3,19 +3,19 @@
 <head>
     <!-- Website Thumbnail -->
     <title>Pokémon Item Searcher</title>
-    <meta property="og:url" content="https://jihunkimcode.github.io/poke_counter/item.html">
-    <meta property="og:title" content="Pokémon Color Searcher">
+    <meta property="og:url" content="https://jihunkimcode.github.io/poke_counter/pages/item.html">
+    <meta property="og:title" content="Pokémon Item Searcher">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dream-world/sitrus-berry.png">
-    <meta property="og:description" content="Search Pokémon with its color.">
+    <meta property="og:description" content="Retrieve details about various items featured in the Pokémon series.">
     <!-- Website Information -->
     <meta name="author" content="Jihun Kim">
-    <meta name="keywords" content="Pokémon, Pokémon colors">
-    <meta name="description" content="Search Pokémon with its color.">        
+    <meta name="keywords" content="Pokémon, Pokémon items">
+    <meta name="description" content="Retrieve details about various items featured in the Pokémon series.">        
     <!-- Website Settings -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../styles.css" />
     <link 
         rel="icon" 
         type="image/x-icon" 
@@ -31,7 +31,7 @@
         <div>
             <h1>
             <a
-            href="index.html"
+            href="../index.html"
             class="btn btn-github"
             rel="noopener noreferrer"
             >
@@ -44,10 +44,10 @@
             title="sitrus-berry">
             
             <a
-                href="item.html"
-                rel="noopener noreferrer"
+            href="item.html"
+            rel="noopener noreferrer"
             >
-            Pokémon Color Searcher
+            Pokémon Item Searcher
             </a>
             </h1>
         </div>
@@ -55,7 +55,7 @@
         <div class="search-container">
             <button id="shuffle"><i class="fa-solid fa-shuffle"></i></button>
             <button id="microphone" onclick="voiceRecognition()"><i class="fa-solid fa-microphone"></i></button>
-            <input type="text" id="itemName" placeholder="Enter color" autocomplete="off">
+            <input type="text" id="itemName" placeholder="Enter item name" autocomplete="off">
             <button id="itemSearchButton" onclick="searchItem()"><i class="fa fa-search"></i></button>
             <div id="clearButton" onclick="clearInput()"><i class="fa-solid fa-xmark"></i></div>
             <div id="pokemonDropdown"></div>
@@ -70,6 +70,13 @@
                 <option>Pokémon Dream World</option>
                 <option>Underground</option>
             </select>
+        </div>
+        <div class="itemText">
+            <div id="item"></div>
+            <div id="itemEffect"></div>
+            <div id="heldPokemon">
+                <div id="itemPokemon"></div>
+            </div>
         </div>
     </div>
 </body>
@@ -87,5 +94,5 @@
         </button>
     </div>
 </footer>    
-<script src="script.js"></script>
+<script src="../script.js"></script>
 </html>

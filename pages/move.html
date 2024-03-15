@@ -3,7 +3,7 @@
 <head>
     <!-- Website Thumbnail -->
     <title>Pokémon Move Searcher</title>
-    <meta property="og:url" content="https://jihunkimcode.github.io/poke_counter/move.html">
+    <meta property="og:url" content="https://jihunkimcode.github.io/poke_counter/pages/move.html">
     <meta property="og:title" content="Pokémon Move Searcher">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dream-world/choice-scarf.png">
@@ -15,7 +15,7 @@
     <!-- Website Settings -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../styles.css" />
     <link 
         rel="icon" 
         type="image/x-icon" 
@@ -31,7 +31,7 @@
         <div>
             <h1>
             <a
-            href="index.html"
+            href="../index.html"
             class="btn btn-github"
             rel="noopener noreferrer"
             >
@@ -44,8 +44,8 @@
             title="choice-scarf">
             
             <a
-                href="move.html"
-                rel="noopener noreferrer"
+            href="move.html"
+            rel="noopener noreferrer"
             >
             Pokémon Move Searcher
             </a>
@@ -69,120 +69,64 @@
                 <div id="moveType"></div>
                 <div id="moveInfo">
                     <div class="split-box">
-                        <div class="left-half">
-                        <p>Power</p>
-                        </div>
-                        <div class="right-half">
-                        <p id="movePower"></p>
-                        </div>
+                        <div class="left-half"><p>Power</p></div>
+                        <div class="right-half"><p id="movePower"></p></div>
                     </div>      
                     <div class="split-box">
-                        <div class="left-half">
-                        <p>Accuracy</p>
-                        </div>
-                        <div class="right-half">
-                        <p id="moveAccuracy"></p>
-                        </div>
+                        <div class="left-half"><p>Accuracy</p></div>
+                        <div class="right-half"><p id="moveAccuracy"></p></div>
                     </div>   
                     <div class="split-box">
-                        <div class="left-half">
-                        <p>PP</p>
-                        </div>
-                        <div class="right-half">
-                        <p id="movePP"></p>
-                        </div>
+                        <div class="left-half"><p>PP</p></div>
+                        <div class="right-half"><p id="movePP"></p></div>
                     </div>
                 </div>   
                 <div id="moveInfo2">
                     <div class="split-box">
-                        <div class="left-half">
-                        <p>Priority</p>
-                        </div>
-                        <div class="right-half">
-                        <p id="movePriority"></p>
-                        </div>
+                        <div class="left-half"><p>Priority</p></div>
+                        <div class="right-half"><p id="movePriority"></p></div>
                     </div>              
                     <div class="split-box">
-                        <div id="left-half-effect">
-                        <p id="ailment"></p>
-                        </div>
-                        <div class="right-half">
-                        <p id="moveAilmentChance"></p>
-                        </div>
+                        <div id="left-half-effect"><p id="ailment"></p></div>
+                        <div class="right-half"><p id="moveAilmentChance"></p></div>
                     </div>
                     <div class="split-box">
-                        <div class="left-half">
-                        <p>Gen</p>
-                        </div>
-                        <div class="right-half">
-                        <p id="moveGeneration"></p>
-                        </div>
+                        <div class="left-half"><p>Gen</p></div>
+                        <div class="right-half"><p id="moveGeneration"></p></div>
                     </div>
                 </div>
                 <div id="moveMoreInfo">
                     <div class="split-box2">
-                        <div class="top-half">
-                        <p>HP</p>
-                        </div>
-                        <div class="bottom-half">
-                        <p id="hp">0</p>
-                        </div>
+                        <div class="top-half"><p>HP</p></div>
+                        <div class="bottom-half"><p id="hp">0</p></div>
                     </div>
                     <div class="split-box2">
-                        <div class="top-half">
-                        <p>ATK</p>
-                        </div>
-                        <div class="bottom-half">
-                        <p id="atk">0</p>
-                        </div>
+                        <div class="top-half"><p>ATK</p></div>
+                        <div class="bottom-half"><p id="atk">0</p></div>
                     </div>
                     <div class="split-box2">
-                        <div class="top-half">
-                        <p>DEF</p>
-                        </div>
-                        <div class="bottom-half">
-                        <p id="def">0</p>
-                        </div>
+                        <div class="top-half"><p>DEF</p></div>
+                        <div class="bottom-half"><p id="def">0</p></div>
                     </div>
                     <div class="split-box2">
-                        <div class="top-half">
-                        <p>SPA</p>
-                        </div>
-                        <div class="bottom-half">
-                        <p id="spa">0</p>
-                        </div>
+                        <div class="top-half"><p>SPA</p></div>
+                        <div class="bottom-half"><p id="spa">0</p></div>
                     </div>
                     <div class="split-box2">
-                        <div class="top-half">
-                        <p>SPD</p>
-                        </div>
-                        <div class="bottom-half">
-                        <p id="spd">0</p>
-                        </div>
+                        <div class="top-half"><p>SPD</p></div>
+                        <div class="bottom-half"><p id="spd">0</p></div>
                     </div>
                     <div class="split-box2">
-                        <div class="top-half">
-                        <p>SPE</p>
-                        </div>
-                        <div class="bottom-half">
-                        <p id="spe">0</p>
-                        </div>
+                        <div class="top-half"><p>SPE</p></div>
+                        <div class="bottom-half"><p id="spe">0</p></div>
                     </div>
                     <div class="split-box2">
-                        <div class="top-half">
-                        <p>ACC</p>
-                        </div>
-                        <div class="bottom-half">
-                        <p id="acc">0</p>
-                        </div>
+                        <div class="top-half"><p>ACC</p></div>
+                        <div class="bottom-half"><p id="acc">0</p></div>
                     </div>
                     <div class="split-box2">
-                        <div class="top-half">
-                        <p>EVA</p>
-                        </div>
-                        <div class="bottom-half">
-                        <p id="eva">0</p>
-                        </div>
+                        <div class="top-half"><p>EVA</p></div>
+                        <div class="bottom-half"><p id="eva">0</p></div>
                     </div>
                 </div>
             </div>
@@ -222,5 +166,5 @@
         </button>
     </div>
 </footer>    
-<script src="script.js"></script>
+<script src="../script.js"></script>
 </html>

@@ -3,7 +3,7 @@ The main page of the website.
 
 This page links to **Source code, Counter Pokémon Searcher, Pokémon Move Searcher, and Pokémon Item Searcher**.
 
-## [Counter Pokémon Searcher](https://jihunkimcode.github.io/poke_counter/info.html)
+## [Counter Pokémon Searcher](https://jihunkimcode.github.io/poke_counter/pages/info.html)
 Explore information on Pokémon and discover effective counters for them.
 
 ### Features
@@ -61,7 +61,7 @@ Explore information on Pokémon and discover effective counters for them.
 - [ ] Better calculation to find counter pokemon
 - [ ] Image Path Check
 
-## [Pokémon Move Searcher](https://jihunkimcode.github.io/poke_counter/move.html)
+## [Pokémon Move Searcher](https://jihunkimcode.github.io/poke_counter/pages/move.html)
 Retrieve information on Pokémon moves.
 
 ### Features
@@ -88,7 +88,7 @@ Retrieve information on Pokémon moves.
 - **Learn By Pokemon**
     - Sprite of the pokemon who learns the move
 
-## [Pokémon Item Searcher](https://jihunkimcode.github.io/poke_counter/item.html)
+## [Pokémon Item Searcher](https://jihunkimcode.github.io/poke_counter/pages/item.html)
 Retrieve details about various items featured in the Pokémon series.
 
 ### Features
@@ -112,7 +112,7 @@ Retrieve details about various items featured in the Pokémon series.
 - **Held By Pokemon**
     - Sprite of the pokemon who holds the item
 
-## [Pokémon Berry Searcher](https://jihunkimcode.github.io/poke_counter/berry.html)
+## [Pokémon Berry Searcher](https://jihunkimcode.github.io/poke_counter/pages/berry.html)
 Search about berries in the Pokémon series, filtering by in-game effects.
 
 ### Features
