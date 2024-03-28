@@ -2516,7 +2516,7 @@ async function searchMove() {
             const randomIndex = Math.floor(Math.random() * flavorTextEntries.length);
             const randomFlavorTextEntry = flavorTextEntries[randomIndex];
             effect.innerHTML += `<h3>In-Game Description</h3>`;
-            effect.innerHTML += randomFlavorTextEntry.flavor_text;
+            effect.innerHTML += `<p>${randomFlavorTextEntry.flavor_text}</p>`;
         } else {
             effect.textContent = "N/A";
         }
@@ -2971,8 +2971,67 @@ async function getBerryData(berries, clickedBerryName){
         <img src="${data.sprites.default}" 
         alt="${data.name}" width="100" class="pokemon-image">
     `;
+    // Item Description
+    if(data.effect_entries.length>0){
+        berryInfo.innerHTML += `
+            <h3>Short Description</h3>
+            <p>${data.effect_entries[0].short_effect || ""}</p>
+            <h3>Long Description</h3>
+            <p>${data.effect_entries[0].effect || ""}</p>
+        `;
+    } else {
+        berryInfo.innerHTML += `
+        <h3>Short Description</h3>
+        <p>none</p>
+        <h3>Long Description</h3>
+        <p>none</p>
+    `;
+    }
+
+    // Item In-Game Description
+    const flavorTextEntries = data.flavor_text_entries.filter(entry => entry.language.name === "en");
+    if (flavorTextEntries.length > 0) {
+        const randomIndex = Math.floor(Math.random() * flavorTextEntries.length);
+        const randomFlavorTextEntry = flavorTextEntries[randomIndex];
+        berryInfo.innerHTML += `<h3>In-Game Description</h3>`;
+        berryInfo.innerHTML += `<p>${randomFlavorTextEntry.text}</p>`;
+    } else {
+        berryInfo.innerHTML += `<h3>In-Game Description</h3>`;
+        berryInfo.innerHTML += `N/A`;
+    }    
+
+    // Fling Effect and Power
+    const flingEffectName = (data.fling_effect) != null ? data.fling_effect.name : "Effect";
+    var flingEffect = "N/A", flingPower = data.fling_power||"N/A";
+    if(flingEffectName != "Effect"){
+        const response = await fetch(data.fling_effect.url);
+        const flingEffectData = await response.json(); 
+        flingEffect = flingEffectData.effect_entries[0].effect||"N/A";
+    }
+    berryInfo.innerHTML += `
+        <h3>Fling</h3>
+        <p>${flingEffect}</p>
+        <p>Power: ${flingPower}</p>
+    `;    
 
     if(berryData){
+        // Natural Gift Type & Power
+        const type = berryData.natural_gift_type.name;
+        const typeImage = 
+            `<div class="tooltip-types-origin">
+                <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" 
+                    alt="${type}" 
+                    class="type-image" 
+                    width="30px">
+                <span class="tooltiptext">${type}</span>
+            </div>`;
+
+        berryInfo.innerHTML += 
+        `
+            <h3>Natural Gift</h3>
+            <p>${typeImage} Power: ${berryData.natural_gift_power+20}</p>
+        `;
+        
         // Info
         berryInfo.innerHTML += 
         `
@@ -2997,68 +3056,7 @@ async function getBerryData(berries, clickedBerryName){
             `;
         });
         berryInfo.innerHTML += `<p>Smoothness: ${berryData.smoothness}</p>`
-
-        // Natural Gift Type & Power
-        const type = berryData.natural_gift_type.name;
-        const typeImage = 
-            `<div class="tooltip-types-origin">
-                <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" 
-                    alt="${type}" 
-                    class="type-image" 
-                    width="30px">
-                <span class="tooltiptext">${type}</span>
-            </div>`;
-
-        berryInfo.innerHTML += 
-        `
-            <h3>Natural Gift</h3>
-            <p>${typeImage} Power: ${berryData.natural_gift_power+20}</p>
-        `;
     }
-
-    // Fling Effect and Power
-    // Category, Attribute, Fling (effect and power)
-    const flingEffectName = (data.fling_effect) != null ? data.fling_effect.name : "Effect";
-    var flingEffect = "N/A", flingPower = data.fling_power||"N/A";
-    if(flingEffectName != "Effect"){
-        const response = await fetch(data.fling_effect.url);
-        const flingEffectData = await response.json(); 
-        flingEffect = flingEffectData.effect_entries[0].effect||"N/A";
-    }
-    berryInfo.innerHTML += `
-        <h3>Fling</h3>
-        <p>${flingEffect}</p>
-        <p>Power: ${flingPower}</p>
-    `;    
-
-    // Item Description
-    if(data.effect_entries.length>0){
-        berryInfo.innerHTML += `
-            <h3>Short Description</h3>
-            <p>${data.effect_entries[0].short_effect || ""}</p>
-            <h3>Long Description</h3>
-            <p>${data.effect_entries[0].effect || ""}</p>
-        `;
-    } else {
-        berryInfo.innerHTML += `
-        <h3>Short Description</h3>
-        <p>none</p>
-        <h3>Long Description</h3>
-        <p>none</p>
-    `;
-    }
-
-    // Item In-Game Description
-    const flavorTextEntries = data.flavor_text_entries.filter(entry => entry.language.name === "en");
-    if (flavorTextEntries.length > 0) {
-        const randomIndex = Math.floor(Math.random() * flavorTextEntries.length);
-        const randomFlavorTextEntry = flavorTextEntries[randomIndex];
-        berryInfo.innerHTML += `<h3>In-Game Description</h3>`;
-        berryInfo.innerHTML += randomFlavorTextEntry.text;
-    } else {
-        berryInfo.innerHTML += `<h3>In-Game Description</h3>`;
-        berryInfo.innerHTML += `N/A`;
-    }    
 }
   
   // Event listener for type filter changes
