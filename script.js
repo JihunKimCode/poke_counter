@@ -595,7 +595,7 @@ function performSearch() {
                     // Update theme colors
                     findColors(data.name, data.id);
                     // Main Body
-                    getPokemonInfo(types, data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, shape, speciesData.names, data.cries.latest);
+                    getPokemonInfo(types, data.name, data.id, sprites, data.height, data.weight, speciesData.gender_rate, shape, speciesData.names, data.cries);
                     getGen(data.name, speciesData.id);
                     getTypeAbility(types, data.abilities, data.past_abilities);
                     getEvolution(speciesData.evolution_chain.url);
@@ -613,7 +613,7 @@ function performSearch() {
 }
 
 // Get the bioInfo of the pokemon
-function getPokemonInfo(types, name, id, sprites, height, weight, gender_rate, shape, foreignNames, cry){
+function getPokemonInfo(types, name, id, sprites, height, weight, gender_rate, shape, foreignNames, cries){
     // Trace Pokemon's information
     const image = getSprite(name, sprites);
     const foreignName = getForeignName(foreignNames);
@@ -638,10 +638,17 @@ function getPokemonInfo(types, name, id, sprites, height, weight, gender_rate, s
         </div>
         <p>Pokédex #${id} | ${foreignName}</p>
         <div class="bioInfo">${bioInfo}</div>
+        <p class="audioName"><i class="fa-solid fa-volume-high"></i> New Audio</p>
         <audio controls>
-            <source src="${cry}" type="audio/ogg">
+            <source src="${cries.latest}" type="audio/ogg">
             Your browser does not support the audio element.
         </audio>
+        <p class="audioName"><i class="fa-solid fa-volume-high"></i> Old Audio</p>
+        <audio controls>
+            <source src="${cries.legacy}" type="audio/ogg">
+            Your browser does not support the audio element.
+        </audio>
+
     `;
 }
 
@@ -1541,7 +1548,6 @@ function evolutionWithImages(evolutionDetails) {
                 <span class="tooltiptext">${pokemonName}</span>
                 </div>`
                 
-            console.log(imgTooltip)
             evolutionDetails = evolutionDetails.replace(match, imgTooltip);
         } catch (error) {
             console.error(`Error fetching data for ${pokemonName}:`, error);
@@ -2812,22 +2818,22 @@ function populateFilters() {
     });
 
     // Populate typeFilter dropdown
-    typeFilter.innerHTML = "";
+    if(typeFilter) typeFilter.innerHTML = "";
     uniqueTypes.forEach(type => {
         const option = document.createElement("option");
         option.value = type === "all" ? type : type.toLowerCase();
         option.textContent = type === "all" ? "All Types" : type[0].toUpperCase() + type.slice(1);
-        typeFilter.appendChild(option);
+        if(typeFilter) typeFilter.appendChild(option);
     });
 
     // Populate detailFilter dropdown
-    detailFilter.innerHTML = "";
+    if(detailFilter) detailFilter.innerHTML = "";
     uniqueDetails.forEach(detail => {
         const option = document.createElement("option");
         option.value = detail.value;
         option.dataset.type = detail.type === "all" ? "all" : detail.type.toLowerCase();
         option.textContent = detail.text;
-        detailFilter.appendChild(option);
+        if(detailFilter) detailFilter.appendChild(option);
     });
 }
 
@@ -2849,8 +2855,8 @@ async function fetchBerryData() {
 
 // Function to filter berries based on type and size
 function filterBerries() {
-    const typeFilterValue = document.getElementById('typeFilter').value;
-    const detailFilterValue = document.getElementById('detailFilter').value;
+    const typeFilterValue = typeFilter.value;
+    const detailFilterValue = detailFilter.value;
 
     const filteredBerries = berries.filter(berry => {
         return (typeFilterValue === 'all' || berry.type.toLowerCase() === typeFilterValue.toLowerCase()) &&
@@ -2862,29 +2868,28 @@ function filterBerries() {
 
 // Function to update size options based on the selected type
 function updateSizeOptions() {
-const typeFilter = document.getElementById('typeFilter').value;
-const detailFilter = document.getElementById('detailFilter');
+    if(detailFilter){
+        // Hide all size options
+        for (let i = 0; i < detailFilter.options.length; i++) {
+            detailFilter.options[i].style.display = 'none';
+        }
 
-// Hide all size options
-for (let i = 0; i < detailFilter.options.length; i++) {
-    detailFilter.options[i].style.display = 'none';
-}
+        // Show size options corresponding to the selected type
+        for (let i = 0; i < detailFilter.options.length; i++) {
+            const option = detailFilter.options[i];
+            const optionType = option.getAttribute('data-type');
 
-// Show size options corresponding to the selected type
-for (let i = 0; i < detailFilter.options.length; i++) {
-    const option = detailFilter.options[i];
-    const optionType = option.getAttribute('data-type');
-
-    if (typeFilter === 'all' || typeFilter === optionType) {
-        option.style.display = '';
+            if (typeFilter && (typeFilter.value === 'all' || typeFilter.value === optionType)) {
+                option.style.display = '';
+            }
+        }
     }
-}
 }
   
 // Function to display berries in the container
 function displayBerries(berries) {
     const berryContainer = document.getElementById('berryContainer');
-    berryContainer.innerHTML = '';
+    if(berryContainer) berryContainer.innerHTML = '';
 
     fetchBerryData().then(() => {
         berries.forEach(berry => {
@@ -2907,7 +2912,7 @@ function displayBerries(berries) {
             // Append both elements to the berry container
             berryElement.appendChild(spriteElement);
 
-            berryContainer.appendChild(berryElement);
+            if(berryContainer) berryContainer.appendChild(berryElement);
         });
     })
 }
@@ -3060,13 +3065,15 @@ async function getBerryData(berries, clickedBerryName){
 }
   
   // Event listener for type filter changes
-  document.getElementById('typeFilter').addEventListener('change', function () {
-    filterBerries();
-    updateSizeOptions();
-  });
+  if(typeFilter){
+    typeFilter.addEventListener('change', function () {
+        filterBerries();
+        updateSizeOptions();
+    });
+  }
   
   // Event listener for size filter changes
-  document.getElementById('detailFilter').addEventListener('change', filterBerries);
+  if(detailFilter) detailFilter.addEventListener('change', filterBerries);
   
   // Initial update of size options
   updateSizeOptions();

@@ -288,6 +288,10 @@ footer a:hover{
     margin-right: 10px;
 }
 
+.audioName{
+    margin-block-end: 0px;
+}
+
 #pokemonInfo {
     display: table-cell;
     width: fit-content;
