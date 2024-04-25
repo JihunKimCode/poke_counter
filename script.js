@@ -638,12 +638,12 @@ function getPokemonInfo(types, name, id, sprites, height, weight, gender_rate, s
         </div>
         <p>Pokédex #${id} | ${foreignName}</p>
         <div class="bioInfo">${bioInfo}</div>
-        <p class="audioName"><i class="fa-solid fa-volume-high"></i> New Audio</p>
+        <p class="audioName"><i class="fa-solid fa-volume-high"></i> New Voice</p>
         <audio controls>
             <source src="${cries.latest}" type="audio/ogg">
             Your browser does not support the audio element.
         </audio>
-        <p class="audioName"><i class="fa-solid fa-volume-high"></i> Old Audio</p>
+        <p class="audioName"><i class="fa-solid fa-volume-high"></i> Old Voice</p>
         <audio controls>
             <source src="${cries.legacy}" type="audio/ogg">
             Your browser does not support the audio element.
