@@ -476,6 +476,7 @@ const progressContainer = document.getElementById('progress-bar');
 const dfHead = document.getElementById('dfHead');
 const forms = document.getElementById('forms');
 const heldItems = document.getElementById('heldItems');
+const locations = document.getElementById('locations');
 const others = document.getElementById('others');
 
 const cbx_form = document.getElementById('cbx_form');
@@ -582,6 +583,10 @@ function performSearch() {
                     const speciesUrl = data.species.url;
                     const response = await fetch(speciesUrl);
                     const speciesData = await response.json();
+
+                    const locUrl = data.location_area_encounters;
+                    const locResponse = await fetch(locUrl);
+                    const locData = await locResponse.json();
         
                     // Global variables for click events
                     global_name = data.name;
@@ -602,6 +607,7 @@ function performSearch() {
                     displayStatsHistogram(statsData);
                     showForms(speciesUrl);
                     showHeldItems(data.held_items);
+                    getLoc(locData);
                     trivia(speciesData);
                     findCounterPokemon(types, statsData);
                 })
@@ -1477,6 +1483,76 @@ function showHeldItems(items){
     }
 }
 
+// Show where the Pokemon can be found
+async function getLoc(loc) {
+    locations.style.display = 'block';
+
+    const fetchCSV = async (url) => {
+        const response = await fetch(url);
+        const csvData = await response.text();
+        return csvData.split('\n').map(row => row.split(','));
+    };
+
+    try {
+        const csvData = await fetchCSV('https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/locations.csv');
+        const locationMapping = {};
+
+        // Create mapping from identifier to location details
+        csvData.forEach(([id, region_id, identifier]) => {
+            const parsedRegionId = region_id ? parseInt(region_id) : 0;
+            // Hisui, Paldea Adjustment
+            const adjustedRegionId = (parsedRegionId === 9 || parsedRegionId === 10) ? parsedRegionId - 1 : parsedRegionId;
+            locationMapping[identifier] = { id, region_id: adjustedRegionId, identifier };
+        });
+
+        const regions = {};
+
+        // Function to find the best match
+        const findMatch = (name) => {
+            let identifier = name;
+            while (identifier) {
+                if (locationMapping[identifier]) {
+                    return locationMapping[identifier];
+                }
+                identifier = identifier.includes('-') ? identifier.substring(0, identifier.lastIndexOf('-')) : '';
+            }
+            return null;
+        };
+
+        // Iterate over each location to find a match and store region and location details
+        for (let i = 0; i < loc.length; i++) {
+            const locationName = loc[i].location_area.name;
+            const matchedLocation = findMatch(locationName);
+
+            if (matchedLocation) {
+                const { region_id, identifier } = matchedLocation;
+                if (!regions[region_id]) {
+                    regions[region_id] = [];
+                }
+                regions[region_id].push(locationName);
+            }
+        }
+
+        // Update generation circles based on the regions data
+        const locationsDiv = document.getElementById('locations');
+        const circles = locationsDiv.getElementsByClassName('circle');
+
+        for (let i = 0; i < circles.length; i++) {
+            circles[i].classList.remove('color-class-appear');
+            const circleId = parseInt(circles[i].id);
+
+            if (regions[circleId]) {
+                circles[i].classList.add('color-class-appear');
+                circles[i].getElementsByClassName('tooltiptext')[0].textContent = regions[circleId].join('\n');
+            } else {
+                circles[i].getElementsByClassName('tooltiptext')[0].textContent = "Not Appear";
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching or processing CSV:', error);
+    }
+}
+
 // Write Trivia of the Pokemon
 function trivia(speciesData){
     let genera = "undefined";
@@ -2033,7 +2109,7 @@ function updateTableSize(){
     const table = document.querySelector('.table');
     if (tableContainer) {
         const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + generations.clientHeight + typeAbility.clientHeight + evolution.clientHeight;
-        const container2 = psHead.clientHeight + levelContainer.clientHeight + statsHistogram.clientHeight + dfHead.clientHeight + cbx_form.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
+        const container2 = psHead.clientHeight + levelContainer.clientHeight + statsHistogram.clientHeight + dfHead.clientHeight + cbx_form.clientHeight + forms.clientHeight + heldItems.clientHeight + locations.clientHeight + others.clientHeight;
         const clientHeight = container1 > container2 ? container1 : container2;
         const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
         const screenHeight = (window.innerHeight > 0) ? window.innerHeight : screen.height;
@@ -2069,7 +2145,7 @@ function makeTable(pokemonArray){
     const tableContainer = document.createElement('div');
     tableContainer.className = 'tableContainer';
     const container1 = chooseSprite.clientHeight + pokemonInfo.clientHeight + generations.clientHeight + typeAbility.clientHeight + evolution.clientHeight;
-    const container2 = psHead.clientHeight + levelContainer.clientHeight + statsHistogram.clientHeight + dfHead.clientHeight + cbx_form.clientHeight + forms.clientHeight + heldItems.clientHeight + others.clientHeight;
+    const container2 = psHead.clientHeight + levelContainer.clientHeight + statsHistogram.clientHeight + dfHead.clientHeight + cbx_form.clientHeight + forms.clientHeight + heldItems.clientHeight + locations.clientHeight + others.clientHeight;
     const clientHeight = container1 > container2 ? container1 : container2;
     const screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
     const screenHeight = (window.innerHeight > 0) ? window.innerHeight : screen.height;
