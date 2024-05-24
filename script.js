@@ -1483,57 +1483,44 @@ function showHeldItems(items){
     }
 }
 
+// Change Version Name into Region ID
+const versionToRegionId = {
+    'red': 1, 'green': 1, 'blue': 1, 'yellow': 1, 'firered': 1, 'leafgreen': 1, 
+    'lets-go-pikachu': 1, 'lets-go-eevee': 1,
+    'gold': 2, 'silver': 2, 'crystal': 2, 'heartgold': 2, 'soulsilver': 2,
+    'ruby': 3, 'sapphire': 3, 'emerald': 3, 'omega-ruby': 3, 'alpha-sapphire': 3,
+    'diamond': 4, 'pearl': 4, 'platinum': 4, 'brilliant-diamond': 4, 'shining-pearl': 4,
+    'black': 5, 'white': 5, 'black-2': 5, 'white-2': 5,
+    'x': 6, 'y': 6,
+    'sun': 7, 'moon': 7, 'ultra-sun': 7, 'ultra-moon': 7,
+    'sword': 8, 'shield': 8, 'the-isle-of-armor': 8, 'the-crown-tundra': 8, 'legends-arceus': 8,
+    'scarlet': 9, 'violet': 9, 'the-teal-mask': 9, 'the-indigo-disk': 9
+};
+
 // Show where the Pokemon can be found
 async function getLoc(loc) {
     locations.style.display = 'block';
 
-    const fetchCSV = async (url) => {
-        const response = await fetch(url);
-        const csvData = await response.text();
-        return csvData.split('\n').map(row => row.split(','));
-    };
-
     try {
-        const csvData = await fetchCSV('https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/locations.csv');
-        const locationMapping = {};
-
-        // Create mapping from identifier to location details
-        csvData.forEach(([id, region_id, identifier]) => {
-            const parsedRegionId = region_id ? parseInt(region_id) : 0;
-            // Hisui, Paldea Adjustment
-            const adjustedRegionId = (parsedRegionId === 9 || parsedRegionId === 10) ? parsedRegionId - 1 : parsedRegionId;
-            locationMapping[identifier] = { id, region_id: adjustedRegionId, identifier };
-        });
-
         const regions = {};
-
-        // Function to find the best match
-        const findMatch = (name) => {
-            let identifier = name;
-            while (identifier) {
-                if (locationMapping[identifier]) {
-                    return locationMapping[identifier];
-                }
-                identifier = identifier.includes('-') ? identifier.substring(0, identifier.lastIndexOf('-')) : '';
-            }
-            return null;
-        };
 
         // Iterate over each location to find a match and store region and location details
         for (let i = 0; i < loc.length; i++) {
             const locationName = loc[i].location_area.name;
-            const matchedLocation = findMatch(locationName);
 
-            if (matchedLocation) {
-                const { region_id, identifier } = matchedLocation;
-                if (!regions[region_id]) {
-                    regions[region_id] = [];
+            for (let j = 0; j < loc[i].version_details.length; j++) {
+                const versionName = loc[i].version_details[j].version.name;
+                if (versionToRegionId.hasOwnProperty(versionName)) {
+                    let regionId = versionToRegionId[versionName];
+
+                    if (!regions[regionId]) regions[regionId] = {};
+                    if (!regions[regionId][versionName]) regions[regionId][versionName] = [];
+                    regions[regionId][versionName].push(locationName);
                 }
-                regions[region_id].push(locationName);
             }
         }
 
-        // Update generation circles based on the regions data
+        // Update location circles based on the regions data
         const locationsDiv = document.getElementById('locations');
         const circles = locationsDiv.getElementsByClassName('circle');
 
@@ -1543,13 +1530,20 @@ async function getLoc(loc) {
 
             if (regions[circleId]) {
                 circles[i].classList.add('color-class-appear');
-                circles[i].getElementsByClassName('tooltiptext')[0].textContent = regions[circleId].join('\n');
+                let tooltipContent = '';
+                // Prepend version name
+                for (const versionName in regions[circleId]) {
+                    tooltipContent += `[${versionName}]\n`;
+                    tooltipContent += regions[circleId][versionName].join('\n');
+                    tooltipContent += '\n\n';
+                }
+                circles[i].getElementsByClassName('tooltiptext')[0].textContent = tooltipContent.trim();
             } else {
                 circles[i].getElementsByClassName('tooltiptext')[0].textContent = "Not Appear";
             }
         }
     } catch (error) {
-        console.error('Error fetching or processing CSV:', error);
+        console.error('Error processing location data:', error);
     }
 }
 
