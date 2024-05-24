@@ -580,6 +580,7 @@ input[type="range"]::-moz-range-track {
 /* Make the tooltip scrollable */
 .tooltip-location .tooltiptext{
     max-height: 250px; /* Adjust the height as needed */
+    max-width: 200px;
     overflow-y: auto;  
 }
 
