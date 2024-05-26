@@ -3150,3 +3150,118 @@ async function getBerryData(berries, clickedBerryName){
   // Initial display of all berries
   displayBerries(berries);
   
+/***************
+ *  color.html  *
+ ***************/
+const colorPokemon = document.getElementById("colorPokemon");
+
+async function activateButton(button, value) {
+    // Damage Class
+    switch(value) {
+        case 1:
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dark-gem.png';
+            randomItem.title = 'dark-gem';
+            updateColors("black");
+            break;
+        case 2:
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/water-gem.png';
+            randomItem.title = 'water-gem';
+            updateColors("blue");
+            break;
+        case 3:
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ground-gem.png';
+            randomItem.title = 'ground-gem';
+            updateColors("brown");
+            break;
+        case 4:
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/steel-gem.png';
+            randomItem.title = 'steel-gem';
+            updateColors("gray");
+            break;
+        case 5:
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/grass-gem.png';
+            randomItem.title = 'grass-gem';
+            updateColors("green");
+            break;
+        case 6:
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fairy-gem.png';
+            randomItem.title = 'fairy-gem';
+            updateColors("pink");
+            break;
+        case 7:
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poison-gem.png';
+            randomItem.title = 'poison-gem';
+            updateColors("purple");
+            break;
+        case 8:
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fire-gem.png';
+            randomItem.title = 'fire-gem';
+            updateColors("red");
+            break;
+        case 9:
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/normal-gem.png';
+            randomItem.title = 'normal-gem';
+            updateColors("white");
+            break;
+        case 10:
+            randomItem.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/electric-gem.png';
+            randomItem.title = 'electric-gem';
+            updateColors("yellow");
+            break;
+        default:
+            randomItem.src = '';
+            randomItem.title = 'unknown';
+            break;
+    }
+
+    try {
+        // Display a loading message
+        colorPokemon.innerHTML = '<p>Loading...</p>';
+        
+        // Remove active class from all buttons
+        const buttons = document.querySelectorAll('.circle-button');
+        buttons.forEach(btn => btn.classList.remove('active'));
+
+        // Add active class to the clicked button
+        button.classList.add('active');
+
+        // Fetch Pokemon color data
+        const url = `https://pokeapi.co/api/v2/pokemon-color/${value}/`;
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+
+        // Extract digit and attach it to the pokemon data
+        const pokemonList = data.pokemon_species.map(pokemon => {
+            const parts = pokemon.url.split('/').filter(part => part !== '');
+            const digit = parseInt(parts[parts.length - 1]);
+            return { ...pokemon, digit };
+        });
+
+        // Sort the pokemonList by digit
+        pokemonList.sort((a, b) => a.digit - b.digit);
+
+        // Fetch Pokemon sprites
+        const sprites = await Promise.all(pokemonList.map(async pokemon => {
+            return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.digit}.png`;
+        }));
+
+        // Clear the loading message and prepare for new content
+        colorPokemon.innerHTML = '';
+
+        // Display Pokemon sprites and names
+        pokemonList.forEach((pokemon, index) => {
+            const img = document.createElement('img');
+            img.src = sprites[index] || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+            img.alt = pokemon.name;
+            img.title = pokemon.name;
+            img.style.width = "80px";
+            colorPokemon.appendChild(img);
+        });
+    } catch (error) {
+        colorPokemon.innerHTML = `<p>Error loading data: ${error.message}</p>`;
+        console.error('Error:', error);
+    }
+}

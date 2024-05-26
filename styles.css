@@ -1246,6 +1246,46 @@ input[type="range"]::-moz-range-track {
     cursor: pointer;
   }
 
+/***************
+ *  color.html  *
+ ***************/
+.button-container {
+    display: table-cell;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+.circle-button {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    transition: box-shadow 0.3s;
+    margin-right: 10px;
+}
+.circle-button.active::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid;
+    border-color: currentColor; /* Use the button's color */
+}
+.colorContainer {
+    display: table;
+    width: 100%;
+    margin: 10px;
+    padding: 10px;
+}
+#colorPokemon{
+    display: table;
+    width: 100%;
+}
+
 /*Layout for Tablet and split screen*/
 @media (min-width: 768px) and (max-width: 1024px) {
     .set{
@@ -1492,5 +1532,8 @@ input[type="range"]::-moz-range-track {
 
     #typeFilter, #detailFilter{
         width: 100%;
+    }    
+    .button-container {
+        margin-top: 10px;
     }    
 }

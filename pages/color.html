@@ -6,12 +6,12 @@
     <meta property="og:url" content="https://jihunkimcode.github.io/poke_counter/pages/color.html">
     <meta property="og:title" content="Pokémon Color Searcher">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dream-world/sitrus-berry.png">
-    <meta property="og:description" content="Search Pokémon with its color.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dream-world/normal-gem.png">
+    <meta property="og:description" content="Search all Pokémon in specific colors.">
     <!-- Website Information -->
     <meta name="author" content="Jihun Kim">
     <meta name="keywords" content="Pokémon, Pokémon colors">
-    <meta name="description" content="Search Pokémon with its color.">        
+    <meta name="description" content="Search all Pokémon in specific colors.">        
     <!-- Website Settings -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,7 +19,7 @@
     <link 
         rel="icon" 
         type="image/x-icon" 
-        href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dream-world/sitrus-berry.png"
+        href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dream-world/normal-gem.png"
     >
     <link
         rel="stylesheet"
@@ -39,9 +39,9 @@
             </a>
 
             <img id = "randomItem" 
-            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sitrus-berry.png" 
-            alt="sitrus-berry" 
-            title="sitrus-berry">
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/normal-gem.png" 
+            alt="normal-gem" 
+            title="normal-gem">
             
             <a
             href="color.html"
@@ -51,26 +51,26 @@
             </a>
             </h1>
         </div>
-        <!-- Top nav and search bar-->
-        <div class="search-container">
-            <button id="shuffle"><i class="fa-solid fa-shuffle"></i></button>
-            <button id="microphone" onclick="voiceRecognition()"><i class="fa-solid fa-microphone"></i></button>
-            <input type="text" id="itemName" placeholder="Enter color" autocomplete="off">
-            <button id="itemSearchButton" onclick="searchItem()"><i class="fa fa-search"></i></button>
-            <div id="clearButton" onclick="clearInput()"><i class="fa-solid fa-xmark"></i></div>
-            <div id="pokemonDropdown"></div>
-        </div>
     </div>
-    <div class="itemInfo">
-        <div id="itemSprite"></div>
-        <div id="chooseItemSprite">
-            <label for="itemSpriteType"></label>
-            <select id="itemSpriteType" name="itemSpriteType">
-                <option selected>Pixel Art</option>
-                <option>Pokémon Dream World</option>
-                <option>Underground</option>
-            </select>
-        </div>
+    <div class="colorContainer">
+        <div class="button-container">
+            <div class="row">
+                <div class="circle-button" style="background-color: white;" onclick="activateButton(this, 9)"></div>
+                <div class="circle-button" style="background-color: red;" onclick="activateButton(this, 8)"></div>
+                <div class="circle-button" style="background-color: brown;" onclick="activateButton(this, 3)"></div>
+                <div class="circle-button" style="background-color: yellow;" onclick="activateButton(this, 10)"></div>
+                <div class="circle-button" style="background-color: green;" onclick="activateButton(this, 5)"></div>
+            </div>
+            <div class="row">
+                <div class="circle-button" style="background-color: blue;" onclick="activateButton(this, 2)"></div>
+                <div class="circle-button" style="background-color: purple;" onclick="activateButton(this, 7)"></div>
+                <div class="circle-button" style="background-color: pink;" onclick="activateButton(this, 6)"></div>
+                <div class="circle-button" style="background-color: gray;" onclick="activateButton(this, 4)"></div>
+                <div class="circle-button" style="background-color: black;" onclick="activateButton(this, 1)"></div>
+            </div>
+        </div>    
+    </div>
+    <div id="colorPokemon">
     </div>
 </body>
 <footer>
