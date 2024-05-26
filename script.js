@@ -444,6 +444,27 @@ function scrollIntoView() {
     }
 }
 
+// Perform Search from Address
+document.addEventListener("DOMContentLoaded", function(event) {
+    // Get the search term from the URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var searchTerm = urlParams.get('s');
+    
+    // Set the search input value if a search term exists
+    if (searchTerm) {
+        // Check the URL to determine which function to call
+        var pathname = window.location.pathname;
+        element.value = searchTerm;
+        if (pathname.includes("info.html")) {
+            performSearch();
+        } else if (pathname.includes("move.html")) {
+            searchMove();
+        } else if (pathname.includes("item.html")) {
+            searchItem();
+        }
+    }
+});
+
 /***************
  *  info.html  *
  ***************/
@@ -3245,7 +3266,7 @@ async function activateButton(button, value) {
 
         // Fetch Pokemon sprites
         const sprites = await Promise.all(pokemonList.map(async pokemon => {
-            return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.digit}.png`;
+            return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.digit}.png`;
         }));
 
         // Clear the loading message and prepare for new content
