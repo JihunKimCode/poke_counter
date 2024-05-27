@@ -2640,7 +2640,7 @@ async function searchMove() {
             if(pokemonList.length > 0) learnedByPokemon.style.display = "block";
             else learnedByPokemon.style.display = "none";
 
-            learnedByPokemon.innerHTML = '<h3> Learn By Pokemon</h3>';
+            learnedByPokemon.innerHTML = '<h3> Learn By Pokémon</h3>';
             for (let i = 0; i < pokemonList.length; i++) {
                 const sprite = sprites[i];
                 const pokemonName = pokemonList[i].name;
@@ -2801,7 +2801,7 @@ async function searchItem() {
                 return pokemonDetails.sprites.front_default;
             }));
 
-            itemPokemon.innerHTML = '<h3> Held By Pokemon</h3>';
+            itemPokemon.innerHTML = '<h3> Held By Pokémon</h3>';
             if(pokemonList.length <= 0) itemPokemon.innerHTML += '<p>none</p>';
 
             for (let i = 0; i < pokemonList.length; i++) {
