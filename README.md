@@ -19,7 +19,7 @@ Explore information on Pokémon and discover effective counters for them.
     - Search with query string and parameters
         - Adding "?s=lapras" after the URL will search for information about lapras.
 ## Features
-- **Update Website color based on color of the Pokémon**
+- **Update website color based on color of the Pokémon**
 - **Sprite**
     - Shiny/Female Sprite
     - Front/Back Sprite
@@ -133,5 +133,6 @@ Search all Pokémon in specific colors.
     - Ten unique colors to search Pokémon
     - Click on the circle of the color to see the Pokémon associated with that color.
     - Sort by PokéDex Number
+- **Update website color based on the chosen color**
 - **Sprite**
   - A hyperlink to view information about the Pokémon
