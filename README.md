@@ -1,12 +1,11 @@
-# [jihunkimcode.github.io/poke_counter/](https://jihunkimcode.github.io/poke_counter/)
+# [Pokémon Info Searcher](https://jihunkimcode.github.io/poke_counter/)
+![PokeAPI Main Page](https://github.com/JihunKimCode/poke_counter/assets/135993942/3ce02b91-8c56-485f-81b4-d9aa72ea4c4c)
 The main page of the website. 
 
-This page links to **Source code, Counter Pokémon Searcher, Pokémon Move Searcher, Pokémon Item Searcher, and Pokémon Color Searcher**.
-
-## [Counter Pokémon Searcher](https://jihunkimcode.github.io/poke_counter/pages/info.html)
+# [Counter Pokémon Searcher](https://jihunkimcode.github.io/poke_counter/pages/info.html)
+![jihunkimcode github io_poke_counter_pages_info html](https://github.com/JihunKimCode/poke_counter/assets/135993942/079fa4ee-1631-418c-ab7a-4573cf152caa)
 Explore information on Pokémon and discover effective counters for them.
-
-### Features
+## Search Mechanism
 - **Search ID or Name**
     - English, Korean, Japanese, Chinese, French, German, Spanish, Italian, and Czech
 - **Search Dropdown**
@@ -18,57 +17,49 @@ Explore information on Pokémon and discover effective counters for them.
     - Levenshtein Distance
 - **Search with a query in address**
     - Search with query string and parameters
-        - Adding "?s=lapras" after the URL will search for information about Lapras.
-    - This allowed the embedding of hyperlinks in each image
+        - Adding "?s=lapras" after the URL will search for information about lapras.
+## Features
+- **Update Website color based on color of the Pokémon**
 - **Sprite**
     - Shiny/Female Sprite
     - Front/Back Sprite
     - All platforms
-- **PokeDex ID**
-    - National PokeDex ID
-    - Regional PokeDex IDs
+- **National/Regional PokeDex ID**
 - **Pokémon Information**
-    - Show Foreign Names (Korean, Japanese)
+    - Types with icons
     - Height, weight, gender rate, shape
     - Pokémon cry (Both New and Old)
-    - Types (with logo)
     - Abilities (Normal, Hidden, Taken Away)
-    - Stats
-    - Wild Pokémon (EVs, held-item)
-    - Locations where trainers can find the Pokémon
+    - Stats (HP, Atk, Def, SpA, SpD, Spe) in LV 1-100
+    - All forms of the Pokémon
+        - A hyperlink to view information about the Pokémon
     - Egg Groups / Trivia
+- **Catch/Defeat Wild Pokémon**
+    - EV that can be obtained by defeating wild Pokémon
+    - Held items that can be obtained by defeating wild Pokémon
+        - A hyperlink to view information about the item
+    - Locations where trainers can find the Pokémon
 - **Evolutions**
     - Evolution Chains
         - Pokémon with Images
-        - More than one (e.g. Eevee, Beautifly)
-        - Evolution Level
-        - Evolution Method (Friendship, Item, Moves, Locations, etc.)
+            - A hyperlink to view information about the Pokémon
+    - Evolution Method (Friendship, Item, Moves, Locations, etc.)
 - **Counter Type** (defense)
     - Order by Multiple (x4 to x2; x1/2 to x1/4)
 - **Counter Pokémon**
-    - Exclude BST > 600
-    - Exclude Mega
-    - Exclude illegal Pokémon and Gmax
-    - Use Calculation using BS, IV, and EV
-    - Beautify Display Table
-        - color update
-        - Hide elements
-        - Table length == info length
-- **Website Design**
-    - Webpage logo
-    - Table Colors
-    - Easter Eggs!
-
+    - Can hide columns in settings
+    - Can exclude BST>600, Mega, and Gmax
+    - Find effective counter Pokémon using BS, IV, and EV
 ### Plans
 - [ ] Minor evolution routes 
     - e.g. Lycanroc, Urshifu, Pawmot, Maushold, Brambleghast, Rabsca, Palafin, Annihilape, Kingambit, and Gholdengo
 - [ ] Better calculation to find counter Pokémon
 - [ ] Image Path Check for some sprites
 
-## [Pokémon Move Searcher](https://jihunkimcode.github.io/poke_counter/pages/move.html)
+# [Pokémon Move Searcher](https://jihunkimcode.github.io/poke_counter/pages/move.html)
+![jihunkimcode github io_poke_counter_pages_move html](https://github.com/JihunKimCode/poke_counter/assets/135993942/5b105fd0-7d62-4d38-85b1-a73e818cc8e1)
 Retrieve information on Pokémon moves.
-
-### Features
+## Search Mechanism
 - **Search ID or Name**
     - English, Korean, Japanese, Chinese, French, German, Spanish, Italian, and Czech
 - **Search Dropdown**
@@ -80,26 +71,25 @@ Retrieve information on Pokémon moves.
 - **Search with a query in address**
     - Search with query string and parameters
         - Adding "?s=surf" after the URL will search for information about surf.
-    - This allowed the embedding of hyperlinks in each image
+## Features
 - **Move Information**
     - Type with icons
-    - Attack Category with icons
-    - Power, Accuracy, PP
-    - Priority, Generation
-    - Additional Effect
+    - Attack category with icons
+    - Power, Accuracy, PP, Priority, and Generation
+    - Additional Effect with percentage
         - Freeze, burn, paralysis, poison, etc.
-        - percentage
     - Stat Changes
-    - Range
-- **Description**
-    - Short, Long, PokeDex
+    - Attack Range
+- **Short/Long/In-Game Description**
 - **Learn By Pokémon**
     - Sprite of the Pokémon who learns the move
+        - A hyperlink to view information about the Pokémon
 
-## [Pokémon Item Searcher](https://jihunkimcode.github.io/poke_counter/pages/item.html)
+# [Pokémon Item Searcher](https://jihunkimcode.github.io/poke_counter/pages/item.html)
+![jihunkimcode github io_poke_counter_pages_item html](https://github.com/JihunKimCode/poke_counter/assets/135993942/cf52fa4b-7c8f-493d-9d31-3fbf7d493a94)
 Retrieve details about various items featured in the Pokémon series.
 
-### Features
+## Search Mechanism
 - **Search ID or Name**
     - English, Korean, Japanese, Chinese, French, German, Spanish, Italian, and Czech
 - **Search Dropdown**
@@ -110,40 +100,37 @@ Retrieve details about various items featured in the Pokémon series.
     - Levenshtein Distance
 - **Search with a query in address**
     - Search with query string and parameters
-        - Adding "?s=repel" after the URL will search for information about repel.
-    - This allowed the embedding of hyperlinks in each image
+        - Adding "?s=sitrus-berry" after the URL will search for information about sitrus berry.
+## Features
 - **Sprite** 
 - **Item Information**
-    - Category
-    - Attribute
-    - Fling
-        - Effect
-        - Power
-- **Description**
-    - Short, Long, PokeDex
+    - Category and Attribute
+    - Effect and Power with [Fling](https://jihunkimcode.github.io/poke_counter/pages/move.html?s=fling)
+- **Short/Long/In-Game Description**
 - **Held By Pokémon**
     - Sprite of the Pokémon who holds the item
+        - A hyperlink to view information about the Pokémon
 
-## [Pokémon Berry Searcher](https://jihunkimcode.github.io/poke_counter/pages/berry.html)
+# [Pokémon Berry Searcher](https://jihunkimcode.github.io/poke_counter/pages/berry.html)
+![jihunkimcode github io_poke_counter_pages_berry html](https://github.com/JihunKimCode/poke_counter/assets/135993942/b0b8ebcf-01b6-41af-986f-f75f060c7a60)
 Search about berries in the Pokémon series, filtering by in-game effects.
-
-### Features
+## Features
 - **Search using Filters**
     - Filter berries based on in-game usage
-    - Click an image to see information 
+    - Click the berry to see information of it 
 - **Sprite** 
 - **Berry Information**
-    - Foreign Name
-    - Firmness and Size
-    - Flavors
+    - Firmness, Size, and Flavors
     - Natural Gift Type and Power
     - Fling Effect and Power
-- **Description**
-    - Short, Long, PokeDex
+- **Short/Long/In-Game Description**
 
 ## [Pokémon Color Searcher](https://jihunkimcode.github.io/poke_counter/pages/color.html)
+![jihunkimcode github io_poke_counter_pages_color html](https://github.com/JihunKimCode/poke_counter/assets/135993942/9dfe8246-0bd7-4423-aa66-d4e045615d94)
+Search all Pokémon in specific colors.
+## Features
 - **Search using Colors**
     - Ten unique colors to search Pokémon
     - Sort by PokéDex Number
 - **Sprite**
-    - Hyperlink-embedded images
+  - A hyperlink to view information about the Pokémon
