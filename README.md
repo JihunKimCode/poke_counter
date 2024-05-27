@@ -117,7 +117,7 @@ Search about berries in the Pokémon series, filtering by in-game effects.
 ## Features
 - **Search using Filters**
     - Filter berries based on in-game usage
-    - Click the berry to see information of it 
+    - Click the berry to see the information of it 
 - **Sprite** 
 - **Berry Information**
     - Firmness, Size, and Flavors
@@ -131,6 +131,7 @@ Search all Pokémon in specific colors.
 ## Features
 - **Search using Colors**
     - Ten unique colors to search Pokémon
+    - Click on the circle of the color to see the Pokémon associated with that color.
     - Sort by PokéDex Number
 - **Sprite**
   - A hyperlink to view information about the Pokémon
