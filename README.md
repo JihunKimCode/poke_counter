@@ -10,12 +10,16 @@ Explore information on Pokémon and discover effective counters for them.
 - **Search ID or Name**
     - English, Korean, Japanese, Chinese, French, German, Spanish, Italian, and Czech
 - **Search Dropdown**
-    - Fetch to csv file of PokeAPI
-    - Related Pokemon list on serach bar
+    - Fetch to CSV file of PokeAPI
+    - Related Pokémon list on the search bar
     - Levenshtein Distance + Regex
 - **Voice Search**
-    - Fetch to csv file of PokeAPI
+    - Fetch to CSV file of PokeAPI
     - Levenshtein Distance
+- **Search with a query in address**
+    - Search with query string and parameters
+        - Adding "?s=lapras" after the URL will search for information about Lapras.
+    - This allowed the embedding of hyperlinks in each image
 - **Sprite**
     - Shiny/Female Sprite
     - Front/Back Sprite
@@ -23,27 +27,28 @@ Explore information on Pokémon and discover effective counters for them.
 - **PokeDex ID**
     - National PokeDex ID
     - Regional PokeDex IDs
-- **Pokemon Information**
+- **Pokémon Information**
     - Show Foreign Names (Korean, Japanese)
     - Height, weight, gender rate, shape
-    - Pokemon cry
+    - Pokémon cry (Both New and Old)
     - Types (with logo)
     - Abilities (Normal, Hidden, Taken Away)
     - Stats
-    - Wild Pokemon (EVs, held-item)
+    - Wild Pokémon (EVs, held-item)
+    - Locations where trainers can find the Pokémon
     - Egg Groups / Trivia
 - **Evolutions**
     - Evolution Chains
-        - Pokemon with Images
-        - More than one (e.g. eevee, beautifly)
+        - Pokémon with Images
+        - More than one (e.g. Eevee, Beautifly)
         - Evolution Level
         - Evolution Method (Friendship, Item, Moves, Locations, etc.)
 - **Counter Type** (defense)
     - Order by Multiple (x4 to x2; x1/2 to x1/4)
-- **Counter Pokemon**
+- **Counter Pokémon**
     - Exclude BST > 600
-    - Exclude mega
-    - Exclude illegal pokemon and gmax
+    - Exclude Mega
+    - Exclude illegal Pokémon and Gmax
     - Use Calculation using BS, IV, and EV
     - Beautify Display Table
         - color update
@@ -55,11 +60,10 @@ Explore information on Pokémon and discover effective counters for them.
     - Easter Eggs!
 
 ### Plans
-- [ ] Minor routes 
-    - e.g. lycanroc, urshifu, pawmot, maushold, brambleghast, rabsca, palafin, annihilape, kingambit, and gholdengo
-- [ ] x1 Types?
-- [ ] Better calculation to find counter pokemon
-- [ ] Image Path Check
+- [ ] Minor evolution routes 
+    - e.g. Lycanroc, Urshifu, Pawmot, Maushold, Brambleghast, Rabsca, Palafin, Annihilape, Kingambit, and Gholdengo
+- [ ] Better calculation to find counter Pokémon
+- [ ] Image Path Check for some sprites
 
 ## [Pokémon Move Searcher](https://jihunkimcode.github.io/poke_counter/pages/move.html)
 Retrieve information on Pokémon moves.
@@ -68,11 +72,15 @@ Retrieve information on Pokémon moves.
 - **Search ID or Name**
     - English, Korean, Japanese, Chinese, French, German, Spanish, Italian, and Czech
 - **Search Dropdown**
-    - Fetch to csv file of PokeAPI
-    - Related move list on serach bar
+    - Fetch to CSV file of PokeAPI
+    - Related move list on the search bar
 - **Voice Search**
-    - Fetch to csv file of PokeAPI
+    - Fetch to CSV file of PokeAPI
     - Levenshtein Distance
+- **Search with a query in address**
+    - Search with query string and parameters
+        - Adding "?s=surf" after the URL will search for information about surf.
+    - This allowed the embedding of hyperlinks in each image
 - **Move Information**
     - Type with icons
     - Attack Category with icons
@@ -85,8 +93,8 @@ Retrieve information on Pokémon moves.
     - Range
 - **Description**
     - Short, Long, PokeDex
-- **Learn By Pokemon**
-    - Sprite of the pokemon who learns the move
+- **Learn By Pokémon**
+    - Sprite of the Pokémon who learns the move
 
 ## [Pokémon Item Searcher](https://jihunkimcode.github.io/poke_counter/pages/item.html)
 Retrieve details about various items featured in the Pokémon series.
@@ -95,11 +103,15 @@ Retrieve details about various items featured in the Pokémon series.
 - **Search ID or Name**
     - English, Korean, Japanese, Chinese, French, German, Spanish, Italian, and Czech
 - **Search Dropdown**
-    - Fetch to csv file of PokeAPI
-    - Related item list on serach bar
+    - Fetch to CSV file of PokeAPI
+    - Related item list on the search bar
 - **Voice Search**
-    - Fetch to csv file of PokeAPI
+    - Fetch to CSV file of PokeAPI
     - Levenshtein Distance
+- **Search with a query in address**
+    - Search with query string and parameters
+        - Adding "?s=repel" after the URL will search for information about repel.
+    - This allowed the embedding of hyperlinks in each image
 - **Sprite** 
 - **Item Information**
     - Category
@@ -109,8 +121,8 @@ Retrieve details about various items featured in the Pokémon series.
         - Power
 - **Description**
     - Short, Long, PokeDex
-- **Held By Pokemon**
-    - Sprite of the pokemon who holds the item
+- **Held By Pokémon**
+    - Sprite of the Pokémon who holds the item
 
 ## [Pokémon Berry Searcher](https://jihunkimcode.github.io/poke_counter/pages/berry.html)
 Search about berries in the Pokémon series, filtering by in-game effects.
@@ -118,7 +130,7 @@ Search about berries in the Pokémon series, filtering by in-game effects.
 ### Features
 - **Search using Filters**
     - Filter berries based on in-game usage
-    - Click image to see information 
+    - Click an image to see information 
 - **Sprite** 
 - **Berry Information**
     - Foreign Name
@@ -131,6 +143,7 @@ Search about berries in the Pokémon series, filtering by in-game effects.
 
 ## [Pokémon Color Searcher](https://jihunkimcode.github.io/poke_counter/pages/color.html)
 - **Search using Colors**
-    - Ten unique colors to search pokemon
+    - Ten unique colors to search Pokémon
     - Sort by PokéDex Number
 - **Sprite**
+    - Hyperlink-embedded images
