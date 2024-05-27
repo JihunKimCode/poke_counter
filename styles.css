@@ -1305,6 +1305,10 @@ input[type="range"]::-moz-range-track {
     .container3{
         display: table-row;
     }
+    
+    #cbx_sprite{
+        display: block;
+    }    
 
     .moveDetails{
         display: table-cell;
@@ -1381,6 +1385,10 @@ input[type="range"]::-moz-range-track {
     .container3{
         display: table-row;
         width: 100%;
+    }
+
+    #cbx_sprite{
+        display: block;
     }
     
     #pokemonInfo {
