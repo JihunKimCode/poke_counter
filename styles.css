@@ -1277,7 +1277,7 @@ input[type="range"]::-moz-range-track {
 }
 .colorContainer {
     display: table;
-    width: 100%;
+    width: 90%;
     margin: 10px;
     padding: 10px;
 }
