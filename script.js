@@ -1477,10 +1477,12 @@ async function showForms(species){
             if(currentFormCall !== latestFormCall) return;
             
             forms.innerHTML += `
-                <div class="tooltip-items">
-                    <img src="${sprite}" alt = "${pokemonName}" width = "60px">
-                    <span class="tooltiptext">${pokemonName}</span>
-                </div>`;
+            <div class="tooltip-items">
+                <a href="./info.html?s=${pokemonName}" target="_blank">
+                    <img src="${sprite}" alt="${pokemonName}" width="60px">
+                </a>
+                <span class="tooltiptext">${pokemonName}</span>
+            </div>`;
         }
     }
 } 
@@ -1492,9 +1494,11 @@ function showHeldItems(items){
         const itemName = items[i].item.name;
         const itemImage = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${itemName}.png`;
 
-        heldItems.innerHTML+=`
+        heldItems.innerHTML += `
             <div class="tooltip-items">
-                <img src="${itemImage}" alt = "held-item" width = "50px">
+                <a href="./item.html?s=${itemName}" target="_blank">
+                    <img src="${itemImage}" alt="held-item" width="50px">
+                </a>
                 <span class="tooltiptext">${itemName}</span>
             </div>
         `;
@@ -1635,9 +1639,11 @@ function evolutionWithImages(evolutionDetails) {
             else if(match.includes("<br>or ")) imgTooltip +="<br>or "
             imgTooltip += `
             <div class="tooltip-pokemon">
-                <img src="${img}" alt="${pokemonName}" width="60px"/>
+                <a href="./info.html?s=${pokemonName}" target="_blank">
+                    <img src="${img}" alt="${pokemonName}" width="60px"/>
+                </a>
                 <span class="tooltiptext">${pokemonName}</span>
-                </div>`
+            </div>`;        
                 
             evolutionDetails = evolutionDetails.replace(match, imgTooltip);
         } catch (error) {
@@ -2213,7 +2219,11 @@ function makeTable(pokemonArray){
         // Add row to the table
         const row = table.insertRow();
         row.innerHTML = `
-        <td><img src="${pokemon.sprite}" alt="${pokemon.name}" width="50"></td>
+        <td>
+            <a href="./info.html?s=${pokemon.name}" target="_blank">
+                <img src="${pokemon.sprite}" alt="${pokemon.name}" width="50">
+            </a>
+        </td>
         <td>${pokemon.name}</td>
         `;
         if(!filterSpe_type){
@@ -2634,12 +2644,19 @@ async function searchMove() {
             for (let i = 0; i < pokemonList.length; i++) {
                 const sprite = sprites[i];
                 const pokemonName = pokemonList[i].name;
+            
+                const a = document.createElement('a');
+                a.href = `./info.html?s=${pokemonName}`;
+                a.target = '_blank'; // Opens the link in a new tab
+            
                 const img = document.createElement('img');
                 img.src = sprite || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
                 img.alt = pokemonName;
                 img.title = pokemonName;
-                img.style.width = "60px"
-                learnedByPokemon.appendChild(img);
+                img.style.width = "60px";
+            
+                a.appendChild(img);
+                learnedByPokemon.appendChild(a);
             }
         } else {
             learnedByPokemon.textContent = "N/A";
@@ -2790,12 +2807,19 @@ async function searchItem() {
             for (let i = 0; i < pokemonList.length; i++) {
                 const sprite = sprites[i];
                 const pokemonName = pokemonList[i].pokemon.name;
+            
+                const a = document.createElement('a');
+                a.href = `./info.html?s=${pokemonName}`;
+                a.target = '_blank'; // Opens the link in a new tab
+            
                 const img = document.createElement('img');
                 img.src = sprite || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
                 img.alt = pokemonName;
                 img.title = pokemonName;
-                img.style.width = "80px"
-                itemPokemon.appendChild(img);
+                img.style.width = "80px";
+            
+                a.appendChild(img);
+                itemPokemon.appendChild(a);
             }
         } else {
             itemPokemon.textContent = "N/A";
@@ -3274,12 +3298,18 @@ async function activateButton(button, value) {
 
         // Display Pokemon sprites and names
         pokemonList.forEach((pokemon, index) => {
+            const a = document.createElement('a');
+            a.href = `./info.html?s=${pokemon.name}`;
+            a.target = '_blank'; // Opens the link in a new tab
+        
             const img = document.createElement('img');
             img.src = sprites[index] || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
             img.alt = pokemon.name;
             img.title = pokemon.name;
             img.style.width = "80px";
-            colorPokemon.appendChild(img);
+        
+            a.appendChild(img);
+            colorPokemon.appendChild(a);
         });
     } catch (error) {
         colorPokemon.innerHTML = `<p>Error loading data: ${error.message}</p>`;

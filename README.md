@@ -1,7 +1,7 @@
 # [jihunkimcode.github.io/poke_counter/](https://jihunkimcode.github.io/poke_counter/)
 The main page of the website. 
 
-This page links to **Source code, Counter Pokémon Searcher, Pokémon Move Searcher, and Pokémon Item Searcher**.
+This page links to **Source code, Counter Pokémon Searcher, Pokémon Move Searcher, Pokémon Item Searcher, and Pokémon Color Searcher**.
 
 ## [Counter Pokémon Searcher](https://jihunkimcode.github.io/poke_counter/pages/info.html)
 Explore information on Pokémon and discover effective counters for them.
