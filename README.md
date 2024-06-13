@@ -125,7 +125,7 @@ Search about berries in the Pokémon series, filtering by in-game effects.
     - Fling Effect and Power
 - **Short/Long/In-Game Description**
 
-## [Pokémon Color Searcher](https://jihunkimcode.github.io/poke_counter/pages/color.html)
+# [Pokémon Color Searcher](https://jihunkimcode.github.io/poke_counter/pages/color.html)
 ![jihunkimcode github io_poke_counter_pages_color html](https://github.com/JihunKimCode/poke_counter/assets/135993942/9dfe8246-0bd7-4423-aa66-d4e045615d94)
 Search all Pokémon in specific colors.
 ## Features
