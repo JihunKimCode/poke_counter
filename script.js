@@ -1414,78 +1414,79 @@ if(filterCheckbox_shinyform || filterCheckbox_back){
 let latestFormCall = 0;
 
 // Take all forms of the Pokemon
-async function showForms(species){
+async function showForms(species) {
     const currentFormCall = Date.now();
     latestFormCall = currentFormCall;
 
-    const speciesresponse = await fetch(species);
-    const speciesData = await speciesresponse.json();
-    dfHead.style.display = 'block';
-    
-    filter_shinyform.style.display = 'inline-block';
-    filter_back.style.display = 'inline-block';
-    const filterSpe_shinyform = filterCheckbox_shinyform.checked;       // Shiny sprite
-    const filterSpe_back = filterCheckbox_back.checked;                 // Back sprite
-    forms.innerHTML = '';
-    
-    for(var i = 0; i<speciesData.varieties.length; i++){
-        // Check if a newer call has been made, and cancel if true
-        if(currentFormCall !== latestFormCall) return;
+    try {
+        const speciesResponse = await fetch(species);
+        const speciesData = await speciesResponse.json();
+        dfHead.style.display = 'block';
+        filter_shinyform.style.display = 'inline-block';
+        filter_back.style.display = 'inline-block';
 
-        const url = speciesData.varieties[i].pokemon.url;
-        const response = await fetch(url);
-        const data = await response.json();
+        const filterSpe_shinyform = filterCheckbox_shinyform.checked; // Shiny sprite
+        const filterSpe_back = filterCheckbox_back.checked;           // Back sprite
+        let formsHtml = '';
 
-        for(var j  = 0; j<data.forms.length; j++){
-            // Check if a newer call has been made, and cancel if true
-            if(currentFormCall !== latestFormCall) return;
+        const varietyUrls = speciesData.varieties.map(variety => variety.pokemon.url);
+        const varietyResponses = await Promise.all(varietyUrls.map(url => fetch(url)));
+        const varietyData = await Promise.all(varietyResponses.map(response => response.json()));
 
-            const pokemonName = data.forms[j].name;
-            
-            const formUrl = data.forms[j].url;
-            const formResponse = await fetch(formUrl);
-            const formData = await formResponse.json();
-            
-            // Find the sprite based on checkboxes
-            let sprite;
-            const pokeball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
-            const masterball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
-            
-            if(filterSpe_shinyform){
-                if(filterSpe_back) sprite = formData.sprites.back_shiny;
-                else sprite = formData.sprites.front_shiny;
-            } else{
-                if(filterSpe_back) sprite = formData.sprites.back_default;
-                else sprite = formData.sprites.front_default;
+        for (const data of varietyData) {
+            if (currentFormCall !== latestFormCall) return;
+
+            const formUrls = data.forms.map(form => form.url);
+            const formResponses = await Promise.all(formUrls.map(url => fetch(url)));
+            const formDataList = await Promise.all(formResponses.map(response => response.json()));
+
+            for (const formData of formDataList) {
+                if (currentFormCall !== latestFormCall) return;
+
+                const pokemonName = formData.name;
+                const sprite = await showSprite(formData, filterSpe_shinyform, filterSpe_back);
+
+                formsHtml += `
+                <div class="tooltip-items">
+                    <a href="./info.html?s=${pokemonName}" target="_blank">
+                        <img src="${sprite}" alt="${pokemonName}" width="60px">
+                    </a>
+                    <span class="tooltiptext">${pokemonName}</span>
+                </div>`;
             }
+        }
 
-            if(!sprite){
-                const url = formData.pokemon.url;
-                const response = await fetch(url);
-                const data = await response.json();
+        forms.innerHTML = formsHtml;
 
-                if(filterSpe_shinyform){
-                    if(filterSpe_back) sprite = data.sprites.back_shiny||masterball;
-                    else sprite = data.sprites.front_shiny||masterball;
-                } else{
-                    if(filterSpe_back) sprite = data.sprites.back_default||pokeball;
-                    else sprite = data.sprites.front_default||pokeball;
-                }
-            }
+    } catch (error) {
+        console.error('Error fetching forms:', error);
+    }
+}
 
-            // Check if a newer call has been made, and cancel if true
-            if(currentFormCall !== latestFormCall) return;
-            
-            forms.innerHTML += `
-            <div class="tooltip-items">
-                <a href="./info.html?s=${pokemonName}" target="_blank">
-                    <img src="${sprite}" alt="${pokemonName}" width="60px">
-                </a>
-                <span class="tooltiptext">${pokemonName}</span>
-            </div>`;
+async function showSprite(formData, shiny, back) {
+    const pokeball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+    const masterball = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png';
+
+    let sprite;
+    if (shiny) {
+        sprite = back ? formData.sprites.back_shiny : formData.sprites.front_shiny;
+    } else {
+        sprite = back ? formData.sprites.back_default : formData.sprites.front_default;
+    }
+
+    if (!sprite) {
+        const url = formData.pokemon.url;
+        const data = await fetch(url).then(response => response.json());
+
+        if (shiny) {
+            return back ? data.sprites.back_shiny || masterball : data.sprites.front_shiny || masterball;
+        } else {
+            return back ? data.sprites.back_default || pokeball : data.sprites.front_default || pokeball;
         }
     }
-} 
+
+    return sprite;
+}
 
 // Show held item when the Pokemon is in the wild
 function showHeldItems(items){
@@ -2934,15 +2935,22 @@ populateFilters();
 
 // Function to fetch data from PokeAPI
 async function fetchBerryData() {
-    for (let i = 0; i < berries.length; i++) {
-        const berry = berries[i];
+    // Create an array of promises for fetching berry data
+    const fetchPromises = berries.map(async (berry) => {
         const response = await fetch(`https://pokeapi.co/api/v2/item/${berry.number}`);
         const data = await response.json();
         
         // Update name and sprite fields
-        berries[i].name = data.name;
-        berries[i].sprite = data.sprites.default;
-    }
+        return { ...berry, name: data.name, sprite: data.sprites.default };
+    });
+
+    // Wait for all promises to resolve
+    const updatedBerries = await Promise.all(fetchPromises);
+
+    // Update the berries array with the new data
+    updatedBerries.forEach((updatedBerry, index) => {
+        berries[index] = updatedBerry;
+    });
 }
 
 // Function to filter berries based on type and size
@@ -3167,10 +3175,12 @@ async function getBerryData(berries, clickedBerryName){
   // Event listener for size filter changes
   if(detailFilter) detailFilter.addEventListener('change', filterBerries);
   
-  // Initial update of size options
-  updateSizeOptions();
-  // Initial display of all berries
-  displayBerries(berries);
+  if (window.location.pathname.includes('berry.html')){
+    // Initial update of size options
+    updateSizeOptions();
+    // Initial display of all berries
+    displayBerries(berries);
+  }
   
 /***************
  *  color.html  *
