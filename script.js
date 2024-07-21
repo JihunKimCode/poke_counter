@@ -2281,76 +2281,44 @@ async function findCounterPokemon(types, SP_stats) {
     
     // Find Weaknesses of the pokemon
     const weaknesses = new Set();
-    types.forEach((type) => {
+    types.forEach(type => {
         const typeWeaknesses = WeakChart[type];
         if (typeWeaknesses) {
-            typeWeaknesses.forEach((weakness) => weaknesses.add(weakness));
+            typeWeaknesses.forEach(weakness => weaknesses.add(weakness));
         }
     });
-    types.forEach((type) => {
+    types.forEach(type => {
         const typeResistances = ResisChart[type];
         if (typeResistances) {
-            typeResistances.forEach((resistance) => weaknesses.delete(resistance));
+            typeResistances.forEach(resistance => weaknesses.delete(resistance));
         }
     });
     for (let rep = 0; rep < 2; rep++) {
-        types.forEach((type) => {
+        types.forEach(type => {
             const typeInval = ResisInvalChart[type];
             if (typeInval) {
-                typeInval.forEach((inval) => weaknesses.delete(inval));
+                typeInval.forEach(inval => weaknesses.delete(inval));
             }
         });
-    }        
-    
-    const base_url = 'https://pokeapi.co/api/v2/';
-
-    // Create an object to store pokemon scores
-    const pokemonScores = {};
-    let progress = 0, totalPokemon = 0;
-    
-    // Get total number of pokemon for loading bar
-    for (const type of weaknesses) {
-        // Check if a newer call has been made, and cancel if true
-        if (currentCallTimestamp !== latestCallTimestamp) return;
-
-        const typeUrl = `${base_url}type/${type.toLowerCase()}`;
-        try {
-            const typeResponse = await fetch(typeUrl);
-            const typeData = await typeResponse.json();
-            totalPokemon += typeData.pokemon.length;
-        } catch (error) {
-            console.error('Error fetching type data:', error);
-            continue; // Skip this type if there's an error
-        }
     }
 
-    // Iterate through each type in the weaknesses list
-    for (const type of weaknesses) {
-        // Get a list of pokemon for the current weakness type
-        const typeUrl = `${base_url}type/${type.toLowerCase()}`;
-        let typeData;
-        try {
-            const typeResponse = await fetch(typeUrl);
-            typeData = await typeResponse.json();
-        } catch (error) {
-            console.error('Error fetching type data:', error);
-            continue; // Skip this type if there's an error
-        }
+    const base_url = 'https://pokeapi.co/api/v2/';
+    // Create an object to store pokemon scores
+    const pokemonScores = {};
+    const typeUrls = Array.from(weaknesses).map(type => `${base_url}type/${type.toLowerCase()}`);
+    let progress = 0;
 
-        // Iterate through each pokemon for the current weakness type
-        for (const entry of typeData.pokemon) {
-            // Check if a newer call has been made, and cancel if true
+    try {
+        const typeResponses = await Promise.all(typeUrls.map(url => fetch(url).then(response => response.json())));
+        const totalPokemon = typeResponses.reduce((total, typeData) => total + typeData.pokemon.length, 0);
+
+        const pokemonUrls = typeResponses.flatMap(typeData => typeData.pokemon.map(entry => `${base_url}pokemon/${entry.pokemon.name}`));
+        const pokemonResponses = await Promise.all(pokemonUrls.map(url => fetch(url).then(response => response.text())));
+        
+        pokemonResponses.forEach(async (pokemonText, index) => {
             if (currentCallTimestamp !== latestCallTimestamp) return;
             
-            // Update Loading Bar
-            progressContainer.innerHTML = '';
-            progress += 1;
-            const percentage = Math.floor((progress / totalPokemon) * 100);
-            progressContainer.style.width = `${percentage}%`;
-            progressContainer.innerHTML = `Loading...${percentage}%`;
-
-            // Pokemon Name Check
-            const pokemonName = entry.pokemon.name;
+            const pokemonName = pokemonUrls[index].split('/').pop();
             if(!pokemonName 
                 || pokemonName.includes("-totem")       //7th gen totem pokemons
                 || pokemonName.includes("pikachu-")     //pikachu forms
@@ -2360,69 +2328,54 @@ async function findCounterPokemon(types, SP_stats) {
                 || pokemonName.includes("-build")       //koraidon
                 || pokemonName.includes("-mode")        //miraidon
                 ) { 
-                    continue;
+                    return;
                 }
+            if (!pokemonName || pokemonName.includes("-mega") && filterSpe_mega) return;
 
-            if (filterSpe_mega && (pokemonName.includes("-mega"))) {
-                continue;
-            }
-
-            // Fetch the stats of the Counter Pokemon (CP) from the PokeAPI
-            const CP_url = `${base_url}pokemon/${pokemonName}`;
-            let CP_data;
+            let pokemonData;
             try {
-                const CP_response = await fetch(CP_url);
-                const CP_text = await CP_response.text();
-                try {
-                    CP_data = JSON.parse(CP_text);
-                } catch (jsonError) {
-                    console.error('Error parsing JSON for', pokemonName, CP_text, jsonError);
-                    continue; // Skip this pokemon if there's a JSON parsing error
-                }
-            } catch (error) {
-                console.error('Error fetching pokemon data:', error);
-                continue; // Skip this pokemon if there's an error
+                pokemonData = JSON.parse(pokemonText);
+            } catch (jsonError) {
+                console.error('Error parsing JSON for', pokemonName, jsonError);
+                return;
             }
-            
-            // Counter pokemon stats in variables
-            const hp = CP_data.stats.find((stat) => stat.stat.name === 'hp').base_stat;
-            const atk = CP_data.stats.find((stat) => stat.stat.name === 'attack').base_stat;
-            const def = CP_data.stats.find((stat) => stat.stat.name === 'defense').base_stat;
-            const spa = CP_data.stats.find((stat) => stat.stat.name === 'special-attack').base_stat;
-            const spd = CP_data.stats.find((stat) => stat.stat.name === 'special-defense').base_stat;
-            const spe = CP_data.stats.find((stat) => stat.stat.name === 'speed').base_stat;
-            const total = hp + atk + def + spa + spd + spe;
-            
-            // Skip Pokemon with BST > 600
-            if (filterSpe_bst600 && total > 600) continue;
 
-            // Initialize the score and information of the pokemon if not present
+            const hp = pokemonData.stats.find(stat => stat.stat.name === 'hp').base_stat;
+            const atk = pokemonData.stats.find(stat => stat.stat.name === 'attack').base_stat;
+            const def = pokemonData.stats.find(stat => stat.stat.name === 'defense').base_stat;
+            const spa = pokemonData.stats.find(stat => stat.stat.name === 'special-attack').base_stat;
+            const spd = pokemonData.stats.find(stat => stat.stat.name === 'special-defense').base_stat;
+            const spe = pokemonData.stats.find(stat => stat.stat.name === 'speed').base_stat;
+            const total = hp + atk + def + spa + spd + spe;
+
+            if (filterSpe_bst600 && total > 600) return;
+
             if (!pokemonScores[pokemonName]) {
                 pokemonScores[pokemonName] = {
-                    sprite: CP_data.sprites.front_default || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png', 
-                    name: CP_data.name,
-                    types: CP_data.types.map((type) => type.type.name).join(', '),
-                    abilities: CP_data.abilities.map((ability) => ability.ability.name).join(', '),
+                    sprite: pokemonData.sprites.front_default || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png', 
+                    name: pokemonData.name,
+                    types: pokemonData.types.map(type => type.type.name).join(', '),
+                    abilities: pokemonData.abilities.map(ability => ability.ability.name).join(', '),
                     score: 0,
-                    stats: {
-                        hp: hp,
-                        atk: atk,
-                        def: def,
-                        spa: spa,
-                        spd: spd,
-                        spe: spe,
-                        total: total
-                    }
+                    stats: { hp, atk, def, spa, spd, spe, total }
                 };
             }
-            
+
             if (pokemonScores[pokemonName].score === 0) {
                 // Score for the pokemon based on matched types
                 pokemonScores[pokemonName].score += 15;
                 // Scoring based on pokemon's stats
                 pokemonScores[pokemonName] = calculate(pokemonScores[pokemonName], SP_stats);
             }
-        }
+
+            progress += 1;
+            const percentage = Math.floor((progress / totalPokemon) * 100);
+            progressContainer.style.width = `${percentage}%`;
+            progressContainer.innerHTML = `Loading...${percentage}%`;
+        });
+
+    } catch (error) {
+        console.error('Error fetching type or pokemon data:', error);
     }
 
     // Convert the scores object into an array of objects
