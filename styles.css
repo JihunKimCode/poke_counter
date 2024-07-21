@@ -1152,7 +1152,8 @@ input[type="range"]::-moz-range-track {
  ***************/
 .itemInfo {
     display: table;
-    padding: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
     margin-top: 0px;
     width: 95%;
     line-height: 1.5;
@@ -1372,8 +1373,9 @@ input[type="range"]::-moz-range-track {
     .information{
         flex-direction: column;
         margin: 0px;
-        padding: 10px;
-        width: 95%;
+        padding-top: 10px;
+        padding-left: 20px;
+        width: 90%;
     }
 
     .container1,
