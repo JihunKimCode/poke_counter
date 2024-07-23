@@ -271,10 +271,19 @@ footer a:hover{
     width: 50%;
 }
 
-#pokemonHead{
-    display: inline-flex;
+#pokemonHead {
+    display: flex;
     align-items: center;
     flex-wrap: wrap;
+    max-width: 100%;
+}
+
+.pokemon-name {
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: block;
 }
 
 .bioInfo{

@@ -6,9 +6,34 @@ var currentYear = new Date().getFullYear();
 document.getElementById("year").innerHTML = currentYear;
 document.getElementById("year2").innerHTML = currentYear;
 
-// Capitalize the first letter of a string
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+// Capitalize letters
+function capitalization(string) {
+    // Split the string at double hyphens first to preserve them
+    let doubleHyphenParts = string.split('--');
+    
+    // Process each part separately
+    for (let i = 0; i < doubleHyphenParts.length; i++) {
+        let part = doubleHyphenParts[i];
+        
+        // Split the part at single hyphens
+        let parts = part.split('-');
+        
+        // Capitalize the first letter of each part except the first one
+        for (let j = 1; j < parts.length; j++) {
+            parts[j] = parts[j].charAt(0).toUpperCase() + parts[j].slice(1);
+        }
+        
+        // Join the parts with a space
+        doubleHyphenParts[i] = parts.join(' ');
+        
+        // Capitalize the first letter of the resulting string
+        doubleHyphenParts[i] = doubleHyphenParts[i].charAt(0).toUpperCase() + doubleHyphenParts[i].slice(1);
+    }
+    
+    // Join the double hyphen parts with the double hyphen
+    let transformedWord = doubleHyphenParts.join('--');
+    
+    return transformedWord;
 }
 
 // Footer
@@ -649,15 +674,15 @@ function getPokemonInfo(types, name, id, sprites, height, weight, gender_rate, s
 
     const typeImages = types.map(type =>
         `<div class="tooltip-types-origin">
-            <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" 
+            <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalization(type)}.png" 
                 alt="${type}" 
                 class="type-image" 
                 width="30px">
             <span class="tooltiptext">${type}</span>
         </div>`
     );
-
-    pokeHead.innerHTML = `${typeImages.join('')}${name.toUpperCase()}`;
+    
+    pokeHead.innerHTML = `${typeImages.join('')}<span class="pokemon-name">${capitalization(name)}</span>`;
     pokemonInfo.innerHTML = `
         <div>
             <img src="${image[0]}" alt="${name}" width="130" class="pokemon-image">
@@ -1916,8 +1941,7 @@ function getWeaknesses(types) {
     
     // Map the sorted weaknesses (x4 and then x2) with type images
     const sortedEffectiveWeaknesses = effectiveWeaknesses.map(({ weakness, count }) => {
-        const capitalizedWeakness = capitalizeFirstLetter(weakness);
-        const weaknessImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedWeakness}.png`;
+        const weaknessImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalization(weakness)}.png`;
         return `
         <div class="tooltip-types">
             <img src="${weaknessImageUrl}" alt="${weakness}" class="type-image" width="40px" > 
@@ -1962,8 +1986,7 @@ function getResistances(types) {
     
     // Map the sorted resistances (x1/2 and then x1/4) with type images
     const sortedEffectiveResistances = effectiveResistances.map(({ resistance, count }) => {
-        const capitalizedResistance = capitalizeFirstLetter(resistance);
-        const resistanceImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedResistance}.png`;
+        const resistanceImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalization(resistance)}.png`;
         return `
         <div class="tooltip-types">
             <img src="${resistanceImageUrl}" alt="${resistance}" class="type-image"  width="40px"> 
@@ -1986,8 +2009,7 @@ function getInvalid(types) {
     });
     // Map the invalid types with type images
     const invalidWithTypeImages = Array.from(invalid).map((inval) => {
-        const capitalizedInval = capitalizeFirstLetter(inval);
-        const invalImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizedInval}.png`;
+        const invalImageUrl = `https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalization(inval)}.png`;
         return `
         <div class="tooltip-types">
             <img src="${invalImageUrl}" alt="${inval}" class="type-image"  width="40px">
@@ -2225,7 +2247,7 @@ function makeTable(pokemonArray){
                 <img src="${pokemon.sprite}" alt="${pokemon.name}" width="50">
             </a>
         </td>
-        <td>${pokemon.name}</td>
+        <td>${capitalization(pokemon.name)}</td>
         `;
         if(!filterSpe_type){
             row.innerHTML += `<td>${pokemon.types}</td>`;
@@ -2470,11 +2492,11 @@ async function searchMove() {
         }
 
         // Move Name, Type, and Damage Class
-        moveNameDisplay.textContent = moveData.name.toUpperCase();
+        moveNameDisplay.textContent = capitalization(moveData.name);
         foreignMoveName.textContent = getForeignName(moveData.names);
         moveType.innerHTML =  `
             <div class="tooltip-moves">
-                <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(moveData.type.name)}.png" 
+                <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalization(moveData.type.name)}.png" 
                     alt="${moveData.type.name}" 
                     class="type-image" 
                     width="60px">
@@ -2507,7 +2529,7 @@ async function searchMove() {
         
         // Move Target
         const target = moveData.target.name;
-        moveTargetInfo.textContent = capitalizeFirstLetter(target.replace(/-/g, ' ').replace(" me first", "")) || "N/A";
+        moveTargetInfo.textContent = capitalization(target.replace(" me first", "")) || "N/A";
         
         const targetMappings = {
             "specific-move": { box1: "#00d6fa", box2: "#00d6fa", box3: "#00d6fa", box4: "#ff0800", box5: "#00d6fa", box6: "#00d6fa"},
@@ -2581,7 +2603,7 @@ async function searchMove() {
                 if(moveData.meta.flinch_chance > 0) ailment.textContent = "Flinch"
                 else ailment.textContent = "Effect"
             } else {
-                ailment.textContent = capitalizeFirstLetter(moveData.meta.ailment.name);
+                ailment.textContent = capitalization(moveData.meta.ailment.name);
             }
             moveAilmentChance.textContent = moveData.meta.ailment_chance === 0 ? moveData.effect_chance || "-" : moveData.meta.ailment_chance || "-";
             ailmentEffect.style.backgroundColor = ailmentColors[ailment.textContent] || "gray";
@@ -2713,7 +2735,7 @@ async function searchItem() {
         // Item Name and Sprite
         itemSprite.innerHTML = 
             `
-                <h2>${itemData.name.toUpperCase()}</h2>
+                <h2>${capitalization(itemData.name)}</h2>
                 <p>${getForeignName(itemData.names)}</p>
                 <img src="${getItemSprite(itemData.name, itemData.sprites.default)}" 
                 alt="${itemNameInput}" width="130" class="pokemon-image">
@@ -2722,7 +2744,7 @@ async function searchItem() {
         global_itemImage = itemData.sprites.default;
         
         // Category, Attribute, Fling (effect and power)
-        const attributes = itemData.attributes.map(attribute => attribute.name);
+        const attributes = itemData.attributes.map(attribute => capitalization(attribute.name));
         if(attributes.length === 0) attributes.push("N/A");
         const flingEffectName = (itemData.fling_effect) != null ? itemData.fling_effect.name : "Effect";
         var flingEffect = "N/A", flingPower = itemData.fling_power||"N/A";
@@ -2733,11 +2755,11 @@ async function searchItem() {
         }
         item.innerHTML = `
             <h3>Category</h3>
-            <p>${itemData.category.name}</p>
+            <p>${capitalization(itemData.category.name)}</p>
             <h3>Attribute</h3>
-            <p>${attributes.join(",")}</p>
+            <p>${attributes.join(", ")}</p>
             <h3>Fling</h3>
-            <p>${capitalizeFirstLetter(flingEffectName)}: ${flingEffect}</p>
+            <p>${capitalization(flingEffectName)}: ${flingEffect}</p>
             <p>Power: ${flingPower}</p>
         `
 
@@ -2915,7 +2937,7 @@ function populateFilters() {
     uniqueTypes.forEach(type => {
         const option = document.createElement("option");
         option.value = type === "all" ? type : type.toLowerCase();
-        option.textContent = type === "all" ? "All Types" : type[0].toUpperCase() + type.slice(1);
+        option.textContent = type === "all" ? "All Types" : capitalization(type);
         if(typeFilter) typeFilter.appendChild(option);
     });
 
@@ -3071,7 +3093,7 @@ async function getBerryData(berries, clickedBerryName){
     }
 
     berryInfo.innerHTML = `
-        <h2>${data.name.toUpperCase()}</h2>
+        <h2>${capitalization(data.name)}</h2>
         <p>${getForeignName(data.names)}</p>
         <img src="${data.sprites.default}" 
         alt="${data.name}" width="100" class="pokemon-image">
@@ -3124,7 +3146,7 @@ async function getBerryData(berries, clickedBerryName){
         const type = berryData.natural_gift_type.name;
         const typeImage = 
             `<div class="tooltip-types-origin">
-                <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalizeFirstLetter(type)}.png" 
+                <img src="https://raw.githubusercontent.com/CajunAvenger/cajunavenger.github.io/main/types/${capitalization(type)}.png" 
                     alt="${type}" 
                     class="type-image" 
                     width="30px">
