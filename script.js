@@ -485,6 +485,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         } else if (pathname.includes("item.html")) {
             searchItem();
         }
+        clearButton.style.display = 'block';
     }
 });
 
