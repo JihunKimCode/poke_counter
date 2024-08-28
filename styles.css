@@ -1378,6 +1378,7 @@ input[type="range"]::-moz-range-track {
 
     .topnav .search-container {
         margin-top: 10px;
+        width: calc(100% - 15px);
     }
 
     .information{
@@ -1430,7 +1431,7 @@ input[type="range"]::-moz-range-track {
     }
     
     #searchInput, #moveName, #itemName {
-        width: 200px;
+        width: calc(100% - 131px);
     }
 
     #pokemonDropdown{
