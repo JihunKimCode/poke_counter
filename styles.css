@@ -1523,6 +1523,14 @@ input[type="range"]::-moz-range-track {
         margin-top: 10px;  
     }
 
+    .filterContainer {
+        display: inline-flex;
+        margin-left: 5px;
+        margin-top: 15px;
+        width: auto;
+        overflow: hidden;
+      }    
+
     .berryContainer {
         display: flex;
         flex-direction: column;
