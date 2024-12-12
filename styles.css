@@ -1436,7 +1436,7 @@ input[type="range"]::-moz-range-track {
     }
 
     #pokemonDropdown{
-        width: 212px;
+        width: calc(100% - 119px);
     }
 
     #clearButton {
