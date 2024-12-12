@@ -98,12 +98,13 @@ footer p{
     position: relative;
 }
 
-.topnav input[type=text] {
+.topnav input[type="text"] {
     font-family: 'NanumS', sans-serif;
     padding: 6px;
     font-size: 17px;
     border: none;
     box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2);
+    outline: none;
 }
   
 #searchInput, #moveName, #itemName {
@@ -140,7 +141,7 @@ footer p{
     max-height: 190px;
     overflow-y: auto;
     z-index: 3;
-    top: 100%; /* Position the dropdown below the search input */
+    top: 97%; /* Position the dropdown below the search input */
     width: 267px;
     box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2);
 }
@@ -1439,7 +1440,8 @@ input[type="range"]::-moz-range-track {
     }
 
     #clearButton {
-        right: 37%;
+        /* right: 37%; */
+        right: 125px;
     }
 
     footer{
