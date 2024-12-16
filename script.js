@@ -568,6 +568,10 @@ if(searchInput){
         // Check if the key pressed is the Enter key (key code 13)
         if (event.keyCode === 13) {
             performSearch();
+            if(pokemonDropdown){
+                pokemonDropdown.innerHTML = '';
+                pokemonDropdown.style.display = 'none';
+            }        
         }
     });
 }
@@ -2459,6 +2463,10 @@ if(moveName){
         // Check if the key pressed is the Enter key (key code 13)
         if (event.keyCode === 13) {
             searchMove();
+            if(pokemonDropdown){
+                pokemonDropdown.innerHTML = '';
+                pokemonDropdown.style.display = 'none';
+            }        
         }
     });
 }
@@ -2683,6 +2691,10 @@ if(itemName){
         // Check if the key pressed is the Enter key (key code 13)
         if (event.keyCode === 13) {
             searchItem();
+            if(pokemonDropdown){
+                pokemonDropdown.innerHTML = '';
+                pokemonDropdown.style.display = 'none';
+            }        
         }
     });
 }
