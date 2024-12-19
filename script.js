@@ -248,7 +248,7 @@ async function newItem(){
 }
 
 function performRandomSearch() {
-    var randomNumber = Math.floor(Math.random() * pokemonNames.length) + 1;
+    var randomNumber = Math.floor(Math.random() * pokemonNames.length);
     element.value = pokemonNames[randomNumber];
     if(element === pokemon) performSearch();
     else if(element === moveName) searchMove();
