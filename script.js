@@ -688,7 +688,7 @@ function getPokemonInfo(types, name, id, sprites, height, weight, gender_rate, s
     pokeHead.innerHTML = `${typeImages.join('')}<span class="pokemon-name">${capitalization(name)}</span>`;
     pokemonInfo.innerHTML = `
         <div>
-            <img src="${image[0]}" alt="${name}" width="130" class="pokemon-image">
+            <img src="${image[0]}" alt="${name}" width="130" class="pokemon-image" onerror="this.src='${image[1]}';">
             <img src="${image[1]}" alt="${name}" width="130" class="pokemon-image2">
         </div>
         <p>Pokédex #${id} | ${foreignName}</p>
@@ -1098,7 +1098,12 @@ if(selectSprite){
         // Update the sprite in the HTML
         const sprite_front = document.querySelector('.pokemon-image');
         const sprite_back = document.querySelector('.pokemon-image2');
-        if (sprite_front) sprite_front.src = updatedImage[0];
+        if (sprite_front) {
+            sprite_front.src = updatedImage[0];
+            sprite_front.onerror = function () {
+                this.src = updatedImage[1];
+            };
+        }
         if (sprite_back) sprite_back.src = updatedImage[1];
     });
 }

@@ -723,15 +723,7 @@ input[type="range"]::-moz-range-track {
 }
 
 /* Checkbox and Text */
-#filter_bst600 *, #filter_bst600 ::after, #filter_bst600 ::before,
-#filter_mega *, #filter_mega ::after, #filter_mega ::before,
-#filter_type *, #filter_type ::after, #filter_type ::before,
-#filter_abilities *, #filter_abilities ::after, #filter_abilities ::before,
-#filter_baseStat *, #filter_baseStat ::after, #filter_baseStat ::before,
-#filter_shiny *, #filter_shiny ::after, #filter_shiny ::before,
-#filter_female *, #filter_female ::after, #filter_female ::before,
-#filter_shinyform *, #filter_shinyform ::after, #filter_shinyform ::before,
-#filter_back *, #filter_back ::after, #filter_back ::before{
+.filters *, .filters ::after, .filters ::before{
     box-sizing: border-box;
     vertical-align: top;
     margin-right: 6px;
@@ -739,15 +731,7 @@ input[type="range"]::-moz-range-track {
 }
 
 /* Checkbox styles */
-#filter_bst600 .cbx_bst600,
-#filter_mega .cbx_mega,
-#filter_type .cbx_type,
-#filter_abilities .cbx_abilities,
-#filter_baseStat .cbx_baseStat,
-#filter_shiny .cbx_shiny,
-#filter_female .cbx_female,
-#filter_shinyform .cbx_shinyform,
-#filter_back .cbx_back {
+.filters .cbx {
     position: relative;
     display: block;
     float: left;
@@ -759,15 +743,7 @@ input[type="range"]::-moz-range-track {
 }
 
 /* Checkmark styles */
-#filter_bst600 .cbx_bst600 svg,
-#filter_mega .cbx_mega svg,
-#filter_type .cbx_type svg,
-#filter_abilities .cbx_abilities svg,
-#filter_baseStat .cbx_baseStat svg,
-#filter_shiny .cbx_shiny svg,
-#filter_female .cbx_female svg,
-#filter_shinyform .cbx_shinyform svg,
-#filter_back .cbx_back svg {
+.filters .cbx svg {
     position: absolute;
     top: 3px;
     left: 3px;
@@ -781,15 +757,7 @@ input[type="range"]::-moz-range-track {
 }
 
 /* Container styles */
-#filter_bst600,
-#filter_mega,
-#filter_type,
-#filter_abilities,
-#filter_baseStat,
-#filter_shiny,
-#filter_female ,
-#filter_shinyform,
-#filter_back {
+.filters {
     user-select: none;
     display: none;
     justify-content: space-between;
@@ -797,65 +765,30 @@ input[type="range"]::-moz-range-track {
 }
 
 /* Label styles */
-#filter_bst600 label,
-#filter_mega label,
-#filter_type label,
-#filter_abilities label,
-#filter_baseStat label,
-#filter_shiny label,
-#filter_female label,
-#filter_shinyform label,
-#filter_back label {
+.filters label {
     display: inline-block;
     cursor: pointer;
 }
 
 /* Hide default checkboxes */
-#filter_bst600 input[type="checkbox"],
-#filter_mega input[type="checkbox"],
-#filter_type input[type="checkbox"],
-#filter_abilities input[type="checkbox"],
-#filter_baseStat input[type="checkbox"],
-#filter_shiny input[type="checkbox"],
-#filter_female input[type="checkbox"],
-#filter_shinyform input[type="checkbox"],
-#filter_back input[type="checkbox"] {
+.filters input[type="checkbox"] {
     display: none;
     visibility: hidden;
 }
 
 /* Checked state styles */
-#filter_bst600 input[type="checkbox"]:checked + .cbx_bst600,
-#filter_mega input[type="checkbox"]:checked + .cbx_mega,
-#filter_type input[type="checkbox"]:checked + .cbx_type,
-#filter_abilities input[type="checkbox"]:checked + .cbx_abilities,
-#filter_baseStat input[type="checkbox"]:checked + .cbx_baseStat,
-#filter_shiny input[type="checkbox"]:checked + .cbx_shiny,
-#filter_female input[type="checkbox"]:checked + .cbx_female,
-#filter_shinyform input[type="checkbox"]:checked + .cbx_shinyform,
-#filter_back input[type="checkbox"]:checked + .cbx_back {
+.filters input[type="checkbox"]:checked + .cbx{
     background-color: var(--pokemoncolor, #1288f8);
 }
 
 /* Checked state animation */
-#filter_bst600 input[type="checkbox"]:checked + .cbx_bst600 svg,
-#filter_mega input[type="checkbox"]:checked + .cbx_mega svg,
-#filter_type input[type="checkbox"]:checked + .cbx_type svg,
-#filter_abilities input[type="checkbox"]:checked + .cbx_abilities svg,
-#filter_baseStat input[type="checkbox"]:checked + .cbx_baseStat svg,
-#filter_shiny input[type="checkbox"]:checked + .cbx_shiny svg,
-#filter_female input[type="checkbox"]:checked + .cbx_female svg,
-#filter_shinyform input[type="checkbox"]:checked + .cbx_shinyform svg,
-#filter_back input[type="checkbox"]:checked + .cbx_back svg {
+.filters input[type="checkbox"]:checked + .cbx svg {
     stroke-dashoffset: 0;
     transition: all 0.15s ease;
 }
 
 /* Button Layout */
-#settingButton,
-#updateButton,
-#scrollUpButton,
-#scrollDownButton,
+.setTable,
 #learnPokemon {
     background: #fff;
     color: #000;
@@ -876,19 +809,13 @@ input[type="range"]::-moz-range-track {
     margin-right: 6px;
 }
 
-#settingButton:hover,
-#updateButton:hover,
-#scrollUpButton:hover,
-#scrollDownButton:hover,
+.setTable:hover,
 #learnPokemon:hover {
     box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2),0 3px 3px 0 rgba(0,0,0,0.2);
     transform: translateY(-2px);
 }
 
-#settingButton:active,
-#updateButton:active,
-#scrollUpButton:active,
-#scrollDownButton:active,
+.setTable:active,
 #learnPokemon:active {
     box-shadow: none;
     transform: translateY(0px);
