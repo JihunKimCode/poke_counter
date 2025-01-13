@@ -111,6 +111,14 @@ Retrieve details about various items featured in the Pokémon series.
     - Sprite of the Pokémon who holds the item
         - A hyperlink to view information about the Pokémon
 
+# [Pokémon Nature Searcher](https://jihunkimcode.github.io/poke_counter/pages/nature.html)
+![image](https://github.com/user-attachments/assets/6665c2af-3903-411d-b203-347ab5c5fcd0)
+Search for information about the nature of Pokémons, highlighting which stats have increased and decreased.
+## Features
+- **Hover nature** to see which stat is increased and which is decreased.
+- **Search nature** to see which stat is increased and which is decreased.
+- Users can manually **look for nature** using increased and decreased stat.
+
 # [Pokémon Berry Searcher](https://jihunkimcode.github.io/poke_counter/pages/berry.html)
 ![jihunkimcode github io_poke_counter_pages_berry html](https://github.com/JihunKimCode/poke_counter/assets/135993942/b0b8ebcf-01b6-41af-986f-f75f060c7a60)
 Search about berries in the Pokémon series, filtering by in-game effects.
