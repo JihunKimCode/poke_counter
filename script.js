@@ -58,7 +58,7 @@ const element = pokemon || moveName || itemName;
 document.addEventListener('keydown', function (event) {
     if (event.key === '/') {
       event.preventDefault();
-      element.focus();
+      if(element) element.focus();
     }
 });
 
@@ -3341,3 +3341,77 @@ async function activateButton(button, value) {
         console.error('Error:', error);
     }
 }
+
+/*****************
+ *  nature.html  *
+ *****************/
+if(document.getElementById('natureName')){
+    // Move to search bar when input "/"
+    document.addEventListener('keydown', function (event) {
+        if (event.key === '/') {
+        event.preventDefault();
+        document.getElementById('natureName').focus();
+        }
+    });
+}
+
+// Highlight cells by search
+function highlightNature() {
+    const input = document.getElementById('natureName').value.toLowerCase().trim();
+    const cells = document.querySelectorAll('.nature');
+    const rows = document.querySelectorAll('#natureTable tbody tr');
+    const colHeaders = document.querySelectorAll('#natureTable thead th');
+
+    // Clear previous highlights
+    cells.forEach(cell => cell.classList.remove('highlight'));
+    rows.forEach(row => row.firstElementChild.classList.remove('search-highlight'));    // Row headers
+    colHeaders.forEach(header => header.classList.remove('search-highlight'));          // Column headers
+
+    if (!input) return; // Do nothing if input is empty
+
+    // Highlight matching cells and corresponding headers
+    cells.forEach(cell => {
+        if (cell.dataset.nature.toLowerCase().includes(input)) {
+            cell.classList.add('highlight');
+
+            // Highlight row header
+            const row = cell.parentElement;
+            row.firstElementChild.classList.add('search-highlight');
+
+            // Highlight column header
+            const colIndex = Array.from(row.children).indexOf(cell);
+            colHeaders[colIndex].classList.add('search-highlight');
+        }
+    });
+}
+
+// Highlight cells by hovering
+document.querySelectorAll('.nature').forEach(cell => {
+    cell.addEventListener('mouseover', () => {
+        // Highlight the hovered cell
+        cell.classList.add('hover-highlight');
+
+        // Highlight row header
+        const row = cell.parentElement;
+        row.firstElementChild.classList.add('hover-highlight');
+
+        // Highlight column header
+        const colIndex = Array.from(row.children).indexOf(cell);
+        const colHeader = document.querySelector(`thead th:nth-child(${colIndex + 1})`);
+        colHeader.classList.add('hover-highlight');
+    });
+
+    cell.addEventListener('mouseout', () => {
+        // Remove highlight from the hovered cell
+        cell.classList.remove('hover-highlight');
+
+        // Remove highlight from row header
+        const row = cell.parentElement;
+        row.firstElementChild.classList.remove('hover-highlight');
+
+        // Remove highlight from column header
+        const colIndex = Array.from(row.children).indexOf(cell);
+        const colHeader = document.querySelector(`thead th:nth-child(${colIndex + 1})`);
+        colHeader.classList.remove('hover-highlight');
+    });
+});

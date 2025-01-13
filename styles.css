@@ -107,7 +107,7 @@ footer p{
     outline: none;
 }
   
-#searchInput, #moveName, #itemName {
+#searchInput, #moveName, #itemName, #natureName {
     width: 255px;
 }
 
@@ -1051,7 +1051,7 @@ input[type="range"]::-moz-range-track {
     display: inline-block;
     box-sizing: border-box;
     width: 100%;
-    margin: 10px 1.5%; 
+    margin: 10px; 
     background-color: #e2e2e2;
     box-shadow: 0 6px 6px 0 rgba(0,0,0,0.2);
 }
@@ -1222,6 +1222,68 @@ input[type="range"]::-moz-range-track {
 #colorPokemon{
     display: table;
     width: 100%;
+}
+
+/*****************
+ *  nature.html  *
+ *****************/
+.table-container {
+    width: calc(100% - 40px);
+    overflow-x: auto; 
+    padding: 20px;
+    margin: 0 auto;
+}
+
+#natureName {
+    margin-right: 20px;
+}
+
+#natureTable {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+#natureTable thead th {
+    background-color: #ddd;
+    font-weight: bold;
+    padding: 10px;
+}
+
+#natureTable tbody td, #natureTable thead th {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.nature {
+    transition: background-color 0.3s;
+}
+
+.nature:hover {
+    background-color: #f0f0f0;
+}
+
+#natureTable .highlight {
+    background-color: #ffeb3b;
+    font-weight: bold;
+}
+
+#natureTable .search-highlight{
+    background-color: #ffcc80;
+    font-weight: bold;
+}
+
+#natureTable .hover-highlight {
+    background-color: #7cd0ff;
+    font-weight: bold;
+}
+
+#natureTable thead th.hover-highlight,
+#natureTable tbody td:first-child.hover-highlight {
+    background-color: #70b7e6;
+    font-weight: bold;
 }
 
 /*Layout for Tablet and split screen*/

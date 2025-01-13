@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Website Thumbnail -->
+    <title>Pokémon Nature Searcher</title>
+    <meta property="og:url" content="https://jihunkimcode.github.io/poke_counter/pages/nature.html">
+    <meta property="og:title" content="Pokémon Nature Table">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://raw.githubusercontent.com/msikma/pokesprite/master/items/mint/special-defense.png">
+    <meta property="og:description" content="Search all nature of Pokémon.">
+    <!-- Website Information -->
+    <meta name="author" content="Jihun Kim">
+    <meta name="keywords" content="Pokémon, Pokémon nature">
+    <meta name="description" content="Search all nature of Pokémon.">        
+    <!-- Website Settings -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link 
+        rel="icon" 
+        type="image/x-icon" 
+        href="https://raw.githubusercontent.com/msikma/pokesprite/master/items/mint/special-defense.png"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />    
+</head>
+<body>
+    <div class="topnav">
+        <div>
+            <h1>
+            <a
+            href="../index.html"
+            class="btn btn-github"
+            rel="noopener noreferrer"
+            >
+                <i class="fa-solid fa-house"></i>
+            </a>
+
+            <img id = "randomItem" 
+            src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/mint/special-defense.png" 
+            alt="mint" 
+            title="mint">
+            
+            <a
+            href="nature.html"
+            rel="noopener noreferrer"
+            >
+            Pokémon Nature Table
+            </a>
+            </h1>
+        </div>
+        <div class="search-container">
+            <input type="text" id="natureName" placeholder="Enter nature name" oninput="highlightNature()" autocomplete="off">
+        </div>
+    </div>
+    <div class="table-container">
+        <table id="natureTable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>공격</th>
+                    <th>방어</th>
+                    <th>특공</th>
+                    <th>특방</th>
+                    <th>스피드</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>공격</td>
+                    <td class="nature" data-nature="노력, Hardy, がんばりや">노력<br>Hardy<br>がんばりや</td>
+                    <td class="nature" data-nature="외로움, Lonely, さみしがり">외로움<br>Lonely<br>さみしがり</td>
+                    <td class="nature" data-nature="고집, Adamant, いじっぱり">고집<br>Adamant<br>いじっぱり</td>
+                    <td class="nature" data-nature="개구쟁이, Naughty, やんちゃ">개구쟁이<br>Naughty<br>やんちゃ</td>
+                    <td class="nature" data-nature="용감, Brave, ゆうかん">용감<br>Brave<br>ゆうかん</td>
+                </tr>
+                <tr>
+                    <td>방어</td>
+                    <td class="nature" data-nature="대담, Bold, ずぶとい">대담<br>Bold<br>ずぶとい</td>
+                    <td class="nature" data-nature="온순, Docile, すなお">온순<br>Docile<br>すなお</td>
+                    <td class="nature" data-nature="장난꾸러기, Impish, わんぱく">장난꾸러기<br>Impish<br>わんぱく</td>
+                    <td class="nature" data-nature="촐랑, Lax, のうてんき">촐랑<br>Lax<br>のうてんき</td>
+                    <td class="nature" data-nature="무사태평, Relaxed, のんき">무사태평<br>Relaxed<br>のんき</td>
+                </tr>
+                <tr>
+                    <td>특공</td>
+                    <td class="nature" data-nature="조심, Modest, ひかえめ">조심<br>Modest<br>ひかえめ</td>
+                    <td class="nature" data-nature="의젓, Mild, おっとり">의젓<br>Mild<br>おっとり</td>
+                    <td class="nature" data-nature="수줍음, Bashful, てれや">수줍음<br>Bashful<br>てれや</td>
+                    <td class="nature" data-nature="덜렁, Rash, うっかりや">덜렁<br>Rash<br>うっかりや</td>
+                    <td class="nature" data-nature="냉정, Quiet, れいせい">냉정<br>Quiet<br>れいせい</td>
+                </tr>
+                <tr>
+                    <td>특방</td>
+                    <td class="nature" data-nature="차분, Calm, おだやか">차분<br>Calm<br>おだやか</td>
+                    <td class="nature" data-nature="얌전, Gentle, おとなしい">얌전<br>Gentle<br>おとなしい</td>
+                    <td class="nature" data-nature="신중, Careful, しんちょう">신중<br>Careful<br>しんちょう</td>
+                    <td class="nature" data-nature="변덕, Quirky, きまぐれ">변덕<br>Quirky<br>きまぐれ</td>
+                    <td class="nature" data-nature="건방, Sassy, なまいき">건방<br>Sassy<br>なまいき</td>
+                </tr>
+                <tr>
+                    <td>스피드</td>
+                    <td class="nature" data-nature="겁쟁이, Timid, おくびょう">겁쟁이<br>Timid<br>おくびょう</td>
+                    <td class="nature" data-nature="성급, Hasty, せっかち">성급<br>Hasty<br>せっかち</td>
+                    <td class="nature" data-nature="명랑, Jolly, ようき">명랑<br>Jolly<br>ようき</td>
+                    <td class="nature" data-nature="천진난만, Naive, むじゃき">천진난만<br>Naive<br>むじゃき</td>
+                    <td class="nature" data-nature="성실, Serious, まじめ">성실<br>Serious<br>まじめ</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+<footer>
+    <div class="footerContent">
+        <p>
+            Images are sourced from
+            <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer">PokéAPI</a>.
+            <br>© <span id="year"></span> Pokémon. © 1995-<span id="year2"></span> Nintendo/Creatures Inc./GAME FREAK inc.
+        </p>
+        <button id="scrollTop">            
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dive-ball.png" 
+            alt="scrollTop" 
+            width="50px">
+        </button>
+    </div>
+</footer>    
+<script src="../script.js"></script>
+</html>
