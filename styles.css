@@ -1230,8 +1230,7 @@ input[type="range"]::-moz-range-track {
 .table-container {
     width: calc(100% - 40px);
     overflow-x: auto; 
-    padding: 20px;
-    margin: 0 auto;
+    margin: 20px;
 }
 
 #natureName {
@@ -1239,8 +1238,8 @@ input[type="range"]::-moz-range-track {
 }
 
 #natureTable {
-    width: max-content;
-    min-width: 100%;
+    width: 100%;
+    overflow: scroll;
     border-collapse: collapse;
     margin: 0 auto;
 }
@@ -1555,5 +1554,13 @@ input[type="range"]::-moz-range-track {
     }    
     .button-container {
         margin-top: 10px;
+    }    
+
+    #natureName{
+        margin-bottom: 15px;
+    }
+
+    .table-container {
+        margin: 15px;
     }    
 }
