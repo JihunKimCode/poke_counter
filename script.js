@@ -1065,7 +1065,8 @@ async function getTypeAbility(types, abilities, pastAbility) {
     // Check past ability
     if (pastAbility.length > 0) {
         for (const ability of pastAbility) {
-            const url = `https://pokeapi.co/api/v2/ability/${ability.abilities[0].ability.name}`;
+            if(!ability?.abilities?.[0]?.ability?.name) continue;
+            const url = `https://pokeapi.co/api/v2/ability/${ability?.abilities?.[0]?.ability?.name}`;
             const data = await fetchData(url);
     
             const effectEntry = data ? data.effect_entries.find(entry => entry.language.name === "en") : null;
